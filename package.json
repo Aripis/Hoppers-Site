@@ -1,9 +1,9 @@
 {
-  "name": "create-next-example-app",
-  "description": "A Next.js starter app.",
+  "name": "hoppers-site",
+  "description": "The Hoppers Site.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeit/now/tree/master/examples/nextjs"
+    "url": "https://github.com/IvanDimitrov2002/Hoppers-Site"
   },
   "license": "MIT",
   "scripts": {
@@ -12,7 +12,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "firebase-admin": "^8.9.2",
+    "firebase": "^7.8.1",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.1.6",
     "react": "^16.12.0",

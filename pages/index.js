@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from '../components/head';
+import { db } from '../dbconfig'
 
 const Home = () => {
   const [names, setNames] = useState(null);
 
   useEffect(() => {
-    const getNames = async () => {
-      const res = await fetch('/api/test');
-      const names = await res.json();
-      setNames(names);
-    }
-    getNames();
+    db.collection("notes").onSnapshot(snap => {
+      setNames(snap.docs.map(doc => doc.data()))
+    })
   }, []);
 
   return (
@@ -19,8 +17,8 @@ const Home = () => {
       <Head title="Home" />
       {names
         ? 
-        names.map(name => (
-          <p>{name.name}</p>
+        names.map((name, i) => (
+          <p key={i}>{name.name}</p>
         ))
         :
         "loading..."
