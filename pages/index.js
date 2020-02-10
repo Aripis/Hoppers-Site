@@ -4,27 +4,33 @@ import Head from '../components/head';
 import { db } from '../dbconfig'
 
 const Home = () => {
-  const [names, setNames] = useState(null);
+    const [names, setNames] = useState(null);
 
-  useEffect(() => {
-    db.collection("notes").onSnapshot(snap => {
-      setNames(snap.docs.map(doc => doc.data()))
-    })
-  }, []);
+    useEffect(() => {
+        db.collection("notes").onSnapshot(snap => {
+            setNames(snap.docs.map(doc => doc.data()))
+        })
+    }, []);
 
-  return (
-    <div>
-      <Head title="Home" />
-      {names
-        ? 
-        names.map((name, i) => (
-          <p key={i}>{name.name}</p>
-        ))
-        :
-        "loading..."
-      }
-    </div>
-  );
+    return (
+        <div>
+            <style jsx>{`
+                .test{
+                    color: red;
+                }
+            `}</style>
+            <Head title="Home" />
+            <div className="test">ADasdasdasd</div>
+            {names
+                ?
+                names.map((name, i) => (
+                    <p key={i}>{name.name}</p>
+                ))
+                :
+                "loading..."
+            }
+        </div>
+    );
 };
 
 export default Home;
