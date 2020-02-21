@@ -7,24 +7,34 @@ const Navbar = () => {
             <style jsx>{`
                 .wrp-navbar {
                     height: 80px;
-                    background-color: blue;
-                    color: white;
                     justify-content: space-between;
                     align-items: center;
                     display: flex;
                 }
 
-                .wrp-navbar .navbar-logo{
-
+                .wrp-navbar .navbar-logo {
+                    margin-left: 20px;
                 }
 
-                .wrp-navbar .navbar-buttons{
+                .wrp-navbar .navbar-buttons {
                     display: flex;
                 }
 
-                .wrp-navbar .navbar-buttons > *{
+                .wrp-navbar .navbar-buttons > * {
+                    padding: 20px 40px 20px 40px;
+                    user-select: none;
                     cursor: pointer;
+                    border-bottom: 1px solid transparent;
+                    transition: .3s;
                 }
+
+                .wrp-navbar .navbar-buttons > *:hover {
+                    border-bottom: 1px solid black;
+                    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
+                    background-color: #f2f5f3;
+
+                }
+
             `}</style>
 
             <nav className="wrp-navbar">
