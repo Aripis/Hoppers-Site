@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Navbar = () => {
 
@@ -6,7 +6,7 @@ const Navbar = () => {
         <>
             <style jsx>{`
                 .wrp-navbar {
-                    height: 80px;
+                    height: 60px;
                     justify-content: space-between;
                     align-items: center;
                     display: flex;
@@ -43,13 +43,19 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-buttons">
                     <div>
-                        Kalata
+                        Home
                     </div>
                     <div>
-                        Ivan
+                        Shop
                     </div>
                     <div>
-                        Hoppers
+                        ifc
+                    </div>
+                    <div>
+                        Sign in
+                    </div>
+                    <div>
+                        Sign up
                     </div>
                 </div>
             </nav>
