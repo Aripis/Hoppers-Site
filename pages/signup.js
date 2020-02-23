@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Textfield from '../components/texfield'
+import Textfield from '../components/textfield'
 import Button from '../components/button'
 
 const Signup = () => {

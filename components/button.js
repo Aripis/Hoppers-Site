@@ -8,7 +8,8 @@ const Button = props => (
                 border: 0;
                 border-radius: .4em;
                 outline: none;
-                background-image: linear-gradient(to bottom right, #36a5ff, #0089fa, #006dc7);
+                background-image: linear-gradient(to bottom right, #36a5ff 0%, #0089fa 50%, #006dc7 100%);
+                background-size: 300% 100%;
                 color: white;
                 transition: .2s;
                 box-shadow: 0 .065em .19em rgba(0,0,0,0.12), 0 .065em .125em rgba(0,0,0,0.24);
@@ -16,12 +17,16 @@ const Button = props => (
             }
 
             .button:hover {
-                background-image: linear-gradient(to top left, #36a5ff, #0089fa, #006dc7);
+                background-position: 50% 0;
                 box-shadow: 0 .10em .38em rgba(0,0,0,0.16), 0 .10em .38em rgba(0,0,0,0.23);
             }
 
             .button:active {
-                transform: scale(1.02);
+                background-position: 100% 0;
+                -webkit-font-smoothing: subpixel-antialiased;
+                backface-visibility: hidden;
+                transform: translateZ(0);
+                transform: scale(1.03);
             }
         `}</style>
         <input 

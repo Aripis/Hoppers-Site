@@ -6,13 +6,14 @@ const Textfield = props => (
             .input {
                 padding: 0.7em 1.1em;
                 border-radius: .4em;
-                border: 0;
+                border: 1px solid rgba(0, 0, 0, 0.2);
                 transition: .3s;
                 outline: none;
             }
 
             .input:focus {
                 box-shadow: 0 0 .15em .03em #0089fa;
+                border: 1px solid transparent;
             }
 
             .input::placeholder {
