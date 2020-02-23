@@ -10,16 +10,35 @@ const Footer = () => (
                 right: 0;
                 bottom: 0;
                 left: 0;
-                padding: 1rem;
+                padding: 0;
                 background-color: #fff;
                 text-align: center;
+                display: flex;
+                flex-direction: column;
             }
 
+            .wrp-footer > .footer-one > p, .wrp-footer > .footer-two > * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .footer-two {
+                display: flex;
+            }
 
         `}</style>
         <div className="wrp-footer">
-            <p>Aripis.com</p>
-            <p></p>
+            <div className="footer-one">
+                <p>Aripis.com</p>
+            </div>
+            <div className="footer-two">
+                <p>Copyright © 2020 Aripis Inc. All rights reserved.</p>
+                <a>FAQ</a>
+                <a>Legal Terms</a>
+                <a>Privacy Policy</a>
+                <a>Cookie Policy</a>
+            </div>
+            
         </div>
     </>
 )

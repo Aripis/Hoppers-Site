@@ -20,7 +20,7 @@ const Signup = () => (
             }
 
             .wrp-signup > .signup-form {
-                padding: 5rem 8rem;
+                padding: 6rem 8rem;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-end;
@@ -29,32 +29,18 @@ const Signup = () => (
             }
 
             .wrp-signup > .signup-form > .form-input {
-                margin-top: 1em;
-                font-size: .9em;
-                margin-right: .6em;
-            }
-
-            .wrp-signup > .signup-form > .form-input > input{
-                margin-right: .6em;
+                margin-top: .5em;
             }
         `}</style>
         <div className="wrp-signup">
             <form onSubmit={e => e.preventDefault()} className="signup-form">
-                <div  className="form-input">
-                    <Textfield type="text" placeholder="First Name"/>
-                    <Textfield type="text" placeholder="Surname"/>
-                </div>
-                <div  className="form-input">
-                    <Textfield type="email" placeholder="Google@bulgaria.bg" />
-                    <Textfield type="email"  placeholder="Re-email" />
-                </div>
-                <div  className="form-input">
-                    <Textfield type="password" placeholder="Password" />
-                    <Textfield type="password" placeholder="Re-password" />
-                </div>
-                <div className="form-input">
-                    <Button type="submit" value="Sign up" />
-                </div>
+                <div></div>
+                <Textfield type="text" placeholder="First Name" className="form-input"/>
+                <Textfield type="text" placeholder="Surname" className="form-input"/>
+                <Textfield type="email" placeholder="Google@bulgaria.bg" className="form-input"/>
+                <Textfield type="email"  placeholder="Re-email" className="form-input"/>
+                <Textfield type="password" placeholder="Password" className="form-input"/>
+                <Textfield type="password" placeholder="Re-password" className="form-input"/>
             </form>
         </div>
     </>
