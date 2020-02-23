@@ -17,8 +17,14 @@ const Footer = () => (
                 flex-direction: column;
             }
 
-            .wrp-footer > .footer-one > p, .wrp-footer > .footer-two > * {
-                margin: 0;
+            .wrp-footer > .footer-one > p,
+            .wrp-footer > .footer-two > * {
+                margin: .1em 0;
+                padding: 0;
+            }
+
+            .wrp-footer > .footer-one > p {
+                margin: .1em 0;
                 padding: 0;
             }
 
