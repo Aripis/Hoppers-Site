@@ -35,7 +35,7 @@ const Textfield = props => (
     </>
 )
 
-Textfield.defoultProps = {
+Textfield.defaultProps = {
     type: "text"
 }
 
