@@ -22,7 +22,7 @@ const Signin = () => {
                 }
                 
                 .wrp-signin > .signin-form {
-                    padding: 6em 8em;
+                    padding: 5em 8em;
                     display: flex;
                     flex-direction: column;
                     align-items: flex-end;
@@ -30,7 +30,8 @@ const Signin = () => {
                     border-radius: .2em;
                 }
                 
-                .wrp-signin > .signin-form > .form-div, .wrp-signin > .signin-form > :global(.form-submit)  {
+                .wrp-signin > .signin-form > .form-div, 
+                .wrp-signin > .signin-form > :global(.form-submit)  {
                     margin-top: 1.4em;
                     font-size: 1em;
                 }
@@ -54,13 +55,13 @@ const Signin = () => {
                     pointer-events: none;
                 }
 
-                :global(.form-input:not([value=""])) ~ label{
+                :global(.form-input:not([value=""])) + label{
                     margin: -1.5em 0 0 .3em;
                     color: black;
                     font-size: .75em;
                 }
 
-                :global(.form-input):focus ~ label {
+                :global(.form-input):focus + label {
                     margin: -1.5em 0 0 .3em;
                     color: #0089fa;
                     font-size: .75em;
