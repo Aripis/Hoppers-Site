@@ -26,6 +26,7 @@ const Textfield = props => (
         `}</style>
         <input 
             id={props.id}
+            style={props.style}
             type={props.type}
             onChange={props.onChange}
             className={`input ${props.className}`}

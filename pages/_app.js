@@ -26,9 +26,9 @@ export default class MyApp extends App {
                     }
                 `}</style>
                 <div>
-                    <Navbar />
+                    {/* <Navbar /> */}
                     <Component {...pageProps} />
-                    <Footer />
+                    {/* <Footer /> */}
                 </div>
             </>
         )
