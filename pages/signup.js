@@ -63,11 +63,11 @@ const Signup = () => {
                     width: 100%;
                 }
 
-                .wrp-signup > .signup-form > .form-field > .form-div:nth-child(even) {
+                .wrp-signup > .signup-form > .form-field > .form-div:nth-child(even):not(:only-child) {
                     margin-left: .3em;
                 }
 
-                .wrp-signup > .signup-form > .form-field > .form-div:nth-child(odd) {
+                .wrp-signup > .signup-form > .form-field > .form-div:nth-child(odd):not(:only-child) {
                     margin-right: .3em;
                 }
 

@@ -57,11 +57,11 @@ const Signin = () => {
                     width: 100%;
                 }
 
-                .wrp-signin > .signin-form > .form-field > .form-div:nth-child(even) {
+                .wrp-signin > .signin-form > .form-field > .form-div:nth-child(even):not(:only-child) {
                     margin-left: .3em;
                 }
-
-                .wrp-signin > .signin-form > .form-field > .form-div:nth-child(odd) {
+                
+                .wrp-signin > .signin-form > .form-field > .form-div:nth-child(odd):not(:only-child) {
                     margin-right: .3em;
                 }
 
