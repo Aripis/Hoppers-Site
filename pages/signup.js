@@ -16,13 +16,13 @@ const Signup = () => {
             <Head />
             <style jsx>{`
                 .wrp-signup {
-                    height: calc(100vh - 60px); 
+                    flex-grow: 1;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     background-image: url("https://miro.medium.com/max/11416/0*Mjaw2WtpiOUiz2dy");
                     background-repeat: no-repeat;
-                    background-size: 100% 100%;
+                    background-size: cover;
                     background-position: center;
                     background-attachment: fixed;  
                 }
@@ -37,13 +37,18 @@ const Signup = () => {
                 }
 
                 .wrp-signup > .signup-form > .form-field {
+                    width: 50em;
+                }
+
+                .wrp-signup > .signup-form > .form-field,
+                .wrp-signup > .signup-form > .form-actions {
                     display:flex;
                     flex-direction: row;
                     justify-content: center;
                     margin-top: 1.4em;
                 }
 
-                .wrp-signup > .signup-form > .form-field > :global(.form-submit) {
+                .wrp-signup > .signup-form > .form-actions > :global(.form-submit) {
                     font-size: 1.1em;
                 }
 
@@ -55,6 +60,7 @@ const Signup = () => {
                 .wrp-signup > .signup-form > .form-field > .form-div {
                     display: flex;
                     flex-direction: column;
+                    width: 100%;
                 }
 
                 .wrp-signup > .signup-form > .form-field > .form-div:nth-child(even) {
@@ -67,7 +73,6 @@ const Signup = () => {
 
                 .wrp-signup > .signup-form > .form-field > .form-div > :global(.form-input) {
                     font-size: 1em;
-                    width: 350px;
                 }
 
                 .form-div > label {
@@ -76,6 +81,7 @@ const Signup = () => {
                     margin: .81em 1.05em 0;
                     font-size: 1em;
                     user-select: none;
+                    transform: translateZ(0);
                     transition: .2s;
                     pointer-events: none;
                 }
@@ -98,7 +104,7 @@ const Signup = () => {
                     font-size: .75em;
                 }
 
-                @media only screen and (max-width: 900px){
+                @media only screen and (max-width: 985px){
                     .wrp-signup > .signup-form > .form-field {
                         flex-direction: column;
                     }
@@ -109,6 +115,7 @@ const Signup = () => {
                     }
 
                     .wrp-signup > .signup-form > .form-field {
+                        width: 100%;
                         margin-top: 0;
                     }
 
@@ -124,11 +131,16 @@ const Signup = () => {
                         margin: 2.2em 1.05em 0;
                         font-size: 1em;
                     }
+
+                    :global(.form-input):focus + label {
+                        margin: .2em 0 0 0;
+                    }
                 }
 
                 @media only screen and (max-width: 545px){
                     .wrp-signup > .signup-form {
                         padding: 4em 2em 5em;
+                        align-items: center;
                     }
 
                     .wrp-signup > .signup-form > .form-header {
@@ -169,7 +181,7 @@ const Signup = () => {
                             <label className="required">Retype password</label>
                         </div>
                     </div>
-                    <div className="form-field">
+                    <div className="form-actions">
                         <Button type="submit" value="Sign up" className="form-submit"/>
                     </div>
                 </form>

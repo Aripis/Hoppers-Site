@@ -24,8 +24,17 @@ export default class MyApp extends App {
                     a {
                         text-decoration: none;
                     }
+
+                    .layout{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: space-between;
+                        height: 100vh;
+                    }
+
                 `}</style>
-                <div>
+                <div className="layout">
                     {/* <Navbar /> */}
                     <Component {...pageProps} />
                     {/* <Footer /> */}
