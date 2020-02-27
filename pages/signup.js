@@ -10,6 +10,7 @@ const Signup = () => {
     const [reEmail, setReEmail] = useState("")
     const [password, setPassword] = useState("")
     const [rePassword, setRePassword] = useState("")
+    const [loadingSignUp, setLoadingSignUp] = useState(false)
 
     return (
         <>
@@ -34,6 +35,7 @@ const Signup = () => {
                     align-items: flex-end;
                     background-image: linear-gradient(to top, #d2d2d2, #e5e5e5);
                     border-radius: .3em;
+                    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                 }
 
                 .wrp-signup > .signup-form > .form-field {
@@ -109,8 +111,8 @@ const Signup = () => {
                         flex-direction: column;
                     }
 
-                    .wrp-signup > .signup-form > .form-field > .form-div:nth-child(even),
-                    .wrp-signup > .signup-form > .form-field > .form-div:nth-child(odd) {
+                    .wrp-signup > .signup-form > .form-field > .form-div:nth-child(even):not(:only-child),
+                    .wrp-signup > .signup-form > .form-field > .form-div:nth-child(odd):not(:only-child) {
                         margin: 0;
                     }
 
@@ -130,6 +132,10 @@ const Signup = () => {
                     .form-div > label {
                         margin: 2.2em 1.05em 0;
                         font-size: 1em;
+                    }
+
+                    :global(.form-input:not([value=""])) + label{
+                        margin: .2em 0 0 0;
                     }
 
                     :global(.form-input):focus + label {
@@ -182,7 +188,7 @@ const Signup = () => {
                         </div>
                     </div>
                     <div className="form-actions">
-                        <Button type="submit" value="Sign up" className="form-submit"/>
+                        <Button loading={loadingSignUp} onClick={() => setLoadingSignUp(!loadingSignUp)} type="submit" value="Sign up" className="form-submit"/>
                     </div>
                 </form>
             </div>

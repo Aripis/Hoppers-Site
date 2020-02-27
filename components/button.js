@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Dotloader from './dotloader';
 
 const Button = props => (
     <>
@@ -14,11 +15,13 @@ const Button = props => (
                 transition: .2s;
                 box-shadow: 0 .065em .19em rgba(0,0,0,0.12), 0 .065em .125em rgba(0,0,0,0.24);
                 cursor: pointer;
+                user-select: none;
+                position: relative;
             }
 
             .button:hover {
                 background-position: 50% 0;
-                box-shadow: 0 .10em .38em rgba(0,0,0,0.16), 0 .10em .38em rgba(0,0,0,0.23);
+                box-shadow: 0 .10em .28em rgba(0,0,0,0.16), 0 .10em .28em rgba(0,0,0,0.23);
             }
 
             .button:active {
@@ -29,22 +32,26 @@ const Button = props => (
                 transform: scale(1.03);
             }
         `}</style>
-        <input 
+        <button
             id={props.id}
             type={props.type}
-            className={`button ${props.className}`}
-            value={props.value}
-        />
+            onClick={props.onClick}
+            className={`button ${props.className || ""}`}
+        >   
+            {props.loading && <Dotloader dots={props.dots}/>}
+            <span style={{visibility: props.loading ? "hidden" : "visible"}}>{props.value}</span>
+        </button>
     </>
 )
 
 Button.defoultProps = {
-    type: "button"
+    type: "button",
+    dots: 3
 }
 
 Button.propTypes = {
-    type: PropTypes.oneOf(["submit", "button"]),
-    value: PropTypes.string
+    value: PropTypes.string,
+    dots: PropTypes.number
 }
 
 export default Button;

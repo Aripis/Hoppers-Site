@@ -19,6 +19,7 @@ export default class MyApp extends App {
                     html, body {
                         margin: 0;
                         font-family: Helvetica, Arial, sans-serif;
+                        -webkit-tap-highlight-color: transparent;
                     }
 
                     a {
@@ -65,7 +66,7 @@ export default class MyApp extends App {
 
                 `}</style>
                 <div className="layout">
-                    {/* <Navbar /> */}
+                    <Navbar />
                     <Component {...pageProps} />
                     <Footer />
                 </div>

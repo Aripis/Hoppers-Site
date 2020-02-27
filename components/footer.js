@@ -14,9 +14,10 @@ const Footer = () => (
                 padding: .65em 0;
                 font-weight: bold;
             }
-
+            
             .wrp-footer > .footer-one > a {
                 color: #555;
+                transition: .2s;
             }
 
             .wrp-footer > .footer-one > a:hover {

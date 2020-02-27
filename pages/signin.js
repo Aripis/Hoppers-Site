@@ -5,6 +5,7 @@ import Button from '../components/button'
 const Signin = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loadingSignIn, setLoadingSignIn] = useState(false)
 
     return (
         <>
@@ -28,6 +29,7 @@ const Signin = () => {
                     align-items: flex-end;
                     background-image: linear-gradient(to top, #d2d2d2, #e5e5e5);
                     border-radius: .3em;
+                    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                 }
 
                 .wrp-signin > .signin-form > .form-field {
@@ -103,8 +105,8 @@ const Signin = () => {
                         flex-direction: column;
                     }
 
-                    .wrp-signin > .signin-form > .form-field > .form-div:nth-child(even),
-                    .wrp-signin > .signin-form > .form-field > .form-div:nth-child(odd) {
+                    .wrp-signin > .signin-form > .form-field > .form-div:nth-child(even):not(:only-child),
+                    .wrp-signin > .signin-form > .form-field > .form-div:nth-child(odd):not(:only-child) {
                         margin: 0;
                     }
 
@@ -124,6 +126,10 @@ const Signin = () => {
                     .form-div > label {
                         margin: 2.2em 1.05em 0;
                         font-size: 1em;
+                    }
+
+                    :global(.form-input:not([value=""])) + label{
+                        margin: .2em 0 0 0;
                     }
 
                     :global(.form-input):focus + label {
@@ -148,17 +154,17 @@ const Signin = () => {
                     <div className="form-field">
                         <div className="form-div">
                             <Textfield value={email} onChange={e => setEmail(e.target.value)} type="email" className="form-input" />
-                            <label className="required">Email</label>
+                            <label>Email</label>
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
                             <Textfield value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-input" />
-                            <label className="required">Password</label>
+                            <label>Password</label>
                         </div>
                     </div>
                     <div className="form-actions">
-                        <Button type="submit" value="Sign in" className="form-submit" />
+                        <Button loading={loadingSignIn} onClick={() => setLoadingSignIn(!loadingSignIn)} type="submit" value="Sign in" className="form-submit" />
                     </div>
                 </form>
             </div>
