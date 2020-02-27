@@ -31,7 +31,7 @@ const Signin = () => {
                 }
 
                 .wrp-signin > .signin-form > .form-field {
-                    width: 40em;
+                    width: 25em;
                 }
 
                 .wrp-signin > .signin-form > .form-field,

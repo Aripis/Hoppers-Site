@@ -10,6 +10,7 @@ const Navbar = () => {
                     justify-content: space-between;
                     align-items: center;
                     display: flex;
+                    background-color: #FAFBFD;
                 }
 
                 .wrp-navbar .navbar-logo {
