@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from '../components/head';
-import { db } from '../dbconfig'
 
 const Home = () => {
 

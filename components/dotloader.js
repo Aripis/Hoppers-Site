@@ -17,8 +17,8 @@ const Dotloader = props => (
 
             .dotloader > span {
                 display: inline-block;
-                width: .5em;
-                height: .5em;
+                width: .45em;
+                height: .45em;
                 border-radius: 50%;
                 margin: 0 .1em;
             }

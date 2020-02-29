@@ -1,3 +1,4 @@
+import Link from 'next/link'
 
 const Footer = () => (
     <>
@@ -15,12 +16,12 @@ const Footer = () => (
                 font-weight: bold;
             }
             
-            .wrp-footer > .footer-one > a {
+            .wrp-footer > .footer-one > :global(a) {
                 color: #555;
                 transition: .2s;
             }
 
-            .wrp-footer > .footer-one > a:hover {
+            .wrp-footer > .footer-one > :global(a):hover {
                 color: black;
             }
 
@@ -53,7 +54,7 @@ const Footer = () => (
         `}</style>
         <div className="wrp-footer">
             <div className="footer-one">
-                <a href="">Aripis.com</a>
+                <Link href="/"><a>Aripis.com</a></Link>
             </div>
             <div className="footer-two">
                 <span>Copyright © 2020 Aripis Inc. All rights reserved.&nbsp;</span>

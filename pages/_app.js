@@ -12,13 +12,17 @@ export default class MyApp extends App {
             <>
                 <Head />
                 <style jsx global>{`
+                    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');                    
+                    
                     * {
                         box-sizing: border-box;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
                     }
                     
                     html, body {
                         margin: 0;
-                        font-family: Helvetica, Arial, sans-serif;
+                        font-family: 'Мontserrat', Helvetica, Arial, sans-serif;
                         -webkit-tap-highlight-color: transparent;
                     }
 

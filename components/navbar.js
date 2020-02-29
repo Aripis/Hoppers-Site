@@ -1,39 +1,37 @@
 import { useState } from 'react';
+import Link from 'next/link'
 
 const Navbar = () => {
-
     return (
         <>
             <style jsx>{`
                 .wrp-navbar {
-                    height: 60px;
+                    display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    display: flex;
                     background-color: #FAFBFD;
                 }
 
-                .wrp-navbar .navbar-logo {
-                    margin-left: 20px;
+                .wrp-navbar > .navbar-logo {
+                    margin-left: 1.250em;
                 }
 
-                .wrp-navbar .navbar-buttons {
+                .wrp-navbar > .navbar-buttons {
                     display: flex;
                 }
 
-                .wrp-navbar .navbar-buttons > * {
-                    padding: 20px 40px 20px 40px;
+                .wrp-navbar > .navbar-buttons > :global(a) {
+                    display: inline-block;
+                    padding: 1.55em 2.5em;
                     user-select: none;
+                    color: #444;
                     cursor: pointer;
-                    border-bottom: 1px solid transparent;
                     transition: .3s;
                 }
 
-                .wrp-navbar .navbar-buttons > *:hover {
-                    border-bottom: 1px solid black;
-                    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
-                    background-color: #f2f5f3;
-
+                .wrp-navbar > .navbar-buttons > :global(a):hover {
+                    text-shadow: 0 0 .65px black, 0 0 .65px black;
+                    color: black;
                 }
 
             `}</style>
@@ -43,21 +41,21 @@ const Navbar = () => {
                     <h1>Aripis</h1>
                 </div>
                 <div className="navbar-buttons">
-                    <div>
-                        Home
-                    </div>
-                    <div>
-                        Shop
-                    </div>
-                    <div>
-                        ifc
-                    </div>
-                    <div>
-                        Sign in
-                    </div>
-                    <div>
-                        Sign up
-                    </div>
+                    <Link href="/">
+                        <a>Home</a>
+                    </Link>
+                    <Link href="/shop">
+                        <a>Shop</a>
+                    </Link>
+                    <Link href="">
+                        <a>ifc</a>
+                    </Link>
+                    <Link href="/signin">
+                        <a>Sign in</a>
+                    </Link>
+                    <Link href="/signup">
+                        <a>Sign up</a>
+                    </Link>
                 </div>
             </nav>
         </>
