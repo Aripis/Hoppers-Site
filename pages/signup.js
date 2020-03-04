@@ -26,6 +26,12 @@ const Signup = props => {
         let email = document.getElementById("email").value
         let password = document.getElementById("password").value
         firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => {
+            Router.replace('/')
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     return (

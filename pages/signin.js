@@ -8,6 +8,7 @@ import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from '../utils/auth/initFirebase'
+import Router from 'next/router'
 
 initFirebase()
 
@@ -21,6 +22,12 @@ const Signin = props => {
         let email = document.getElementById('email').value
         let password = document.getElementById('password').value
         firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+            Router.replace('/')
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     return (
