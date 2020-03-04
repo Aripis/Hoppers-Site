@@ -30,6 +30,7 @@ const Signin = props => {
         })
         .catch(error => {
             setError(error.message)
+            setLoadingSignIn(false)
             console.log(error)
         })
     }
@@ -58,8 +59,10 @@ const Signin = props => {
                     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                 }
 
-                .wrp-signin > .signin-form > .form-field {
-                    width: 25em;
+                .wrp-signin > .signin-form > .form-field, 
+                .wrp-signin > .signin-form > :global(.form-message) {
+                    max-width: 25em;
+                    width: 100%;
                 }
 
                 .wrp-signin > .signin-form > :global(.form-message) {
@@ -116,7 +119,6 @@ const Signin = props => {
                     }
 
                     .wrp-signin > .signin-form > .form-field {
-                        width: 100%;
                         margin-top: 0;
                     }
 
@@ -146,14 +148,14 @@ const Signin = props => {
                     <h2 className="form-header">Sign into your account</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield id="email" value={email} onChange={e => setEmail(e.target.value)} type="email" className="form-input" />
-                            <Label htmlFor="email" content="Email" on="form-input"/>
+                            <Textfield error={error} id="email" value={email} onChange={e => {setEmail(e.target.value); setError("")}} type="email" className="form-input" />
+                            <Label error={error} htmlFor="email" content="Email" on="form-input"/>
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield id="password" value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-input" />
-                            <Label htmlFor="password" content="Password" on="form-input"/>
+                            <Textfield error={error} id="password" value={password} onChange={e => {setPassword(e.target.value); setError("")}} type="password" className="form-input" />
+                            <Label error={error} htmlFor="password" content="Password" on="form-input"/>
                         </div>
                     </div>
                     <Message 

@@ -21,6 +21,7 @@ const Message = props => (
             .message > span.content {
                 margin-top: .3em;
                 color: #276f86;
+                word-break: break-word;
                 opacity: .85;
             }
 
