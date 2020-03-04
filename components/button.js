@@ -39,7 +39,7 @@ const Button = props => (
             className={`button ${props.className || ""}`}
         >   
             {props.loading && <Dotloader dots={props.dots}/>}
-            <span style={{visibility: props.loading ? "hidden" : "visible"}}>{props.value}</span>
+            <span style={{visibility: props.loading ? "hidden" : "visible"}}>{props.children}</span>
         </button>
     </>
 )

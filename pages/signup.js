@@ -172,7 +172,7 @@ const Signup = props => {
                     }
 
                     .wrp-signup > .signup-form > .form-header {
-                        // font-size: 1.5em;
+                        font-size: 1.5em;
                     }
                 }
             `}</style>

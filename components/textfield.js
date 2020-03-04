@@ -23,13 +23,23 @@ const Textfield = props => (
             .input:focus::placeholder {
                 opacity: .7;
             }
+
+            .input.error {
+                border: 1px solid #e0b4b4;
+                background-color: #fff6f6;
+                color: #9f3a38;
+            }
+
+            .input.error:focus {
+                box-shadow: 0 0 .15em .03em #fa1d00;
+            }
         `}</style>
         <input 
             id={props.id}
             style={props.style}
             type={props.type}
             onChange={props.onChange}
-            className={`input ${props.className}`}
+            className={`input ${props.error ? "error" : ""} ${props.className || ""}`}
             value={props.value}
             placeholder={props.placeholder}
             required={props.required}
