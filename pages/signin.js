@@ -18,6 +18,7 @@ const Signin = props => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loadingSignIn, setLoadingSignIn] = useState(false)
+    const [error, setError] = useState("")
 
     const handleSignIn = e => {
         e.preventDefault()
@@ -28,6 +29,7 @@ const Signin = props => {
             Router.replace('/')
         })
         .catch(error => {
+            setError(error.message)
             console.log(error)
         })
     }
@@ -154,7 +156,13 @@ const Signin = props => {
                             <Label htmlFor="password" content="Password" on="form-input"/>
                         </div>
                     </div>
-                    <Message className="form-message" />
+                    <Message 
+                        visible={error} 
+                        error={error} 
+                        className="form-message" 
+                        header="An error occurred"
+                        content={error}
+                    />
                     <div className="form-actions">
                         <Button loading={loadingSignIn} onClick={() => setLoadingSignIn(!loadingSignIn)} type="submit" className="form-submit">
                             Sign in

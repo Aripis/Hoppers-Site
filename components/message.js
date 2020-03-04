@@ -52,8 +52,8 @@ const Message = props => (
         `}</style>
         {props.visible &&
             <div className={`message ${props.success ? "success" : ""} ${props.error ? "error" : ""} ${props.className || ""}`}>
-                <span className="header">asdasd</span>
-                <span className="content">A simple message!</span>
+                <span className="header">{props.header}</span>
+                <span className="content">{props.content}</span>
             </div>
         }
     </>
