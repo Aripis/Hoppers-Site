@@ -21,36 +21,12 @@ const Home = props => {
                 ) : (
                         <div>
                             <p>You're signed in. Email: {AuthUser.email}</p>
-                            <p
-                                style={{
-                                    display: 'inlinelock',
-                                    color: 'blue',
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={async () => {
-                                    try {
-                                        await logout()
-                                        Router.push('/')
-                                    } catch (e) {
-                                        console.error(e)
-                                    }
-                                }}
-                            >
-                                Log out
-                            </p>
                         </div>
                     )}
             </div>
         </>
     )
 }
-
-// Home.getInitialProps = async ctx => {
-//     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
-//     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-
-// }
 
 Home.propTypes = {
     AuthUserInfo: PropTypes.shape({

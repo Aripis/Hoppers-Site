@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { get } from 'lodash/object'
 import Textfield from '../components/textfield'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
@@ -186,6 +187,16 @@ const Signin = props => {
             </div>
         </>
     )
+}
+
+Signin.getInitialProps = async ctx => {
+    const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
+    const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+    if(AuthUser !== null){
+        ctx.res.writeHead(302, { Location: '/' })
+        ctx.res.end()
+        return
+    }
 }
 
 export default withAuthUser(withAuthUserInfo(Signin))
