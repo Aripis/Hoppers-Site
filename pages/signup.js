@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import Textfield from '../components/textfield'
 import Button from '../components/button'
+import Navbar from '../components/navbar'
 import Head from '../components/head'
+import withAuthUser from '../utils/pageWrappers/withAuthUser'
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import initFirebase from '../utils/auth/initFirebase'
 
-const Signup = () => {
+initFirebase()
+
+const Signup = props => {
     const [firstName, setFirstName] = useState("")
     const [surName, setSurname] = useState("")
     const [email, setEmail] = useState("")
@@ -11,6 +19,13 @@ const Signup = () => {
     const [password, setPassword] = useState("")
     const [rePassword, setRePassword] = useState("")
     const [loadingSignUp, setLoadingSignUp] = useState(false)
+
+    const handleSignUp = e => {
+        e.preventDefault()
+        let email = document.getElementById("email").value
+        let password = document.getElementById("password").value
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+    }
 
     return (
         <>
@@ -154,8 +169,9 @@ const Signup = () => {
                     }
                 }
             `}</style>
+            <Navbar {...props}/>
             <div className="wrp-signup">
-                <form onSubmit={e => e.preventDefault()} className="signup-form">
+                <form onSubmit={handleSignUp} className="signup-form">
                     <h2 className="form-header">Create your new profile</h2>
                     <div className="form-field">
                         <div className="form-div">
@@ -169,7 +185,7 @@ const Signup = () => {
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield value={email} required onChange={e => setEmail(e.target.value)} type="email" className="form-input"/>
+                            <Textfield id="email" value={email} required onChange={e => setEmail(e.target.value)} type="email" className="form-input"/>
                             <label className="required">Email</label>
                         </div>
                         <div className="form-div">
@@ -179,7 +195,7 @@ const Signup = () => {
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield value={password} required onChange={e => setPassword(e.target.value)} type="password" className="form-input"/>
+                            <Textfield id="password" value={password} required onChange={e => setPassword(e.target.value)} type="password" className="form-input"/>
                             <label className="required">Password</label>
                         </div>
                         <div className="form-div">
@@ -196,4 +212,4 @@ const Signup = () => {
     )
 }
 
-export default Signup;
+export default withAuthUser(withAuthUserInfo(Signup))

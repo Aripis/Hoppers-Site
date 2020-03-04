@@ -1,11 +1,26 @@
 import { useState } from 'react';
 import Textfield from '../components/textfield'
 import Button from '../components/button'
+import Navbar from '../components/navbar'
+import withAuthUser from '../utils/pageWrappers/withAuthUser'
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import initFirebase from '../utils/auth/initFirebase'
 
-const Signin = () => {
+initFirebase()
+
+const Signin = props => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loadingSignIn, setLoadingSignIn] = useState(false)
+
+    const handleSignIn = e => {
+        e.preventDefault()
+        let email = document.getElementById('email').value
+        let password = document.getElementById('password').value
+        firebase.auth().signInWithEmailAndPassword(email, password)
+    }
 
     return (
         <>
@@ -148,18 +163,19 @@ const Signin = () => {
                     }
                 }
             `}</style>
+            <Navbar {...props}/>
             <div className="wrp-signin">
-                <form onSubmit={e => e.preventDefault()} className="signin-form">
+                <form onSubmit={handleSignIn} className="signin-form">
                     <h2 className="form-header">Sign into your account</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield value={email} onChange={e => setEmail(e.target.value)} type="email" className="form-input" />
+                            <Textfield id="email" value={email} onChange={e => setEmail(e.target.value)} type="email" className="form-input" />
                             <label>Email</label>
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-input" />
+                            <Textfield id="password" value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-input" />
                             <label>Password</label>
                         </div>
                     </div>
@@ -172,4 +188,4 @@ const Signin = () => {
     )
 }
 
-export default Signin;
+export default withAuthUser(withAuthUserInfo(Signin))

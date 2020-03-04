@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import Link from 'next/link'
+import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
+import logout from '../utils/auth/logout'
+import Router from 'next/router'
 
-const Navbar = () => {
+const Navbar = props => {
+    const { AuthUserInfo } = props
+    const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     return (
         <>
             <style jsx>{`
@@ -50,16 +57,49 @@ const Navbar = () => {
                     <Link href="">
                         <a>ifc</a>
                     </Link>
-                    <Link href="/signin">
-                        <a>Sign in</a>
-                    </Link>
-                    <Link href="/signup">
-                        <a>Sign up</a>
-                    </Link>
+                    {!AuthUser ? (
+                        <>
+                            <Link href="/signin">
+                                <a>Sign in</a>
+                            </Link>
+                            <Link href="/signup">
+                                <a>Sign up</a>
+                            </Link>
+                        </>
+                    ) : (
+                        <a onClick={async () => {
+                            try {
+                              await logout()
+                              Router.push('/')
+                            } catch (e) {
+                              console.error(e)
+                            }
+                          }}>Log out</a>
+                    )}
                 </div>
             </nav>
         </>
     );
+}
+
+Navbar.propTypes = {
+    AuthUserInfo: PropTypes.shape({
+        AuthUser: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            emailVerified: PropTypes.bool.isRequired,
+        }),
+        token: PropTypes.string,
+    }),
+    data: PropTypes.shape({
+        user: PropTypes.shape({
+            id: PropTypes.string,
+        }).isRequired
+    }),
+}
+
+Navbar.defaultProps = {
+    AuthUserInfo: null,
 }
 
 export default Navbar;

@@ -2,7 +2,6 @@ import React from 'react'
 import App from 'next/app'
 
 import Head from '../components/head'
-import Navbar from '../components/navbar'
 import Footer from '../components/footer'
 
 export default class MyApp extends App {
@@ -70,7 +69,6 @@ export default class MyApp extends App {
 
                 `}</style>
                 <div className="layout">
-                    <Navbar />
                     <Component {...pageProps} />
                     <Footer />
                 </div>
