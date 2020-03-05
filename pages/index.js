@@ -2,8 +2,6 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import logout from '../utils/auth/logout'
-import Router from 'next/router'
 import Navbar from '../components/navbar'
 
 const Home = props => {

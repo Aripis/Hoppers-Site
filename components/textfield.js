@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Label from '../components/label'
 
 const Textfield = props => (
     <>
@@ -44,6 +45,9 @@ const Textfield = props => (
             placeholder={props.placeholder}
             required={props.required}
         />
+        {props.label &&
+            <Label required={props.required} error={props.error} htmlFor={props.id} content={props.label} on="input" />
+        }
     </>
 )
 

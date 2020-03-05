@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { get } from 'lodash/object'
+import PropTypes from 'prop-types'
+import { get } from 'lodash'
 import Textfield from '../components/textfield'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
@@ -22,8 +23,6 @@ const Signin = props => {
 
     const handleSignIn = e => {
         e.preventDefault()
-        let email = document.getElementById('email').value
-        let password = document.getElementById('password').value
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
             Router.replace('/')
@@ -31,7 +30,6 @@ const Signin = props => {
         .catch(error => {
             setError(error.message)
             setLoadingSignIn(false)
-            console.log(error)
         })
     }
 
@@ -148,14 +146,12 @@ const Signin = props => {
                     <h2 className="form-header">Sign into your account</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} id="email" value={email} onChange={e => {setEmail(e.target.value); setError("")}} type="email" className="form-input" />
-                            <Label error={error} htmlFor="email" content="Email" on="form-input"/>
+                            <Textfield label="Email" error={error} id="email" value={email} onChange={e => {setEmail(e.target.value); setError("")}} type="email" className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} id="password" value={password} onChange={e => {setPassword(e.target.value); setError("")}} type="password" className="form-input" />
-                            <Label error={error} htmlFor="password" content="Password" on="form-input"/>
+                            <Textfield label="Password" error={error} id="password" value={password} onChange={e => {setPassword(e.target.value); setError("")}} type="password" className="form-input" />
                         </div>
                     </div>
                     <Message 
@@ -184,6 +180,26 @@ Signin.getInitialProps = async ctx => {
         ctx.res.end()
         return
     }
+}
+
+Signin.propTypes = {
+    AuthUserInfo: PropTypes.shape({
+        AuthUser: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            emailVerified: PropTypes.bool.isRequired,
+        }),
+        token: PropTypes.string,
+    }),
+    data: PropTypes.shape({
+        user: PropTypes.shape({
+            id: PropTypes.string,
+        }).isRequired
+    }),
+}
+
+Signin.defaultProps = {
+    AuthUserInfo: null,
 }
 
 export default withAuthUser(withAuthUserInfo(Signin))

@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { get } from 'lodash/object'
+import PropTypes from 'prop-types'
+import { get } from 'lodash'
 import Textfield from '../components/textfield'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
+import Label from '../components/label'
 import Head from '../components/head'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from '../utils/auth/initFirebase'
+import Router from 'next/router'
 
 initFirebase()
 
@@ -20,17 +23,17 @@ const Signup = props => {
     const [password, setPassword] = useState("")
     const [rePassword, setRePassword] = useState("")
     const [loadingSignUp, setLoadingSignUp] = useState(false)
+    const [error, setError] = useState("")
 
     const handleSignUp = e => {
         e.preventDefault()
-        let email = document.getElementById("email").value
-        let password = document.getElementById("password").value
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(() => {
             Router.replace('/')
         })
         .catch(error => {
-            console.log(error)
+            setLoadingSignUp(false)
+            setError(error)
         })
     }
 
@@ -182,36 +185,32 @@ const Signup = props => {
                     <h2 className="form-header">Create your new profile</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield value={firstName} required onChange={e => setFirstName(e.target.value)} className="form-input"/>
-                            <label className="required">First name</label>
+                            <Textfield error={error} label="First name" id="firstname" value={firstName} required onChange={e => setFirstName(e.target.value)} className="form-input"/>
                         </div>
                         <div className="form-div">
-                            <Textfield value={surName} required onChange={e => setSurname(e.target.value)} className="form-input"/>
-                            <label className="required">Surname</label>
+                            <Textfield error={error} label="Surname" id="surname" value={surName} required onChange={e => setSurname(e.target.value)} className="form-input"/>
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield id="email" value={email} required onChange={e => setEmail(e.target.value)} type="email" className="form-input"/>
-                            <label className="required">Email</label>
+                            <Textfield error={error} label="Email" id="email" value={email} required onChange={e => setEmail(e.target.value)} type="email" className="form-input"/>
                         </div>
                         <div className="form-div">
-                            <Textfield value={reEmail} required onChange={e => setReEmail(e.target.value)} type="email"  className="form-input"/>
-                            <label className="required">Retype email</label>
+                            <Textfield error={error} label="Retype email" id="retypeemail" value={reEmail} required onChange={e => setReEmail(e.target.value)} type="email"  className="form-input"/>
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield id="password" value={password} required onChange={e => setPassword(e.target.value)} type="password" className="form-input"/>
-                            <label className="required">Password</label>
+                            <Textfield error={error} label="Password" id="password" value={password} required onChange={e => setPassword(e.target.value)} type="password" className="form-input"/>
                         </div>
                         <div className="form-div">
-                            <Textfield value={rePassword} required onChange={e => setRePassword(e.target.value)} type="password" className="form-input"/>
-                            <label className="required">Retype password</label>
+                            <Textfield error={error} label="Retype password" id="retypepassword" value={rePassword} required onChange={e => setRePassword(e.target.value)} type="password" className="form-input"/>
                         </div>
                     </div>
                     <div className="form-actions">
-                        <Button loading={loadingSignUp} onClick={() => setLoadingSignUp(!loadingSignUp)} type="submit" value="Sign up" className="form-submit"/>
+                        <Button loading={loadingSignUp} onClick={() => setLoadingSignUp(!loadingSignUp)} type="submit" className="form-submit">
+                            Sign up
+                        </Button>
                     </div>
                 </form>
             </div>
@@ -227,6 +226,26 @@ Signup.getInitialProps = async ctx => {
         ctx.res.end()
         return
     }
+}
+
+Signup.propTypes = {
+    AuthUserInfo: PropTypes.shape({
+        AuthUser: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            emailVerified: PropTypes.bool.isRequired,
+        }),
+        token: PropTypes.string,
+    }),
+    data: PropTypes.shape({
+        user: PropTypes.shape({
+            id: PropTypes.string,
+        }).isRequired
+    }),
+}
+
+Signup.defaultProps = {
+    AuthUserInfo: null,
 }
 
 export default withAuthUser(withAuthUserInfo(Signup))
