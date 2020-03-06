@@ -4,7 +4,6 @@ import { get } from 'lodash'
 import Textfield from '../components/textfield'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
-import Label from '../components/label'
 import Head from '../components/head'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
@@ -226,6 +225,7 @@ Signup.getInitialProps = async ctx => {
         ctx.res.end()
         return
     }
+    return
 }
 
 Signup.propTypes = {
