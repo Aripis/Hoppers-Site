@@ -22,6 +22,7 @@ const Signin = props => {
 
     const handleSignIn = e => {
         e.preventDefault()
+        setLoadingSignIn(!loadingSignIn)
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
             Router.replace('/')
@@ -160,7 +161,7 @@ const Signin = props => {
                         content={error}
                     />
                     <div className="form-actions">
-                        <Button loading={loadingSignIn} onClick={() => setLoadingSignIn(!loadingSignIn)} type="submit" className="form-submit">
+                        <Button loading={loadingSignIn} type="submit" className="form-submit">
                             Sign in
                         </Button>
                     </div>

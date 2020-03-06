@@ -35,13 +35,14 @@ const Signup = props => {
 
     const handleSignUp = e => {
         e.preventDefault()
+        setLoadingSignUp(!loadingSignUp)
         if(!/^[a-zA-Z ]+$/.test(`${firstName} ${surName}`)){
             setError("Name must be aplhabetical");
         }
-        if (!email === reEmail) {
+        if (email !== reEmail) {
             setError("Emails don't match");
         }
-        if(!password === rePassword){
+        if(password !== rePassword){
             setError("Passwords don't match");
         }
         if (!error) {
@@ -203,7 +204,7 @@ const Signup = props => {
                         content={error}
                     />
                     <div className="form-actions">
-                        <Button loading={loadingSignUp} onClick={() => setLoadingSignUp(!loadingSignUp)} type="submit" className="form-submit">
+                        <Button loading={loadingSignUp} type="submit" className="form-submit">
                             Sign up
                         </Button>
                     </div>
