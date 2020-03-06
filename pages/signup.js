@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import Textfield from '../components/textfield'
@@ -11,6 +11,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from '../utils/auth/initFirebase'
 import Router from 'next/router'
+import Message from '../components/message'
 
 initFirebase()
 
@@ -24,17 +25,36 @@ const Signup = props => {
     const [loadingSignUp, setLoadingSignUp] = useState(false)
     const [error, setError] = useState("")
 
+    useEffect(() => {
+        let emailCheck = document.getElementById("retypeemail");
+        let passwordCheck = document.getElementById("retypepassword");
+
+        emailCheck.onpaste = e => e.preventDefault();
+        passwordCheck.onpaste = e => e.preventDefault();
+    }, [])
+
     const handleSignUp = e => {
         e.preventDefault()
-        if (email === reEmail && password === rePassword) {
+        if(!/^[a-zA-Z ]+$/.test(`${firstName} ${surName}`)){
+            setError("Name must be aplhabetical");
+        }
+        if (!email === reEmail) {
+            setError("Emails don't match");
+        }
+        if(!password === rePassword){
+            setError("Passwords don't match");
+        }
+        if (!error) {
             firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {
+            .then(() => {x
                 Router.replace('/')
             })
             .catch(error => {
                 setLoadingSignUp(false)
-                setError(error)
+                setError(error.message)
             })
+        }else{
+            setLoadingSignUp(false);
         }
     }
 
@@ -58,14 +78,23 @@ const Signup = props => {
                     padding: 4em 6em 5em;
                     display: flex;
                     flex-direction: column;
-                    align-items: flex-end;
+                    max-width: 55em;
+                    width: 100%;
                     background-image: linear-gradient(to top, #d2d2d2, #e5e5e5);
                     border-radius: .3em;
                     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                 }
 
                 .wrp-signup > .signup-form > .form-field {
-                    width: 50em;
+                    width: 100%;
+                }
+
+                .wrp-signup > .signup-form > :global(.form-message) {
+                    margin-top: 1em;
+                }
+
+                .wrp-signup > .signup-form > .form-actions {
+                    align-self: flex-end;
                 }
 
                 .wrp-signup > .signup-form > .form-field,
@@ -103,35 +132,6 @@ const Signup = props => {
                     font-size: 1em;
                 }
 
-                .form-div > label {
-                    color: grey;
-                    position: absolute;
-                    margin: .81em 1.05em 0;
-                    font-size: 1em;
-                    user-select: none;
-                    transform: translateZ(0);
-                    transition: .2s;
-                    pointer-events: none;
-                }
-
-                .form-div .required:after{
-                    content: '*';
-                    color: red;
-                    margin-left: .25em;
-                }
-
-                :global(.form-input:not([value=""])) + label{
-                    margin: -1.5em 0 0 .3em;
-                    color: black;
-                    font-size: .75em;
-                }
-
-                :global(.form-input):focus + label {
-                    margin: -1.5em 0 0 .3em;
-                    color: #0089fa;
-                    font-size: .75em;
-                }
-
                 @media only screen and (max-width: 985px){
                     .wrp-signup > .signup-form > .form-field {
                         flex-direction: column;
@@ -153,19 +153,6 @@ const Signup = props => {
 
                     .wrp-signup > .signup-form > .form-field > :global(.form-submit) {
                         margin-top: 1em;
-                    }
-
-                    .form-div > label {
-                        margin: 2.2em 1.05em 0;
-                        font-size: 1em;
-                    }
-
-                    :global(.form-input:not([value=""])) + label{
-                        margin: .2em 0 0 0;
-                    }
-
-                    :global(.form-input):focus + label {
-                        margin: .2em 0 0 0;
                     }
                 }
 
@@ -208,6 +195,13 @@ const Signup = props => {
                             <Textfield error={error} label="Retype password" id="retypepassword" value={rePassword} required onChange={e => setRePassword(e.target.value)} type="password" className="form-input"/>
                         </div>
                     </div>
+                    <Message 
+                        visible={error} 
+                        error={error} 
+                        className="form-message" 
+                        header="An error occurred"
+                        content={error}
+                    />
                     <div className="form-actions">
                         <Button loading={loadingSignUp} onClick={() => setLoadingSignUp(!loadingSignUp)} type="submit" className="form-submit">
                             Sign up

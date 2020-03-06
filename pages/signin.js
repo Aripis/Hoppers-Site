@@ -58,7 +58,6 @@ const Signin = props => {
 
                 .wrp-signin > .signin-form > .form-field, 
                 .wrp-signin > .signin-form > :global(.form-message) {
-                    max-width: 25em;
                     width: 100%;
                 }
 
