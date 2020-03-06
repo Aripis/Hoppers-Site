@@ -46,7 +46,7 @@ const Signup = props => {
         }
         if (!error) {
             firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {x
+            .then(() => { 
                 Router.replace('/')
             })
             .catch(error => {
@@ -173,26 +173,26 @@ const Signup = props => {
                     <h2 className="form-header">Create your new profile</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="First name" id="firstname" value={firstName} required onChange={e => setFirstName(e.target.value)} className="form-input"/>
+                            <Textfield error={error} label="First name" id="firstname" value={firstName} required onChange={e => {setFirstName(e.target.value); setError("")}} className="form-input"/>
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Surname" id="surname" value={surName} required onChange={e => setSurname(e.target.value)} className="form-input"/>
-                        </div>
-                    </div>
-                    <div className="form-field">
-                        <div className="form-div">
-                            <Textfield error={error} label="Email" id="email" value={email} required onChange={e => setEmail(e.target.value)} type="email" className="form-input"/>
-                        </div>
-                        <div className="form-div">
-                            <Textfield error={error} label="Retype email" id="retypeemail" value={reEmail} required onChange={e => setReEmail(e.target.value)} type="email"  className="form-input"/>
+                            <Textfield error={error} label="Surname" id="surname" value={surName} required onChange={e => {setSurname(e.target.value); setError("")}} className="form-input"/>
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Password" id="password" value={password} required onChange={e => setPassword(e.target.value)} type="password" className="form-input"/>
+                            <Textfield error={error} label="Email" id="email" value={email} required onChange={e => {setEmail(e.target.value); setError("")}} type="email" className="form-input"/>
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Retype password" id="retypepassword" value={rePassword} required onChange={e => setRePassword(e.target.value)} type="password" className="form-input"/>
+                            <Textfield error={error} label="Retype email" id="retypeemail" value={reEmail} required onChange={e => {setReEmail(e.target.value); setError("")}} type="email"  className="form-input"/>
+                        </div>
+                    </div>
+                    <div className="form-field">
+                        <div className="form-div">
+                            <Textfield error={error} label="Password" id="password" value={password} required onChange={e => {setPassword(e.target.value); setError("")}} type="password" className="form-input"/>
+                        </div>
+                        <div className="form-div">
+                            <Textfield error={error} label="Retype password" id="retypepassword" value={rePassword} required onChange={e => {setRePassword(e.target.value); setError("")}} type="password" className="form-input"/>
                         </div>
                     </div>
                     <Message 
