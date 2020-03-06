@@ -1,0 +1,24 @@
+{
+    "env": {
+      "firebase_auth_domain": "@firebase_auth_domain",
+      "firebase_client_email": "@firebase_client_email",
+      "firebase_database_url": "@firebase_database_url",
+      "firebase_project_id": "@firebase_project_id",
+      "firebase_public_api_key": "@firebase_public_api_key",
+      "firebase_private_key": "@firebase_private_key",
+      "session_secret_current": "@session_secret_current",
+      "session_secret_previous": "@session_secret_previous"
+    },
+    "build": {
+      "env": {
+        "firebase_auth_domain": "@firebase_auth_domain",
+        "firebase_client_email": "@firebase_client_email",
+        "firebase_database_url": "@firebase_database_url",
+        "firebase_project_id": "@firebase_project_id",
+        "firebase_public_api_key": "@firebase_public_api_key",
+        "firebase_private_key": "@firebase_private_key",
+        "session_secret_current": "@session_secret_current",
+        "session_secret_previous": "@session_secret_previous"
+      }
+    }
+  }

@@ -2,10 +2,10 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 
 const config = {
-  apiKey: process.env.FIREBASE_PUBLIC_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
+  apiKey: process.env.firebase_public_api_key,
+  authDomain: process.env.firebase_auth_domain,
+  databaseURL: process.env.firebase_database_url,
+  projectId: process.env.firebase_project_id,
 }
 
 export default () => {
