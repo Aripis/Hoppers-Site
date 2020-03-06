@@ -227,6 +227,7 @@ Signup.getInitialProps = async ctx => {
         ctx.res.end()
         return
     }
+    return
 }
 
 Signup.propTypes = {
