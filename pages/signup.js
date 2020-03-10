@@ -53,7 +53,8 @@ const Signup = props => {
                 await firebase.firestore().collection("users").doc(res.user.uid).set({
                     firstName: firstName,
                     surName: surName,
-                    email: email
+                    email: email,
+                    role: "user"
                 })
                 Router.replace('/')
             } catch (error) {
