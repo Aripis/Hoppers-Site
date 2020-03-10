@@ -13,7 +13,6 @@ export default async () => {
           const elem = window.document.getElementById('__MY_AUTH_USER_INFO')
           elem.parentNode.removeChild(elem)
         } catch (e) {
-          console.error(e)
         }
       }
       return true

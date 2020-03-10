@@ -8,6 +8,7 @@ import Head from '../components/head'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
+import 'firebase/firestore'
 import 'firebase/auth'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
@@ -33,29 +34,35 @@ const Signup = props => {
         passwordCheck.onpaste = e => e.preventDefault();
     }, [])
 
-    const handleSignUp = e => {
+    const handleSignUp = async e => {
         e.preventDefault()
+        let error = ""
         setLoadingSignUp(!loadingSignUp)
         if(!/^[a-zA-Z ]+$/.test(`${firstName} ${surName}`)){
-            setError("Name must be aplhabetical");
+            error = "Name must be aplhabetical"
         }
         if (email !== reEmail) {
-            setError("Emails don't match");
+            error = "Emails don't match"
         }
         if(password !== rePassword){
-            setError("Passwords don't match");
+            error = "Passwords don't match"
         }
-        if (!error) {
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { 
+        if(!error) {
+            try{
+                let res = await firebase.auth().createUserWithEmailAndPassword(email, password)
+                await firebase.firestore().collection("users").doc(res.user.uid).set({
+                    firstName: firstName,
+                    surName: surName,
+                    email: email
+                })
                 Router.replace('/')
-            })
-            .catch(error => {
+            } catch (error) {
                 setLoadingSignUp(false)
-                setError(error.message)
-            })
-        }else{
+                setError(error.message)    
+            }
+        } else{
             setLoadingSignUp(false);
+            setError(error)
         }
     }
 
