@@ -9,7 +9,7 @@ import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import initFirebase from '../utils/auth/initFirebase'
+import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
 
 initFirebase()

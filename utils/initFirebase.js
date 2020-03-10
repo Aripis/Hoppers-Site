@@ -1,5 +1,4 @@
 import firebase from 'firebase/app'
-import 'firebase/auth'
 
 const config = {
   apiKey: process.env.firebase_public_api_key,
