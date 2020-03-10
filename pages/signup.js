@@ -58,9 +58,9 @@ const Signup = props => {
                 Router.replace('/')
             } catch (error) {
                 setLoadingSignUp(false)
-                setError(error.message)    
+                setError(error.message)
             }
-        } else{
+        } else {
             setLoadingSignUp(false);
             setError(error)
         }
