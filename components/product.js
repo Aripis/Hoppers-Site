@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import priceConvert from '../utils/priceConvert'
-import Button from './button';
+import Button from './button'
+import Router from 'next/router'
 
 const Product = props => {
     return (
@@ -92,7 +93,9 @@ const Product = props => {
                         </div>
                         
                         <div className="info-actions">
-                            <Button className="actions-button">
+                            <Button 
+                            className="actions-button"
+                            onClick={() => {Router.push('/productPage')}}>
                                 See offer
                             </Button>
                         </div>
