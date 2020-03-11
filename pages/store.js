@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import { get } from 'lodash'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
 import Product from '../components/product'
 import { useState } from 'react';
 import Textfield from '../components/textfield'
@@ -22,58 +21,340 @@ const Store = props => {
             <style jsx>{`
                 .wrp-products {
                     flex-grow: 1;
-                    flex-direction: row;
                     display: flex;
-                    flex-wrap: wrap;
+                    flex-flow: row wrap;
                     justify-content: center;
-                    align-self: start;
+                    background-color: #E9EBEE;
+                }
+
+                @media only screen and (max-width: 450px){
+                    .wrp-products > :global(.product) {
+                        margin-top: .4em;
+                        margin-bottom:0;
+                    }
+
+                    .wrp-products > :global(.product):nth-child(odd) {
+                        margin-left: 0;
+                        margin-right: .2em;
+                    }
+
+                    .wrp-products > :global(.product):nth-child(even) {
+                        margin-left: .2em;
+                        margin-right: 0;
+                    }
                 }
             `}</style>
             <Navbar {...props}/>
             <div className="wrp-products">
-                <Product name="Kalata" price="1992" available moreInfo="asdasdasdasdasa sdasdadsadadasd" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                {/* <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasd" />
-                <Product name="Petur" price="176" available moreInfo="kooonondfd oooook" />
-                <Product name="Ivan" price="1882" available moreInfo="kooonondfd sdasdadsadadasdsdasdadsadadasdsdasdadsadadasdsdasdadsadadasdsdasdadsadadasdsdasdadsadadasdsdasdadsadadasd" /> */}
+                <Product
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
+                <Product 
+                    className="product"
+                    image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                    name="Chair Milon, Grey, Wooden" 
+                    price="19.99" 
+                    currency="лв"
+                    available
+                />
+                <Product 
+                    className="product"
+                    image="https://nikstyle.bg/wp-content/uploads/2019/01/edward.jpg" 
+                    name="Chair Drake, Brown, Wooden" 
+                    price="18.99"
+                    currency="лв"
+                    available 
+                />
             </div>
         </>
     )
 }
 
-
-Store.propTypes = {
-    AuthUserInfo: PropTypes.shape({
-        AuthUser: PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            email: PropTypes.string.isRequired,
-            emailVerified: PropTypes.bool.isRequired,
-        }),
-        token: PropTypes.string,
-    }),
-    data: PropTypes.shape({
-        user: PropTypes.shape({
-            id: PropTypes.string,
-        }).isRequired
-    }),
-}
-
-Store.defaultProps = {
-    AuthUserInfo: null,
-}
 Store.propTypes = {
     AuthUserInfo: PropTypes.shape({
         AuthUser: PropTypes.shape({

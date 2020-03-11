@@ -3,7 +3,7 @@ import Dotloader from './dotloader';
 
 const Button = props => (
     <>
-        <style>{`
+        <style jsx>{`
             .button {
                 padding: .5em 1em;
                 border: 0;
@@ -26,10 +26,7 @@ const Button = props => (
 
             .button:active {
                 background-position: 100% 0;
-                -webkit-font-smoothing: subpixel-antialiased;
-                backface-visibility: hidden;
-                transform: translateZ(0);
-                transform: scale(1.03);
+                transform: perspective(1px) scale(1.03);
             }
         `}</style>
         <button
