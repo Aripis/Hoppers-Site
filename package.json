@@ -19,7 +19,8 @@
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.1.6",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-image-gallery": "^1.0.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.149"

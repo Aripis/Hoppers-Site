@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import Textfield from '../components/textfield'

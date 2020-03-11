@@ -4,12 +4,14 @@ import App from 'next/app'
 import Head from '../components/head'
 import Footer from '../components/footer'
 
+import "react-image-gallery/styles/css/image-gallery.css"
+
 export default class MyApp extends App {
     render() {
         const { Component, pageProps } = this.props
         return (
             <>
-                <Head />
+                <Head title="Hoppers"/>
                 <style jsx global>{`
                     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');                    
                     
