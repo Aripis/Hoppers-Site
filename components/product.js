@@ -95,7 +95,7 @@ const Product = props => {
                         <div className="info-actions">
                             <Button 
                             className="actions-button"
-                            onClick={() => {Router.push('/productPage')}}>
+                            onClick={() => {Router.push('/viewproduct')}}>
                                 See offer
                             </Button>
                         </div>

@@ -1,5 +1,5 @@
 export default (price, currency) => {
-    let parsedPrice = price.split(".")
+    let parsedPrice = price.toString().split(".")
     return(
         <>
             <style jsx>{`

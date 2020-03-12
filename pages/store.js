@@ -48,10 +48,11 @@ const Store = props => {
             <div className="wrp-products"> 
                 {[...Array(20).keys()].map(i => (
                     <Product
+                        key={i}
                         className="product"
                         image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
                         name="Chair Milon, Grey, Wooden" 
-                        price="19.99" 
+                        price={19.99}
                         currency="лв"
                         available
                         />
