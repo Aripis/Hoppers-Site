@@ -1,5 +1,7 @@
 const withCSS = require('@zeit/next-css')
 
+require('./env.js')
+
 module.exports = withCSS({
     env: {
         firebase_auth_domain: process.env.firebase_auth_domain,
