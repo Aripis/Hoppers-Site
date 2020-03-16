@@ -5,10 +5,10 @@ node_js:
 
 env:
 - firebase_auth_domain=hoppers-dev.firebaseapp.com
-- firebase_client_email=firebase-adminsdk-t9zxe@hoppers-dev.iam.gserviceaccount.com
-- firebase_database_url=https://hoppers-dev.firebaseio.com
-- firebase_project_id=hoppers-dev
-- firebase_public_api_key=AIzaSyCzUfd5pB1vT4RZCKCojNhhXYobF-xAOvM
+  firebase_client_email=firebase-adminsdk-t9zxe@hoppers-dev.iam.gserviceaccount.com
+  firebase_database_url=https://hoppers-dev.firebaseio.com
+  firebase_project_id=hoppers-dev
+  firebase_public_api_key=AIzaSyCzUfd5pB1vT4RZCKCojNhhXYobF-xAOvM
 
 cache:
   directories:
