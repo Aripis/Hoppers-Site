@@ -24,8 +24,10 @@ before_script: skip
 script:
 - yarn build
 
-after_script:
-- yarn start
+after_script: skip
 
 after_failure:
 - echo "The build failed :("
+
+after_success:
+- echo "The build was successfull :)"
