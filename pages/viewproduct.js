@@ -177,7 +177,7 @@ const ViewProduct = props => {
                         </Button>
                     </div>
                 </div>
-                <div className="view-details">
+                {/* <div className="view-details">
                     <div className="details-description">
                         Description<br />
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
@@ -216,7 +216,7 @@ const ViewProduct = props => {
                             available
                         />
                     ))}
-                </div>
+                </div> */}
             </div>
         </>
     )

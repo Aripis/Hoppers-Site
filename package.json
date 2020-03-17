@@ -7,6 +7,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "test": "jest",
     "dev": "next",
     "build": "next build",
     "start": "next start"
@@ -28,6 +29,8 @@
     "react-image-gallery": "^1.0.6"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.149"
+    "@types/lodash": "^4.14.149",
+    "enzyme": "^3.11.0",
+    "jest": "^25.1.0"
   }
 }
