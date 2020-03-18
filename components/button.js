@@ -28,6 +28,10 @@ const Button = props => (
                 background-position: 100% 0;
                 transform: perspective(1px) scale(1.03);
             }
+
+            .button > span > :global(*) {
+                color: white;
+            }
         `}</style>
         <button
             id={props.id}

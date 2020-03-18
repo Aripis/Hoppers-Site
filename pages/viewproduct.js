@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import priceConvert from '../utils/priceConvert'
@@ -10,6 +10,7 @@ import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/firestore'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
 import Product from '../components/product'
@@ -19,22 +20,9 @@ import "react-image-gallery/styles/css/image-gallery.css"
 initFirebase()
 
 const ViewProduct = props => {
+    //to be encrypted?
 
-    let urls = [
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_afa4aac2b65cd5736e38f4f278b09527_450x450_l4o1.jpg", 
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_ba95234e06c901becd35312782b712fc_450x450_6r3l.jpg", 
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_070500e90047be9120d28e1eb8fc4142_450x450_o68i.jpg", 
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_fe46efa9dcda4ea6351baace05a15581_450x450_bdnm.jpg",
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_6229d1b1261237a232b5f67d13529ce6_450x450_q9e4.jpg",
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_7b8d0abc4b5158d275c1c7f6cd843edb_450x450_e3bp.jpg",
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_05abbaa19776bea7a893766606fe009f_450x450_rka6.jpg",
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_8ac385114fabc3a810d6d3df6ca936fe_450x450_t82b.jpg",
-        "https://s12emagst.akamaized.net/products/4528/4527387/images/res_d8211e274521cb689913d57ebc4f1609_450x450_mbn6.jpg",
-        "https://s12emagst.akamaized.net/products/5747/5746210/images/res_993d05230cb923da18f5eec2ec02fdd6_450x450_162h.jpg",
-        "https://s12emagst.akamaized.net/products/5747/5746210/images/res_3bd8e4ce008d7bca31e66bd6b44c76fd_450x450_nrck.jpg",
-        "https://s12emagst.akamaized.net/products/5747/5746210/images/res_5df1009b930e65aa0894b971ac7f9bad_450x450_qd31.jpg"
-    ]
-    let images = urls.map(url => ({original: url, thumbnail: url}))
+    let images = props.urls.map(url => ({original: url, thumbnail: url}))
     return (
         <>
             <style jsx>{`
@@ -146,7 +134,7 @@ const ViewProduct = props => {
                 }
 
             `}</style>
-            {/* <Navbar /> */}
+            <Navbar {...props}/>
             <div className="wrp-view">
                 <div className="view-content">
                     <div className="content-gallery">
@@ -160,7 +148,7 @@ const ViewProduct = props => {
                     </div>
                     <div className="content-preview">
                         <h2 className="preview-name">
-                            Телевизор Smart Android LED Star-Light, 32" (81 cм), 32DM6500, HD
+                            {props.name}
                         </h2>
                         <div className="preview-available">
                             {props.available || true ?
@@ -170,7 +158,7 @@ const ViewProduct = props => {
                             }
                         </div>
                         <div className="preview-price">
-                            <span>{priceConvert(19.99, "лв")}</span>
+                            <span>{priceConvert(props.price, "лв")}</span>
                         </div>
                         <Button className="content-button"> 
                             Add to cart.
@@ -222,4 +210,29 @@ const ViewProduct = props => {
     )
 }
 
-export default ViewProduct;
+ViewProduct.getInitialProps = async ctx => {
+    let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
+    return {...doc.data()}
+}
+
+ViewProduct.propTypes = {
+    AuthUserInfo: PropTypes.shape({
+        AuthUser: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            emailVerified: PropTypes.bool.isRequired,
+        }),
+        token: PropTypes.string,
+    }),
+    data: PropTypes.shape({
+        user: PropTypes.shape({
+            id: PropTypes.string,
+        }).isRequired
+    }),
+}
+
+ViewProduct.defaultProps = {
+    AuthUserInfo: null,
+}
+
+export default withAuthUser(withAuthUserInfo(ViewProduct));

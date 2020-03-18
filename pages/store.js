@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import Product from '../components/product'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Textfield from '../components/textfield'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
+import 'firebase/firestore'
 import 'firebase/auth'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
@@ -15,6 +16,13 @@ import Router from 'next/router'
 initFirebase()
 
 const Store = props => {
+    const [products, setProducts] = useState([])
+
+    useEffect(() => {
+        firebase.firestore().collection("products").onSnapshot(snapshot => {
+            setProducts(snapshot.docs.map(doc => ({...doc.data(), id: doc.id})))
+        })
+    })
 
     return (
         <>
@@ -46,16 +54,17 @@ const Store = props => {
             `}</style>
             <Navbar {...props}/>
             <div className="wrp-products"> 
-                {[...Array(20).keys()].map(i => (
+                {products.map((product, i) => (
                     <Product
                         key={i}
+                        id={product.id}
                         className="product"
-                        image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
-                        name="Chair Milon, Grey, Wooden" 
-                        price={19.99}
+                        image={product.urls[0]} 
+                        name={product.name} 
+                        price={product.price}
                         currency="лв"
-                        available
-                        />
+                        available={product.available}
+                    />
                 ))}
             </div>
         </>

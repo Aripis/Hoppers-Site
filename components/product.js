@@ -93,16 +93,17 @@ const Product = props => {
                         </div>
                         
                         <div className="info-actions">
-                            <Button 
-                            className="actions-button"
-                            onClick={() => {Router.push('/viewproduct')}}>
-                                See offer
-                            </Button>
+                                <Button 
+                                    className="actions-button"
+                                >
+                                    <Link href={`/viewproduct?id=${props.id}`}>
+                                        <a>See offer</a>
+                                    </Link>
+                                </Button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </>
     );
 }
