@@ -23,9 +23,9 @@ const AddProduct = props => {
     const [name, setName] = useState("")
     const [productId, setProductId] = useState("")
     const [price, setPrice] = useState("")
-    const [url, setUrl] = useState("")
+    const [urls, setUrls] = useState([])
     const [loadingAdd, setLoadingAdd] = useState(false)
-    const [checked, setChecked] = useState(false)
+    const [available, setAvailable] = useState(false)
 
     const addProduct = () => {
         setLoadingAdd(true)
@@ -33,9 +33,9 @@ const AddProduct = props => {
             productId: productId,
             name: name,
             price: price,
-            url: url,
+            urls: urls,
             uid: AuthUser.id,
-            available: checked
+            available: available
         }).then(() => setLoadingAdd(false))
     }
 
@@ -48,10 +48,11 @@ const AddProduct = props => {
             <div className="wrp-add">
                 <Textfield placeholder="Id" value={productId} onChange={e => setProductId(e.target.value)} className="form-input" />
                 <Textfield placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="form-input" />
-                <input type="checkbox" checked={checked} onChange={e => setChecked(e.target.checked)} id="available" name="available" value="Bike" />
+                <input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} id="available" name="available" value="Bike" />
                 <label htmlFor="available">Available</label>
                 <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="form-input" />
-                <Textfield placeholder="Image Url" value={url} onChange={e => setUrl(e.target.value)} className="form-input" />
+                {/* Must edit urls for thumnails and multiple images */}
+                <Textfield placeholder="Image Urls" value={urls[0]} onChange={e => setUrls([e.target.value])} className="form-input" />
                 <Button loading={loadingAdd} onClick={addProduct} className="form-submit">
                     Add product
                 </Button>

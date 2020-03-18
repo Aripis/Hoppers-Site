@@ -142,6 +142,7 @@ const ViewProduct = props => {
                             slideDuration={350}
                             showPlayButton={false}
                             showFullscreenButton={false}
+                            // careful with images
                             items={images}
                         />
                         
@@ -151,7 +152,7 @@ const ViewProduct = props => {
                             {props.name}
                         </h2>
                         <div className="preview-available">
-                            {props.available || true ?
+                            {props.available ?
                                 <>in stock</>
                                 :
                                 <>sold out</>

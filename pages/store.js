@@ -22,7 +22,7 @@ const Store = props => {
         firebase.firestore().collection("products").onSnapshot(snapshot => {
             setProducts(snapshot.docs.map(doc => ({...doc.data(), id: doc.id})))
         })
-    })
+    }, [])
 
     return (
         <>
@@ -59,6 +59,7 @@ const Store = props => {
                         key={i}
                         id={product.id}
                         className="product"
+                        // must be careful with urls
                         image={product.urls[0]} 
                         name={product.name} 
                         price={product.price}
