@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/Aripis/Hoppers-Site/badge.svg?branch=master)](https://coveralls.io/github/Aripis/Hoppers-Site?branch=master)
+
 # Hoppers
 
 ## How to use
