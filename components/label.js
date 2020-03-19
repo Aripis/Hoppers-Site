@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Label = props => (
     <>
         <style jsx>{`
@@ -65,5 +67,12 @@ const Label = props => (
 
     </>
 )
+
+Label.propTypes = {
+    on: PropTypes.string,
+    required: PropTypes.bool,
+    error: PropTypes.bool,
+    htmlFor: PropTypes.string
+}
 
 export default Label;

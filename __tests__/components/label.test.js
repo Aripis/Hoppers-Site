@@ -13,7 +13,7 @@ it('should have props', () => {
         />
     );
 
-    let label = wrapper.find('label')
+    let label = wrapper.find('.label')
 
     expect(label.prop('id')).toEqual('test')
     expect(label.prop('style')).toHaveProperty('color', 'red')
@@ -30,7 +30,7 @@ it('should have classNames, error and required', () => {
         />
     );
 
-    let label = wrapper.find('label')
+    let label = wrapper.find('.label')
 
     expect(label.hasClass('label required error test')).toEqual(true)
 });
@@ -40,7 +40,7 @@ it('should NOT have classNames, error and required', () => {
         <Label />
     );
 
-    let label = wrapper.find('label')
+    let label = wrapper.find('.label')
 
     expect(label.hasClass('label  ')).toEqual(true)
 });

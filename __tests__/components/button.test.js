@@ -6,6 +6,7 @@ it('should have props', () => {
     const wrapper = shallow(
         <Button
             id="test" 
+            style={{color: "red"}}
             type="submit"
         >
             Test
@@ -16,6 +17,7 @@ it('should have props', () => {
     let span = wrapper.find('span')
 
     expect(button.prop('id')).toEqual('test')
+    expect(button.prop('style')).toHaveProperty('color', 'red')
     expect(button.prop('type')).toEqual('submit')
     expect(span.prop('children')).toEqual('Test')
 });
@@ -30,7 +32,7 @@ it('should be loading and have classNames', () => {
         </Button>
     );
 
-    let button = wrapper.find('button')
+    let button = wrapper.find('.button')
     let span = wrapper.find('span')
 
     expect(button.hasClass('button test')).toEqual(true)
@@ -44,7 +46,7 @@ it('should NOT be loading and NOT have classNames', () => {
         </Button>
     );
 
-    let button = wrapper.find('button')
+    let button = wrapper.find('.button')
     let span = wrapper.find('span')
 
     expect(button.hasClass('button ')).toEqual(true)

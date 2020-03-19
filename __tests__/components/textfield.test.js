@@ -15,7 +15,7 @@ it('should have props', () => {
         />
     );
 
-    let input = wrapper.find('input')
+    let input = wrapper.find('.input')
 
     expect(input.prop('id')).toEqual('test')
     expect(input.prop('style')).toHaveProperty('color', 'red')
@@ -25,26 +25,25 @@ it('should have props', () => {
     expect(input.prop('required')).toEqual(true)
 });
 
-it('should have classNames, error and required', () => {    
+it('should have classNames and error', () => {    
     const wrapper = shallow(
         <Textfield
             className="test"
-            required
             error
         />
     );
 
-    let input = wrapper.find('input')
+    let input = wrapper.find('.input')
 
     expect(input.hasClass('input error test')).toEqual(true)
 });
 
-it('should NOT have classNames, error and required', () => {    
+it('should NOT have classNames and error', () => {    
     const wrapper = shallow(
         <Textfield />
     );
 
-    let input = wrapper.find('input')
+    let input = wrapper.find('.input')
 
     expect(input.hasClass('input  ')).toEqual(true)
 });

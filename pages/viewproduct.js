@@ -1,19 +1,13 @@
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import PropTypes from 'prop-types'
 import priceConvert from '../utils/priceConvert'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
-import { get } from 'lodash'
-import Textfield from '../components/textfield'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import initFirebase from '../utils/initFirebase'
-import Router from 'next/router'
-import Product from '../components/product'
 import ImageGallery from 'react-image-gallery'
 import "react-image-gallery/styles/css/image-gallery.css"
 
@@ -229,6 +223,11 @@ ViewProduct.propTypes = {
             id: PropTypes.string,
         }).isRequired
     }),
+    name: PropTypes.string,
+    available: PropTypes.bool
+    // to be written
+    // price:
+    // urls: 
 }
 
 ViewProduct.defaultProps = {
