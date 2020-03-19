@@ -1,6 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/Aripis/Hoppers-Site/badge.svg?branch=master)](https://coveralls.io/github/Aripis/Hoppers-Site?branch=master)
-
-[![Build Status](https://travis-ci.com/Aripis/Hoppers-Site.svg?branch=master)](https://travis-ci.com/Aripis/Hoppers-Site)
+[![Coverage Status](https://coveralls.io/repos/github/Aripis/Hoppers-Site/badge.svg?branch=master)](https://coveralls.io/github/Aripis/Hoppers-Site?branch=master) [![Build Status](https://travis-ci.com/Aripis/Hoppers-Site.svg?branch=master)](https://travis-ci.com/Aripis/Hoppers-Site)
 
 # Hoppers
 
