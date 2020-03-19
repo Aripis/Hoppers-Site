@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "dev": "next",
     "build": "next build",
     "start": "next start"
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.149",
+    "coveralls": "^3.0.9",
     "enzyme": "^3.11.0",
     "jest": "^25.1.0"
   }
