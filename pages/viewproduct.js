@@ -145,7 +145,6 @@ const ViewProduct = props => {
                             // careful with images
                             items={images}
                         />
-                        
                     </div>
                     <div className="content-preview">
                         <h2 className="preview-name">
