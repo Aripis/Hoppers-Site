@@ -7,10 +7,12 @@
   },
   "license": "MIT",
   "jest": {
-    "setupFilesAfterEnv": ["<rootDir>/test-setup.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/test-setup.js"
+    ]
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "dev": "next",
     "build": "next build",
@@ -33,6 +35,7 @@
     "react-image-gallery": "^1.0.6"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
     "@babel/preset-react": "^7.8.3",
     "@types/lodash": "^4.14.149",
