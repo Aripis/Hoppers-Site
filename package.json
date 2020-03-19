@@ -3,7 +3,7 @@
   "description": "The Hoppers Site.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IvanDimitrov2002/Hoppers-Site"
+    "url": "https://github.com/Aripis/Hoppers-Site"
   },
   "license": "MIT",
   "jest": {
@@ -35,9 +35,6 @@
     "react-image-gallery": "^1.0.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/preset-react": "^7.8.3",
     "@types/lodash": "^4.14.149",
     "babel-jest": "^25.1.0",
     "coveralls": "^3.0.9",
