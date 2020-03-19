@@ -14,6 +14,9 @@ import 'firebase/auth'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
 import Product from '../components/product'
+import ImageGallery from 'react-image-gallery'
+import "react-image-gallery/styles/css/image-gallery.css"
+
 
 initFirebase()
 
@@ -27,6 +30,7 @@ const EditProduct = props => {
     const [loadingEdit, setLoadingEdit] = useState(false)
     const [available, setAvailable] = useState(props.available)
     const [loadingDelete, setLoadingDelete] = useState(false)
+    let images = urls.map(url => ({original: url, thumbnail: url}))
 
     const editProduct = () => {
         setLoadingEdit(true)
@@ -48,23 +52,112 @@ const EditProduct = props => {
     return (
         <>
             <style jsx>{`
+                .wrp-edit {
+                    margin: 1em 1.8em;
+                    display: flex;
+                    flex-grow: 1;
+                    flex-direction: column;
+                }
+
+                .wrp-edit > .edit-content {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                }
+
+                .wrp-edit > .edit-content {
+                    margin: 1em;
+                }
+
+                :global(.image-gallery .image-gallery-image){
+                    width: 100vw;
+                    max-width: 45em;
+                    max-height: 28em!important;
+                }
+
+                :global(.image-gallery .image-gallery-thumbnails-wrapper.bottom){
+                    width: 100vw;
+                    max-width: 45em;
+                }
+
+                :global(.image-gallery .image-gallery-thumbnail){
+                    border: .2em solid transparent;
+                    padding: .625em;
+                    transition: .2s;
+                    min-height: 7em;
+                    margin-left: .625em;
+                    margin-right: .625em;
+                }
+
+                :global(.image-gallery .image-gallery-thumbnail:hover){
+                    border: .2em solid #36a5ff;
+                    border-radius: .3em;
+                }
+
+                :global(.image-gallery .image-gallery-thumbnail.active,
+                        .image-gallery .image-gallery-thumbnail:focus){
+                    border: .2em solid #006dc7;
+                    border-radius: .3em;
+                    transform: scale(.9);
+                }
+
+                :global(.image-gallery .image-gallery-icon:focus,
+                        .image-gallery .image-gallery-icon:hover) {
+                    outline: none;
+                    color: #36a5ff;
+                }
+
+                :global(.image-gallery .image-gallery-slide){
+                    outline:none;
+                }
+
+                @media only screen and (max-width: 520px) {
+                    :global(.image-gallery .image-gallery-image){
+                        max-width: 40em;
+                        max-height: 20em!important;
+                    }
+                }
+
+                @media only screen and (max-width: 390px) {
+                    :global(.image-gallery .image-gallery-thumbnail){
+                        width: 100%;
+                        max-width: 5.5em;
+                        margin-left: .2em;
+                        margin-right: .2em;
+                    }
+                }           
 
             `}</style>
             <Navbar {...props}/>
-            <div className="wrp-add">
-                <Textfield placeholder="Id" value={productId} onChange={e => setProductId(e.target.value)} className="form-input" />
-                <Textfield placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="form-input" />
-                <input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} id="available" name="available" value="Bike" />
-                <label htmlFor="available">Available</label>
-                <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="form-input" />
-                {/* Must edit urls for thumnails and multiple images */}
-                <Textfield placeholder="Image Url" value={urls[0]} onChange={e => setUrls([e.target.value])} className="form-input" />
-                <Button loading={loadingEdit} onClick={editProduct} className="form-submit">
-                    Edit product
-                </Button>
-                <Button loading={loadingDelete} onClick={deleteProduct} className="form-submit">
-                    Delete product
-                </Button>
+            <div className="wrp-edit">
+                <div className="edit-content">
+                    <div className="content-gallery">
+                        <ImageGallery
+                            slideDuration={350}
+                            showPlayButton={false}
+                            showFullscreenButton={false}
+                            // careful with images
+                            items={images}
+                        />
+                    </div>
+                    <div className="content-fields">
+                        <Textfield placeholder="Id" value={productId} onChange={e => setProductId(e.target.value)} className="edit-product-id" />
+                        <Textfield placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="edit-name" />
+                        <div className="edit-available">
+                            <input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} id="available" name="available" value="Bike" />
+                            <label htmlFor="available">Available</label>
+                        </div>
+                        <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="edit-price" />
+                        {/* Must edit urls for thumnails and multiple images */}
+                        <Textfield placeholder="Image Urls" value={urls[0]} onChange={e => setUrls([e.target.value])} className="edit-urls" />
+                        <Button loading={loadingEdit} onClick={editProduct} className="edit-submit-edit">
+                            Edit product
+                        </Button>
+                        <Button loading={loadingDelete} onClick={deleteProduct} className="edit-delete">
+                            Delete product
+                        </Button>
+                    </div>
+                </div>
             </div>
         </>
     )

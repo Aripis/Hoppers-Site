@@ -26,6 +26,7 @@ const AddProduct = props => {
     const [urls, setUrls] = useState([])
     const [loadingAdd, setLoadingAdd] = useState(false)
     const [available, setAvailable] = useState(false)
+    const [thumbnail, setThumbnail] = useState("")
 
     const addProduct = () => {
         setLoadingAdd(true)
@@ -34,6 +35,7 @@ const AddProduct = props => {
             name: name,
             price: price,
             urls: urls,
+            thumbnail: thumbnail,
             uid: AuthUser.id,
             available: available
         }).then(() => setLoadingAdd(false))

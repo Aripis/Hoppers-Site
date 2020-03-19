@@ -23,6 +23,7 @@ const ViewProduct = props => {
     //to be encrypted?
 
     let images = props.urls.map(url => ({original: url, thumbnail: url}))
+
     return (
         <>
             <style jsx>{`
@@ -41,9 +42,6 @@ const ViewProduct = props => {
 
                 .wrp-view > .view-content > * {
                     margin: 1em;
-                }
-
-                .wrp-view > .view-content > .content-gallery {
                 }
 
                 .wrp-view > .view-details {
