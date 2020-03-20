@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import Link from 'next/link'
 import PropTypes from 'prop-types'
-import priceConvert from '../utils/priceConvert'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
 import { get } from 'lodash'
@@ -13,7 +11,6 @@ import "firebase/firestore"
 import 'firebase/auth'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
-import Product from '../components/product'
 import ImageGallery from 'react-image-gallery'
 import "react-image-gallery/styles/css/image-gallery.css"
 
@@ -188,6 +185,12 @@ EditProduct.propTypes = {
             id: PropTypes.string,
         }).isRequired
     }),
+    name: PropTypes.string,
+    productId: PropTypes.string,
+    available: PropTypes.bool,
+    // to be written
+    // price: 
+    // url: 
 }
 
 EditProduct.defaultProps = {

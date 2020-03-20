@@ -38,6 +38,7 @@ const Button = props => (
             type={props.type}
             onClick={props.onClick}
             className={`button ${props.className || ""}`}
+            style={props.style}
         >   
             {props.loading && <Dotloader dots={props.dots}/>}
             <span style={{visibility: props.loading ? "hidden" : "visible"}}>{props.children}</span>

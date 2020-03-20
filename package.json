@@ -3,11 +3,17 @@
   "description": "The Hoppers Site.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IvanDimitrov2002/Hoppers-Site"
+    "url": "https://github.com/Aripis/Hoppers-Site"
   },
   "license": "MIT",
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/test-setup.js"
+    ]
+  },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "dev": "next",
     "build": "next build",
     "start": "next start"
@@ -30,7 +36,11 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.149",
+    "babel-jest": "^25.1.0",
+    "coveralls": "^3.0.9",
     "enzyme": "^3.11.0",
-    "jest": "^25.1.0"
+    "enzyme-adapter-react-16": "^1.15.2",
+    "jest": "^25.1.0",
+    "react-test-renderer": "^16.13.0"
   }
 }

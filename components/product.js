@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import priceConvert from '../utils/priceConvert'
 import Button from './button'
-import Router from 'next/router'
 
 const Product = props => {
     return (
@@ -82,9 +80,9 @@ const Product = props => {
                     
                     <div className="content-available">
                         {props.available ?
-                            <>in stock</>
+                            "in stock"
                             :
-                            <>sold out</>
+                            "sold out"
                         }
                     </div>
                     <div className="content-info">
@@ -106,6 +104,18 @@ const Product = props => {
             </div>
         </>
     );
+}
+
+Product.defaultProps = {
+    price: 0,
+    currency: "лв.",
+}
+
+Product.propTypes = {
+    available: PropTypes.bool,
+    image: PropTypes.string,
+    name: PropTypes.string,
+    id: PropTypes.string
 }
 
 export default Product;

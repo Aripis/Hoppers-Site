@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Message = props => (
     <>
         <style jsx>{`
@@ -59,5 +61,17 @@ const Message = props => (
         }
     </>
 )
+
+Message.defaultProps = {
+   visible: true
+}
+
+Message.propTypes = {
+    visible: PropTypes.bool,
+    success: PropTypes.bool,
+    error: PropTypes.bool,
+    header: PropTypes.string,
+    content: PropTypes.string
+}
 
 export default Message

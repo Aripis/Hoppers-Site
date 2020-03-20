@@ -19,6 +19,7 @@ install:
 - yarn install
 before_script: skip
 script:
+- yarn coveralls
 - yarn build
 after_script: skip
 after_failure:
