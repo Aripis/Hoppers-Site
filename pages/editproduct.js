@@ -17,7 +17,6 @@ import Product from '../components/product'
 import ImageGallery from 'react-image-gallery'
 import "react-image-gallery/styles/css/image-gallery.css"
 
-
 initFirebase()
 
 const EditProduct = props => {
