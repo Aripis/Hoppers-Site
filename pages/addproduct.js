@@ -12,7 +12,6 @@ import 'firebase/auth'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
 import ImageGallery from 'react-image-gallery'
-import "react-image-gallery/styles/css/image-gallery.css"
 
 initFirebase()
 
@@ -22,12 +21,10 @@ const AddProduct = props => {
     const [name, setName] = useState("")
     const [productId, setProductId] = useState("")
     const [price, setPrice] = useState("")
-    const [urls, setUrls] = useState([])
+    const [urls, setUrls] = useState("")
     const [loadingAdd, setLoadingAdd] = useState(false)
     const [loadingCancel, setLoadingCancel] = useState(false)
     const [available, setAvailable] = useState(false)
-    const [thumbnail, setThumbnail] = useState("")
-    let images = urls.map(url => ({original: url, thumbnail: url}))
 
     const addProduct = () => {
         setLoadingAdd(true)
@@ -35,8 +32,7 @@ const AddProduct = props => {
             productId: productId,
             name: name,
             price: price,
-            urls: urls,
-            thumbnail: thumbnail,
+            urls: urls.split(/[ ,]+/),
             uid: AuthUser.id,
             available: available
         }).then(() => Router.replace("/store"))
@@ -50,7 +46,6 @@ const AddProduct = props => {
     return (
         <>
             <style jsx>{`
-                
                 .wrp-add {
                     margin: 1em 1.8em;
                     display: flex;
@@ -136,10 +131,16 @@ const AddProduct = props => {
                             showPlayButton={false}
                             showFullscreenButton={false}
                             // careful with images
-                            items={images}
+                            items={
+                                urls.length > 0 
+                                ?
+                                urls.split(/[ ,]+/).map(url => ({original: url, thumbnail: url}))
+                                :
+                                [{original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi"}]
+                            }
                         />
                     </div>
-                    <div  className="content-fields">
+                    <div className="content-fields">
                         <Textfield placeholder="Id" value={productId} onChange={e => setProductId(e.target.value)} className="add-product-id" />
                         <Textfield placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="add-name" />
                         <div className="add-available">
@@ -148,7 +149,7 @@ const AddProduct = props => {
                         </div>
                         <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="add-price" />
                         {/* Must edit urls for thumnails and multiple images */}
-                        <Textfield placeholder="Image Urls" value={urls[0]} onChange={e => setUrls([e.target.value])} className="add-urls" />
+                        <Textfield placeholder="Image Urls" value={urls} onChange={e => setUrls(e.target.value)} className="add-urls" />
                         <Button loading={loadingAdd} onClick={addProduct} className="add-submit-add">
                             Add product
                         </Button>

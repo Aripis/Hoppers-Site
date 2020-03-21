@@ -3,6 +3,7 @@ import App from 'next/app'
 
 import Head from '../components/head'
 import Footer from '../components/footer'
+import "react-image-gallery/styles/css/image-gallery.css"
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPaypal } from '@fortawesome/free-brands-svg-icons'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
