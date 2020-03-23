@@ -61,9 +61,9 @@ const Navbar = props => {
                     <Link href="/store">
                         <a>Store</a>
                     </Link>
-                    <Link href="">
+                    {/* <Link href="">
                         <a>ifc</a>
-                    </Link>
+                    </Link> */}
                     {!AuthUser ? (
                         <>
                             <Link href="/signin">
