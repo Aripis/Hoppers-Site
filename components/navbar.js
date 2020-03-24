@@ -48,15 +48,12 @@ const Navbar = props => {
                     <h1>Aripis</h1>
                 </div>
                 <div className="navbar-buttons">
-                    {AuthUser ? (
+                    {AuthUser &&
                         <>
                             <Link href="/addproduct">
                                 <a>Add Product</a>
                             </Link>
                         </>
-                    ) : (
-                        <></>
-                    )
                     }
                     <Link href="/">
                         <a>Home</a>
@@ -64,9 +61,9 @@ const Navbar = props => {
                     <Link href="/store">
                         <a>Store</a>
                     </Link>
-                    <Link href="">
+                    {/* <Link href="">
                         <a>ifc</a>
-                    </Link>
+                    </Link> */}
                     {!AuthUser ? (
                         <>
                             <Link href="/signin">

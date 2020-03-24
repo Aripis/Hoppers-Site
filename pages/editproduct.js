@@ -12,7 +12,6 @@ import 'firebase/auth'
 import initFirebase from '../utils/initFirebase'
 import Router from 'next/router'
 import ImageGallery from 'react-image-gallery'
-import "react-image-gallery/styles/css/image-gallery.css"
 
 initFirebase()
 
@@ -22,19 +21,18 @@ const EditProduct = props => {
     const [name, setName] = useState(props.name)
     const [productId, setProductId] = useState(props.productId)
     const [price, setPrice] = useState(props.price)
-    const [urls, setUrls] = useState(props.urls)
+    const [urls, setUrls] = useState(props.urls.toString())
     const [loadingEdit, setLoadingEdit] = useState(false)
     const [available, setAvailable] = useState(props.available)
     const [loadingDelete, setLoadingDelete] = useState(false)
-    let images = urls.map(url => ({original: url, thumbnail: url}))
-
+    
     const editProduct = () => {
         setLoadingEdit(true)
         firebase.firestore().collection("products").doc(props.id).update({
             productId: productId,
             name: name,
             price: price,
-            urls: urls,
+            urls: urls.split(/[ ,]+/),
             uid: AuthUser.id,
             available: available
         }).then(() => setLoadingEdit(false))
@@ -133,7 +131,13 @@ const EditProduct = props => {
                             showPlayButton={false}
                             showFullscreenButton={false}
                             // careful with images
-                            items={images}
+                            items={
+                                urls.length > 0 
+                                ?
+                                urls.split(/[ ,]+/).map(url => ({original: url, thumbnail: url}))
+                                :
+                                [{original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi"}]
+                            }
                         />
                     </div>
                     <div className="content-fields">
@@ -145,7 +149,7 @@ const EditProduct = props => {
                         </div>
                         <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="edit-price" />
                         {/* Must edit urls for thumnails and multiple images */}
-                        <Textfield placeholder="Image Urls" value={urls[0]} onChange={e => setUrls([e.target.value])} className="edit-urls" />
+                        <Textfield placeholder="Image Urls" value={urls} onChange={e => setUrls(e.target.value)} className="edit-urls" />
                         <Button loading={loadingEdit} onClick={editProduct} className="edit-submit-edit">
                             Edit product
                         </Button>
