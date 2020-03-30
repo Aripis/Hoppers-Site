@@ -158,7 +158,7 @@ const ViewProduct = props => {
                         <Button className="content-button"> 
                             Add to cart.
                         </Button>
-                        {AuthUser &&
+                        {AuthUser.id === props.uid &&
                             <Button className="content-button"> 
                                 <Link href={`/editproduct?id=${props.id}`}>
                                     <a>Edit product</a>

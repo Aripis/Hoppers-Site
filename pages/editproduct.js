@@ -150,12 +150,16 @@ const EditProduct = props => {
                         <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="edit-price" />
                         {/* Must edit urls for thumnails and multiple images */}
                         <Textfield placeholder="Image Urls" value={urls} onChange={e => setUrls(e.target.value)} className="edit-urls" />
-                        <Button loading={loadingEdit} onClick={editProduct} className="edit-submit-edit">
-                            Edit product
-                        </Button>
-                        <Button loading={loadingDelete} onClick={deleteProduct} className="edit-delete">
-                            Delete product
-                        </Button>
+                        {AuthUser.id === props.uid &&
+                            <>
+                                <Button loading={loadingEdit} onClick={editProduct} className="edit-submit-edit">
+                                    Edit product
+                                </Button>
+                                <Button loading={loadingDelete} onClick={deleteProduct} className="edit-delete">
+                                    Delete product
+                                </Button>
+                            </>
+                        }
                     </div>
                 </div>
             </div>
@@ -167,7 +171,7 @@ EditProduct.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
-    if(AuthUser === null || AuthUser.id != doc.data().uid){
+    if((AuthUser === null || AuthUser.id !== doc.data().uid)  && ctx.res) {
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return
