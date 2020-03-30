@@ -3,11 +3,11 @@ import { verifyIdToken } from '../../utils/auth/firebaseAdmin'
 
 const handler = (req, res) => {
   if (!req.body) {
-    return res.status(400)
+    return res.status(400).json({code: 400, message: "Bad Request"})
   }
 
   const { token } = req.body
-  
+
   return verifyIdToken(token)
     .then(decodedToken => {
       req.session.decodedToken = decodedToken
