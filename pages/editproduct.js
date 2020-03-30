@@ -35,7 +35,7 @@ const EditProduct = props => {
             urls: urls.split(/[ ,]+/),
             uid: AuthUser.id,
             available: available
-        }).then(() => setLoadingEdit(false))
+        }).then(() => Router.replace(`/viewproduct?id=${props.id}`))
     }
 
     const deleteProduct = () => {
@@ -166,12 +166,12 @@ const EditProduct = props => {
 EditProduct.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    if(AuthUser === null){
+    let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
+    if(AuthUser === null || AuthUser.id != doc.data().uid){
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return
     }
-    let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
     return {...doc.data(), id: ctx.query.id}
 }
 

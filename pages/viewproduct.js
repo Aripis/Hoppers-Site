@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import priceConvert from '../utils/priceConvert'
 import Button from '../components/button'
 import Navbar from '../components/navbar'
+import { get } from 'lodash'
 import withAuthUser from '../utils/pageWrappers/withAuthUser'
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
 import firebase from 'firebase/app'
@@ -9,11 +10,14 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import initFirebase from '../utils/initFirebase'
 import ImageGallery from 'react-image-gallery'
+import Link from 'next/link'
 
 initFirebase()
 
 const ViewProduct = props => {
     //to be encrypted?
+    const { AuthUserInfo } = props
+    const AuthUser = get(AuthUserInfo, 'AuthUser', null)
 
     let images = props.urls.map(url => ({original: url, thumbnail: url}))
 
@@ -154,6 +158,13 @@ const ViewProduct = props => {
                         <Button className="content-button"> 
                             Add to cart.
                         </Button>
+                        {AuthUser &&
+                            <Button className="content-button"> 
+                                <Link href={`/editproduct?id=${props.id}`}>
+                                    <a>Edit product</a>
+                                </Link>
+                            </Button>
+                        }
                     </div>
                 </div>
                 {/* <div className="view-details">
@@ -203,7 +214,7 @@ const ViewProduct = props => {
 
 ViewProduct.getInitialProps = async ctx => {
     let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
-    return {...doc.data()}
+    return {...doc.data(), id: ctx.query.id}
 }
 
 ViewProduct.propTypes = {

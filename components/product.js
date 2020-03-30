@@ -80,9 +80,9 @@ const Product = props => {
                     
                     <div className="content-available">
                         {props.available ?
-                            "in stock"
+                            <>in stock</>
                             :
-                            "sold out"
+                            <>sold out</>
                         }
                     </div>
                     <div className="content-info">
@@ -91,13 +91,11 @@ const Product = props => {
                         </div>
                         
                         <div className="info-actions">
-                                <Button 
-                                    className="actions-button"
-                                >
-                                    <Link href={`/viewproduct?id=${props.id}`}>
-                                        <a>See offer</a>
-                                    </Link>
-                                </Button>
+                            <Button className="actions-button">
+                                <Link href={`/viewproduct?id=${props.id}`}>
+                                    <a>See offer</a>
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>
