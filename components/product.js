@@ -80,9 +80,9 @@ const Product = props => {
                     
                     <div className="content-available">
                         {props.available ?
-                            <>in stock</>
+                            "in stock"
                             :
-                            <>sold out</>
+                            "sold out"
                         }
                     </div>
                     <div className="content-info">

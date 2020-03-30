@@ -147,9 +147,9 @@ const ViewProduct = props => {
                         </h2>
                         <div className="preview-available">
                             {props.available ?
-                                <>in stock</>
+                                "in stock"
                                 :
-                                <>sold out</>
+                                "sold out"
                             }
                         </div>
                         <div className="preview-price">
