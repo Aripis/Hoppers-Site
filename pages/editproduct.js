@@ -150,7 +150,7 @@ const EditProduct = props => {
                         <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="edit-price" />
                         {/* Must edit urls for thumnails and multiple images */}
                         <Textfield placeholder="Image Urls" value={urls} onChange={e => setUrls(e.target.value)} className="edit-urls" />
-                        {AuthUser.id === props.uid &&
+                        {AuthUser && AuthUser.id === props.uid &&
                             <>
                                 <Button loading={loadingEdit} onClick={editProduct} className="edit-submit-edit">
                                     Edit product
