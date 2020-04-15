@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useContext, useEffect } from 'react';
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import logout from '../utils/auth/logout'
 import Router from 'next/router'
+import CartContext from '../contexts/cartContext'
 
 const Navbar = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+    const { cartState, setCartState } = useContext(CartContext)
+
+    useEffect(() => {
+        const cart = Object.values({...localStorage}).map(product => JSON.parse(product))
+        setCartState(false)
+    }, [cartState])
 
     return (
         <>

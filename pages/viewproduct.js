@@ -11,6 +11,8 @@ import 'firebase/firestore'
 import initFirebase from '../utils/initFirebase'
 import ImageGallery from 'react-image-gallery'
 import Link from 'next/link'
+import CartContext from '../contexts/cartContext'
+import { useState } from 'react'
 
 initFirebase()
 
@@ -18,8 +20,22 @@ const ViewProduct = props => {
     //to be encrypted?
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+    const [cartState, setCartState] = useState(false)
+
 
     let images = props.urls.map(url => ({original: url, thumbnail: url}))
+
+    const addToCart = () => {
+        const tmp = JSON.parse(localStorage.getItem(props.productId))
+        localStorage.setItem(
+            props.productId,
+            JSON.stringify({
+                id: props.id,
+                quantity: tmp ? tmp.quantity + 1 : 1
+            })
+        )
+        setCartState(true)
+    }
 
     return (
         <>
@@ -129,85 +145,87 @@ const ViewProduct = props => {
                 }
 
             `}</style>
-            <Navbar {...props}/>
-            <div className="wrp-view">
-                <div className="view-content">
-                    <div className="content-gallery">
-                        <ImageGallery
-                            slideDuration={350}
-                            showPlayButton={false}
-                            showFullscreenButton={false}
-                            // careful with images
-                            items={images}
-                        />
-                    </div>
-                    <div className="content-preview">
-                        <h2 className="preview-name">
-                            {props.name}
-                        </h2>
-                        <div className="preview-available">
-                            {props.available ?
-                                "in stock"
-                                :
-                                "sold out"
+            <CartContext.Provider value={{cartState: cartState, setCartState: setCartState}}>
+                <Navbar {...props}/>
+                <div className="wrp-view">
+                    <div className="view-content">
+                        <div className="content-gallery">
+                            <ImageGallery
+                                slideDuration={350}
+                                showPlayButton={false}
+                                showFullscreenButton={false}
+                                // careful with images
+                                items={images}
+                            />
+                        </div>
+                        <div className="content-preview">
+                            <h2 className="preview-name">
+                                {props.name}
+                            </h2>
+                            <div className="preview-available">
+                                {props.available ?
+                                    "in stock"
+                                    :
+                                    "sold out"
+                                }
+                            </div>
+                            <div className="preview-price">
+                                <span>{priceConvert(props.price, "лв")}</span>
+                            </div>
+                            <Button className="content-button" onClick={addToCart}> 
+                                Add to cart.
+                            </Button>
+                            {AuthUser && AuthUser.id === props.uid &&
+                                <Button className="content-button"> 
+                                    <Link href={`/editproduct?id=${props.id}`}>
+                                        <a>Edit product</a>
+                                    </Link>
+                                </Button>
                             }
                         </div>
-                        <div className="preview-price">
-                            <span>{priceConvert(props.price, "лв")}</span>
+                    </div>
+                    {/* <div className="view-details">
+                        <div className="details-description">
+                            Description<br />
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
                         </div>
-                        <Button className="content-button"> 
-                            Add to cart.
-                        </Button>
-                        {AuthUser && AuthUser.id === props.uid &&
-                            <Button className="content-button"> 
-                                <Link href={`/editproduct?id=${props.id}`}>
-                                    <a>Edit product</a>
-                                </Link>
-                            </Button>
-                        }
+                        <div className="details-faq">
+                            Faq<br />
+                            1.<br />
+                            2.<br />
+                            3.<br />
+                            4.<br />
+                        </div>
+                        <div className="details-reviews">
+                            Reviews <br />
+                            1.<br />
+                            2.<br />
+                            3.<br />
+                            4.<br />
+                        </div>
+                        <div className="details-specs">
+                            Specs <br />
+                            1.<br />
+                            2.<br />
+                            3.<br />
+                            4.<br />
+                        </div>
                     </div>
+                    <div className="view-suggestions">
+                        {[...Array(6).keys()].map(i => (
+                            <Product
+                                key={i}
+                                className="product"
+                                image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                                name="Chair Milon, Grey, Wooden" 
+                                price="19.99"
+                                currency="лв"
+                                available
+                            />
+                        ))}
+                    </div> */}
                 </div>
-                {/* <div className="view-details">
-                    <div className="details-description">
-                        Description<br />
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
-                    </div>
-                    <div className="details-faq">
-                        Faq<br />
-                        1.<br />
-                        2.<br />
-                        3.<br />
-                        4.<br />
-                    </div>
-                    <div className="details-reviews">
-                        Reviews <br />
-                        1.<br />
-                        2.<br />
-                        3.<br />
-                        4.<br />
-                    </div>
-                    <div className="details-specs">
-                        Specs <br />
-                        1.<br />
-                        2.<br />
-                        3.<br />
-                        4.<br />
-                    </div>
-                </div>
-                <div className="view-suggestions">
-                    {[...Array(6).keys()].map(i => (
-                        <Product
-                            key={i}
-                            className="product"
-                            image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
-                            name="Chair Milon, Grey, Wooden" 
-                            price="19.99"
-                            currency="лв"
-                            available
-                        />
-                    ))}
-                </div> */}
-            </div>
+            </CartContext.Provider>
         </>
     )
 }
