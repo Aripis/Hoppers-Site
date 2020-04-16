@@ -12,7 +12,7 @@ import initFirebase from '../utils/initFirebase'
 import ImageGallery from 'react-image-gallery'
 import Link from 'next/link'
 import CartContext from '../contexts/cartContext'
-import { useState } from 'react'
+import { useContext } from 'react'
 
 initFirebase()
 
@@ -20,8 +20,7 @@ const ViewProduct = props => {
     //to be encrypted?
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    const [cartState, setCartState] = useState(false)
-
+    const { cartState, setCartState } = useContext(CartContext)
 
     let images = props.urls.map(url => ({original: url, thumbnail: url}))
 
@@ -145,7 +144,7 @@ const ViewProduct = props => {
                 }
 
             `}</style>
-            <CartContext.Provider value={{cartState: cartState, setCartState: setCartState}}>
+                
                 <Navbar {...props}/>
                 <div className="wrp-view">
                     <div className="view-content">
@@ -225,7 +224,7 @@ const ViewProduct = props => {
                         ))}
                     </div> */}
                 </div>
-            </CartContext.Provider>
+            
         </>
     )
 }

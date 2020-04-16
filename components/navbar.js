@@ -1,18 +1,26 @@
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import logout from '../utils/auth/logout'
 import Router from 'next/router'
 import CartContext from '../contexts/cartContext'
+import CartProduct from '../components/cartproduct'
+import initFirebase from '../utils/initFirebase'
+import 'firebase/firestore'
+import 'firebase/auth'
+
+
+initFirebase()
 
 const Navbar = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartState, setCartState } = useContext(CartContext)
+    const [cart, setCart] = useState([])
 
     useEffect(() => {
-        const cart = Object.values({...localStorage}).map(product => JSON.parse(product))
+        setCart(Object.values({...localStorage}).map(product => JSON.parse(product)))
         setCartState(false)
     }, [cartState])
 
@@ -49,7 +57,6 @@ const Navbar = props => {
                 }
 
             `}</style>
-
             <nav className="wrp-navbar">
                 <div className="navbar-logo">
                     <h1>Aripis</h1>
@@ -68,9 +75,13 @@ const Navbar = props => {
                     <Link href="/store">
                         <a>Store</a>
                     </Link>
-                    {/* <Link href="">
-                        <a>ifc</a>
-                    </Link> */}
+                    <div>
+                        {cart && cart.map((item, i) => (
+                            <CartProduct key={i} dbId={item.id} quantity={item.quantity}>
+                                
+                            </CartProduct>
+                        ))}
+                    </div>
                     {!AuthUser ? (
                         <>
                             <Link href="/signin">

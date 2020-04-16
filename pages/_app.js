@@ -8,9 +8,18 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPaypal } from '@fortawesome/free-brands-svg-icons'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 
+import CartContext from '../contexts/cartContext'
+
 library.add(faPaypal, faShoppingCart)
 
 export default class MyApp extends App {
+    state = {
+        cartState: false
+    }
+
+    setCartState = newState => {
+        this.setState({cartState: newState});
+    }
     render() {
         const { Component, pageProps } = this.props
         return (
@@ -75,8 +84,10 @@ export default class MyApp extends App {
 
                 `}</style>
                 <div className="layout">
+                <CartContext.Provider value={{cartState: this.state.cartState, setCartState: this.setCartState}}>
                     <Component {...pageProps} />
                     <Footer />
+                </CartContext.Provider>
                 </div>
             </>
         )
