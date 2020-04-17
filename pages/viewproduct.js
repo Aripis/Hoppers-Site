@@ -25,20 +25,22 @@ const ViewProduct = props => {
     let images = props.urls.map(url => ({original: url, thumbnail: url}))
 
     const addToCart = () => {
-        const tmp = JSON.parse(localStorage.getItem(props.productId))
         if (AuthUser) {
-            firebase.firestore().collection("users").doc(AuthUser.id).get().then(user => {
-                firebase.firestore().collection("users").doc(AuthUser.id).set({
-                    cartProducts: [{
-                        id: props.id,
-                        quantity: user.data().cartProducts.quantity ? 
-                            user.data().cartProducts.quantity + 1
-                            : 
-                            1
-                    }]
-                })
+
+            firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).get().then(doc => {
+                if (doc.exists){
+                    firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).update({
+                        quantity: doc.data().quantity + 1
+                    })
+                }
+                else {
+                    firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).set({
+                        quantity: 1
+                    })
+                }
             })
         } else {
+            const tmp = JSON.parse(localStorage.getItem("Anonymus-" + props.productId))
             localStorage.setItem(
                 "Anonymus-" + props.productId,
                 JSON.stringify({
@@ -47,8 +49,6 @@ const ViewProduct = props => {
                 })
             )
         }
-            // console.log(doc.data())
-        // })
         setCartState(true)
     }
 

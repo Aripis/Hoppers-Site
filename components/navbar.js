@@ -7,6 +7,7 @@ import Router from 'next/router'
 import CartContext from '../contexts/cartContext'
 import CartProduct from '../components/cartproduct'
 import initFirebase from '../utils/initFirebase'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 
@@ -20,11 +21,18 @@ const Navbar = props => {
     const [cart, setCart] = useState([])
 
     useEffect(() => {
-        setCart(Object.values({...localStorage}).map(product => JSON.parse(product)))
-        setCartState(false)
         if (AuthUser) {
-            console.log(AuthUser.id)
+            firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
+                setCart(cart.docs.map(doc => ({
+                    ...doc.data(), 
+                    id: doc.id
+                })))
+            })
         }
+        else {
+            setCart(Object.values({ ...localStorage }).map(product => JSON.parse(product)))
+        }
+        setCartState(false)
     }, [cartState])
 
     return (
@@ -79,9 +87,9 @@ const Navbar = props => {
                         <a>Store</a>
                     </Link>
                     <div>
-                        {(AuthUser && AuthUser.id && cart) && cart.map((item, i) => (
+                        {cart && cart.map((item, i) => (
                             <CartProduct key={i} dbId={item.id} quantity={item.quantity}>
-                                
+
                             </CartProduct>
                         ))}
                     </div>
@@ -95,15 +103,15 @@ const Navbar = props => {
                             </Link>
                         </>
                     ) : (
-                        <a onClick={async () => {
-                            try {
-                              await logout()
-                              Router.push('/')
-                            } catch (e) {
-                              console.error(e)
-                            }
-                          }}>Log out</a>
-                    )}
+                            <a onClick={async () => {
+                                try {
+                                    await logout()
+                                    Router.push('/')
+                                } catch (e) {
+                                    console.error(e)
+                                }
+                            }}>Log out</a>
+                        )}
                 </div>
             </nav>
         </>

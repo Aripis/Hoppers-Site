@@ -11,7 +11,6 @@ const CartProduct = props => {
   useEffect(() =>{
     firebase.firestore().collection("products").doc(props.dbId).get().then(doc => {
       setProduct(doc.data())
-      console.log(doc.data())
     })
   }, [])
 
@@ -31,10 +30,10 @@ const CartProduct = props => {
         }
       `}</style>
       <div className="wrp" >
-        <img src={product.urls && product.urls[0]} />
-        <p>name: {product.name}</p>
-        <p>quantity: {props.quantity}</p>
-        <p>price: {product.price * props.quantity}</p>
+        <img src={product.urls && product.urls[0]}/>
+        <p>name: {product.name};&nbsp;</p>
+        <p>quantity: {props.quantity};&nbsp;</p>
+        <p>price: {Math.round((product.price * props.quantity + Number.EPSILON) * 100) / 100};</p>
       </div>
     </>
   )
