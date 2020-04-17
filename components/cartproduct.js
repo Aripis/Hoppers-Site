@@ -9,7 +9,6 @@ const CartProduct = props => {
   const [product, setProduct] = useState([])
 
   useEffect(() =>{
-    // console.log(props.id)
     firebase.firestore().collection("products").doc(props.dbId).get().then(doc => {
       setProduct(doc.data())
       console.log(doc.data())
@@ -21,8 +20,8 @@ const CartProduct = props => {
       <style jsx>{`
         .wrp {
           color: red;
-          width: 20px;
-          height: 20px;
+          display: flex;
+          flex-direction: row;
         }
 
         img {

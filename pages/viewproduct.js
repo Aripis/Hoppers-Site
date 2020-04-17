@@ -26,13 +26,29 @@ const ViewProduct = props => {
 
     const addToCart = () => {
         const tmp = JSON.parse(localStorage.getItem(props.productId))
-        localStorage.setItem(
-            props.productId,
-            JSON.stringify({
-                id: props.id,
-                quantity: tmp ? tmp.quantity + 1 : 1
+        if (AuthUser) {
+            firebase.firestore().collection("users").doc(AuthUser.id).get().then(user => {
+                firebase.firestore().collection("users").doc(AuthUser.id).set({
+                    cartProducts: [{
+                        id: props.id,
+                        quantity: user.data().cartProducts.quantity ? 
+                            user.data().cartProducts.quantity + 1
+                            : 
+                            1
+                    }]
+                })
             })
-        )
+        } else {
+            localStorage.setItem(
+                "Anonymus-" + props.productId,
+                JSON.stringify({
+                    id: props.id,
+                    quantity: tmp ? tmp.quantity + 1 : 1
+                })
+            )
+        }
+            // console.log(doc.data())
+        // })
         setCartState(true)
     }
 

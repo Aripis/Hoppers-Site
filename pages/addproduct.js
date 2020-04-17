@@ -166,7 +166,7 @@ const AddProduct = props => {
 AddProduct.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    if(AuthUser === null && ctx.res){
+    if((AuthUser === null || AuthUser.role !== 'creator') && ctx.res){
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return

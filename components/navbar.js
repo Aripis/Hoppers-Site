@@ -22,6 +22,9 @@ const Navbar = props => {
     useEffect(() => {
         setCart(Object.values({...localStorage}).map(product => JSON.parse(product)))
         setCartState(false)
+        if (AuthUser) {
+            console.log(AuthUser.id)
+        }
     }, [cartState])
 
     return (
@@ -62,7 +65,7 @@ const Navbar = props => {
                     <h1>Aripis</h1>
                 </div>
                 <div className="navbar-buttons">
-                    {AuthUser &&
+                    {AuthUser && AuthUser.role === "creator" &&
                         <>
                             <Link href="/addproduct">
                                 <a>Add Product</a>
@@ -76,7 +79,7 @@ const Navbar = props => {
                         <a>Store</a>
                     </Link>
                     <div>
-                        {cart && cart.map((item, i) => (
+                        {(AuthUser && AuthUser.id && cart) && cart.map((item, i) => (
                             <CartProduct key={i} dbId={item.id} quantity={item.quantity}>
                                 
                             </CartProduct>

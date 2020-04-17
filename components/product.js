@@ -6,7 +6,7 @@ import Button from './button'
 const Product = props => {
     return (
         <>
-            <style jsx>{`                
+            <style jsx>{`
                 .wrp-card {
                     margin: .5em;
                     flex-shrink: 1;
