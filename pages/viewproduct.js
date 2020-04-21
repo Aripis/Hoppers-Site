@@ -22,20 +22,20 @@ const ViewProduct = props => {
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartState, setCartState } = useContext(CartContext)
 
-    let images = props.urls.map(url => ({original: url, thumbnail: url}))
+    let images = props.urls.map(url => ({ original: url, thumbnail: url }))
 
     const addToCart = () => {
         if (AuthUser) {
-
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).get().then(doc => {
-                if (doc.exists){
+                if (doc.exists) {
                     firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).update({
-                        quantity: doc.data().quantity + 1
+                        quantity: doc.data().quantity + 1,
                     })
                 }
                 else {
                     firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).set({
-                        quantity: 1
+                        quantity: 1,
+                        productId: props.productId
                     })
                 }
             })
@@ -45,7 +45,8 @@ const ViewProduct = props => {
                 "Anonymus-" + props.productId,
                 JSON.stringify({
                     id: props.id,
-                    quantity: tmp ? tmp.quantity + 1 : 1
+                    quantity: tmp ? tmp.quantity + 1 : 1,
+                    productId: props.productId
                 })
             )
         }
@@ -160,46 +161,46 @@ const ViewProduct = props => {
                 }
 
             `}</style>
-                
-                <Navbar {...props}/>
-                <div className="wrp-view">
-                    <div className="view-content">
-                        <div className="content-gallery">
-                            <ImageGallery
-                                slideDuration={350}
-                                showPlayButton={false}
-                                showFullscreenButton={false}
-                                // careful with images
-                                items={images}
-                            />
-                        </div>
-                        <div className="content-preview">
-                            <h2 className="preview-name">
-                                {props.name}
-                            </h2>
-                            <div className="preview-available">
-                                {props.available ?
-                                    "in stock"
-                                    :
-                                    "sold out"
-                                }
-                            </div>
-                            <div className="preview-price">
-                                <span>{priceConvert(props.price, "лв")}</span>
-                            </div>
-                            <Button className="content-button" onClick={addToCart}> 
-                                Add to cart.
-                            </Button>
-                            {AuthUser && AuthUser.id === props.uid &&
-                                <Button className="content-button"> 
-                                    <Link href={`/editproduct?id=${props.id}`}>
-                                        <a>Edit product</a>
-                                    </Link>
-                                </Button>
+
+            <Navbar {...props} />
+            <div className="wrp-view">
+                <div className="view-content">
+                    <div className="content-gallery">
+                        <ImageGallery
+                            slideDuration={350}
+                            showPlayButton={false}
+                            showFullscreenButton={false}
+                            // careful with images
+                            items={images}
+                        />
+                    </div>
+                    <div className="content-preview">
+                        <h2 className="preview-name">
+                            {props.name}
+                        </h2>
+                        <div className="preview-available">
+                            {props.available ?
+                                "in stock"
+                                :
+                                "sold out"
                             }
                         </div>
+                        <div className="preview-price">
+                            <span>{priceConvert(props.price, "лв")}</span>
+                        </div>
+                        <Button className="content-button" onClick={addToCart}>
+                            Add to cart.
+                            </Button>
+                        {AuthUser && AuthUser.id === props.uid &&
+                            <Button className="content-button">
+                                <Link href={`/editproduct?id=${props.id}`}>
+                                    <a>Edit product</a>
+                                </Link>
+                            </Button>
+                        }
                     </div>
-                    {/* <div className="view-details">
+                </div>
+                {/* <div className="view-details">
                         <div className="details-description">
                             Description<br />
                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
@@ -239,15 +240,15 @@ const ViewProduct = props => {
                             />
                         ))}
                     </div> */}
-                </div>
-            
+            </div>
+
         </>
     )
 }
 
 ViewProduct.getInitialProps = async ctx => {
     let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
-    return {...doc.data(), id: ctx.query.id}
+    return { ...doc.data(), id: ctx.query.id }
 }
 
 ViewProduct.propTypes = {

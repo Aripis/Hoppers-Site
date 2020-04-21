@@ -5,12 +5,12 @@ import { get } from 'lodash/object'
 import logout from '../utils/auth/logout'
 import Router from 'next/router'
 import CartContext from '../contexts/cartContext'
+import Button from '../components/button'
 import CartProduct from '../components/cartproduct'
 import initFirebase from '../utils/initFirebase'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
-
 
 initFirebase()
 
@@ -24,7 +24,7 @@ const Navbar = props => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
                 setCart(cart.docs.map(doc => ({
-                    ...doc.data(), 
+                    ...doc.data(),
                     id: doc.id
                 })))
             })
@@ -88,10 +88,13 @@ const Navbar = props => {
                     </Link>
                     <div>
                         {cart && cart.map((item, i) => (
-                            <CartProduct key={i} dbId={item.id} quantity={item.quantity}>
+                            <CartProduct key={i} dbId={item.id} quantity={item.quantity} productId={item.productId}>
 
                             </CartProduct>
                         ))}
+                        <Button onClick={() => Router.replace("/seecart")}>
+                            See cart
+                        </Button>
                     </div>
                     {!AuthUser ? (
                         <>
