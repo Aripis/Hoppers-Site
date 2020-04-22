@@ -1,9 +1,10 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { get } from 'lodash/object'
-import Button from '../components/button';
+import Button from '../components/button'
 import Navbar from '../components/navbar'
+import Router from 'next/router'
 import CartContext from '../contexts/cartContext'
 import CartProduct from '../components/cartproduct'
 
@@ -52,6 +53,12 @@ const SeeCart = props => {
                     </CartProduct>
                 ))}
             </div>
+            <div>
+                <Button onClick={() => Router.replace("/setorder")}>
+                    Set Order
+                </Button>
+            </div>
+            {/* Can add some suggestions */}
         </>
     )
 }

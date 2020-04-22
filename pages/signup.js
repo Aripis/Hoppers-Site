@@ -38,17 +38,17 @@ const Signup = props => {
         e.preventDefault()
         let error = ""
         setLoadingSignUp(!loadingSignUp)
-        if(!/^[a-zA-Z ]+$/.test(`${firstName} ${surName}`)){
+        if (!/^[a-zA-Z ]+$/.test(`${firstName} ${surName}`)) {
             error = "Name must be aplhabetical"
         }
         if (email !== reEmail) {
             error = "Emails don't match"
         }
-        if(password !== rePassword){
+        if (password !== rePassword) {
             error = "Passwords don't match"
         }
-        if(!error) {
-            try{
+        if (!error) {
+            try {
                 let res = await firebase.auth().createUserWithEmailAndPassword(email, password)
                 await firebase.firestore().collection("users").doc(res.user.uid).set({
                     firstName: firstName,
@@ -176,38 +176,38 @@ const Signup = props => {
                     }
                 }
             `}</style>
-            <Navbar {...props}/>
+            <Navbar {...props} />
             <div className="wrp-signup">
                 <form onSubmit={handleSignUp} className="signup-form">
                     <h2 className="form-header">Create your new profile</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="First name" id="firstname" value={firstName} required onChange={e => {setFirstName(e.target.value); setError("")}} className="form-input"/>
+                            <Textfield error={error} label="First name" id="firstname" value={firstName} required onChange={e => { setFirstName(e.target.value); setError("") }} className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Surname" id="surname" value={surName} required onChange={e => {setSurname(e.target.value); setError("")}} className="form-input"/>
+                            <Textfield error={error} label="Surname" id="surname" value={surName} required onChange={e => { setSurname(e.target.value); setError("") }} className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Email" id="email" value={email} required onChange={e => {setEmail(e.target.value); setError("")}} type="email" className="form-input"/>
+                            <Textfield error={error} label="Email" id="email" value={email} required onChange={e => { setEmail(e.target.value); setError("") }} type="email" className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Retype email" id="retypeemail" value={reEmail} required onChange={e => {setReEmail(e.target.value); setError("")}} type="email"  className="form-input"/>
+                            <Textfield error={error} label="Retype email" id="retypeemail" value={reEmail} required onChange={e => { setReEmail(e.target.value); setError("") }} type="email" className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Password" id="password" value={password} required onChange={e => {setPassword(e.target.value); setError("")}} type="password" className="form-input"/>
+                            <Textfield error={error} label="Password" id="password" value={password} required onChange={e => { setPassword(e.target.value); setError("") }} type="password" className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Retype password" id="retypepassword" value={rePassword} required onChange={e => {setRePassword(e.target.value); setError("")}} type="password" className="form-input"/>
+                            <Textfield error={error} label="Retype password" id="retypepassword" value={rePassword} required onChange={e => { setRePassword(e.target.value); setError("") }} type="password" className="form-input" />
                         </div>
                     </div>
-                    <Message 
-                        visible={error} 
-                        error={error} 
-                        className="form-message" 
+                    <Message
+                        visible={error}
+                        error={error}
+                        className="form-message"
                         header="An error occurred"
                         content={error}
                     />
@@ -225,7 +225,7 @@ const Signup = props => {
 Signup.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    if(AuthUser !== null){
+    if (AuthUser !== null) {
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return
