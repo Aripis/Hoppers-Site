@@ -3,6 +3,7 @@ import Button from '../components/button'
 import Navbar from '../components/navbar'
 import Textfield from '../components/textfield'
 import Message from '../components/message'
+import Head from '../components/head'
 import Router from 'next/router'
 
 import { get } from 'lodash/object'
@@ -25,7 +26,7 @@ const SetOrder = props => {
     const [telephoneNumber, setTelephoneNumber] = useState("")
     const [orderType, setOrderType] = useState("")
     const [paymentMethod, setPaymentMethod] = useState("")
-    const [loadingSignUp, setLoadingSignUp] = useState(false)
+    const [loadingSetOrder, setLoadingSetOrder] = useState(false)
     const [error, setError] = useState("")
 
     useEffect(() => {
@@ -34,19 +35,45 @@ const SetOrder = props => {
 
     const handleOrder = async e => {
         e.preventDefault()
-        setLoadingSignUp(!loadingSignUp)
-        // do some shit
-        setLoadingSignUp(false)
+        console.log("Order wokrs...")
+        setLoadingSetOrder(!loadingSignUp)
+        if (AuthUser) {
+            // TODO:
+            if (false) { // if update address
 
+            } else if (false) { // if add new address
+
+            } else {
+                await firebase.firestore().collection(`users`).doc("TYmjYTjgFsX0yHhYR1KumDNeMOH3").set({
+                    orderInfo: {
+                        billingAddress: [billingAddress],
+                        deliveryAddress: [deliveryAddress],
+                        telephoneNumber: telephoneNumber,
+                        orderType: orderType,
+                        paymentMethod: paymentMethod
+                    }
+                })
+                Router.replace("/finalizeorder")
+            }
+        } else {
+            localStorage.setItem(
+                "Anonymus-info",
+                JSON.stringify({
+                    billingAddress: billingAddress,
+                    deliveryAddress: deliveryAddress,
+                    telephoneNumber: telephoneNumber,
+                    orderType: orderType,
+                    paymentMethod: paymentMethod
+                })
+            )
+            Router.replace("/finalizeorder")
+        }
+        setLoadingSetOrder(false)
     }
 
     return (
-        // Billing address
-        // Delivery address
-        // telephone number
-        // Fast order/Normal order
-        // Cash or card 
         <>
+            <Head />
             <style jsx>{`
                 .wrp-setorder {
                     flex-grow: 1;
@@ -155,7 +182,7 @@ const SetOrder = props => {
             `}</style>
             <Navbar {...props} />
             <div className="wrp-setorder">
-                <from onSubmit={handleOrder} className="setorder-from">
+                <from onSubmit={() => console.log('loooooool')} className="setorder-from">
                     <h2 className="form-header">Set an order</h2>
                     <div className="form-field">
                         <div className="form-div">
@@ -201,8 +228,7 @@ const SetOrder = props => {
                         content={error}
                     />
                     <div className="form-actions">
-                        <Button onClick={() => Router.replace("/finalizeorder")}
-                            loading={loadingSignUp}
+                        <Button loading={loadingSetOrder} onClick={() => console.log('clicked')}
                             type="submit"
                             className="form-submit">
                             Procceed to final step
