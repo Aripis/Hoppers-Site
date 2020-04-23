@@ -3,7 +3,7 @@ import Button from '../components/button'
 import Navbar from '../components/navbar'
 import Textfield from '../components/textfield'
 import Message from '../components/message'
-
+import Router from 'next/router'
 
 import { get } from 'lodash/object'
 import PropTypes from 'prop-types'
@@ -201,7 +201,10 @@ const SetOrder = props => {
                         content={error}
                     />
                     <div className="form-actions">
-                        <Button loading={loadingSignUp} type="submit" className="form-submit">
+                        <Button onClick={() => Router.replace("/finalizeorder")}
+                            loading={loadingSignUp}
+                            type="submit"
+                            className="form-submit">
                             Procceed to final step
                         </Button>
                     </div>

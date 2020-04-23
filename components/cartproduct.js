@@ -31,25 +31,27 @@ const CartProduct = props => {
         <>
             <style jsx>{`
                 .wrp {
-                    color: red;
                     display: flex;
                     flex-direction: row;
                 }
 
+
                 img {
                     object-fit: contain;
-                    width: 50px;
-                    height: 50px;
+                    max-width: 80px;
+                    max-height: 80px;
                 }
             `}</style>
             <div className="wrp" >
                 <img src={product.urls && product.urls[0]} />
                 <p>name: {product.name};&nbsp;</p>
                 <p>quantity: {props.quantity};&nbsp;</p>
-                <p>price: {Math.round((product.price * props.quantity + Number.EPSILON) * 100) / 100};</p>
-                <Button onClick={removeItem}>
-                    Remove from Cart
-                </Button>
+                <p>price: {Math.round((product.price * props.quantity + Number.EPSILON) * 100) / 100};&nbsp;</p>
+                <div>
+                    <Button onClick={removeItem}>
+                        Remove from Cart
+                    </Button>
+                </div>
             </div>
         </>
     )

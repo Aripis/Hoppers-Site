@@ -15,9 +15,8 @@ import initFirebase from '../utils/initFirebase'
 import "firebase/firestore"
 import 'firebase/auth'
 
-initFirebase()
 
-const SeeCart = props => {
+const FinalizeOrder = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartState, setCartState } = useContext(CartContext)
@@ -40,22 +39,16 @@ const SeeCart = props => {
         }
     }, [cartState])
 
-
     return (
         <>
             <style jsx>{`
-                .wrp-cartcontent {
+                .wrp {
                     display: flex;
                     flex-direction: row;
-                    justify-content: center;
-                }
-
-                .wrp-cartcontent > * {
-
                 }
             `}</style>
             <Navbar {...props} />
-            <div className="wrp-cartcontent">
+            <div className="wrp" >
                 <div className="cartcontent-productslist">
                     {cart && cart.map((item, i) => (
                         <CartProduct key={i} dbId={item.id} productId={item.productId} quantity={item.quantity} authId={AuthUser ? AuthUser.id : null}>
@@ -63,19 +56,19 @@ const SeeCart = props => {
                         </CartProduct>
                     ))}
                 </div>
+                <div className="cartcontent-address">
+                    Address info
+                </div>
                 <div className="cartcontent-button">
-                    <Button onClick={() => Router.replace("/setorder")}>
-                        Set Order
-                    </Button>
+                    <Button onClick={() => Router.replace("/myorders")}>
+                        Submit Order
+                        </Button>
                 </div>
             </div>
-            {/* Can add some suggestions */}
         </>
     )
 }
-
-
-SeeCart.propTypes = {
+FinalizeOrder.propTypes = {
     AuthUserInfo: PropTypes.shape({
         AuthUser: PropTypes.shape({
             id: PropTypes.string.isRequired,
@@ -91,8 +84,8 @@ SeeCart.propTypes = {
     }),
 }
 
-SeeCart.defaultProps = {
+FinalizeOrder.defaultProps = {
     AuthUserInfo: null,
 }
 
-export default withAuthUser(withAuthUserInfo(SeeCart));
+export default withAuthUser(withAuthUserInfo(FinalizeOrder));
