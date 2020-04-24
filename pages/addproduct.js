@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../components/button';
 import Navbar from '../components/navbar';
 import { get } from 'lodash';
+import searchQueries from '../utils/searchQueries';
 import Textfield from '../components/textfield';
 import withAuthUser from '../utils/pageWrappers/withAuthUser';
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
@@ -35,7 +36,8 @@ const AddProduct = props => {
             price: price,
             urls: urls.split(/[ ,]+/),
             uid: AuthUser.id,
-            available: available
+            available: available,
+            searchQueries: searchQueries(name)
         }).then(() => Router.replace("/store"))
     }
 
