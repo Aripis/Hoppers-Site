@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Product from '../components/product';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
+import { debounce } from 'lodash'
 import Search from '../components/search';
 import withAuthUser from '../utils/pageWrappers/withAuthUser';
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
