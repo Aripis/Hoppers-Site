@@ -1,5 +1,5 @@
-import commonMiddleware from '../../utils/middleware/commonMiddleware'
-import { verifyIdToken } from '../../utils/auth/verifyIdToken'
+import commonMiddleware from '../../utils/middleware/commonMiddleware';
+import { verifyIdToken } from '../../utils/auth/verifyIdToken';
 
 const handler = (req, res) => {
     if (!req.body) {

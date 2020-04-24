@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-import Product from '../components/product'
-import { useState, useEffect } from 'react';
-import Navbar from '../components/navbar'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import initFirebase from '../utils/initFirebase'
+import PropTypes from 'prop-types';
+import Product from '../components/product';
+import { useState, useEffect } from 'react';;
+import Navbar from '../components/navbar';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import initFirebase from '../utils/initFirebase';
 
 initFirebase()
 
@@ -16,7 +16,7 @@ const Store = props => {
 
     useEffect(() => {
         firebase.firestore().collection("products").onSnapshot(snapshot => {
-            setProducts(snapshot.docs.map(doc => ({...doc.data(), id: doc.id})))
+            setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
         })
     }, [])
 
@@ -48,16 +48,15 @@ const Store = props => {
                     }
                 }
             `}</style>
-            <Navbar {...props}/>
-            <div className="wrp-products"> 
+            <Navbar {...props} />
+            <div className="wrp-products">
                 {products.map((product, i) => (
                     <Product
                         key={i}
                         id={product.id}
                         className="product"
-                        // must be careful with urls
-                        image={product.urls[0]} 
-                        name={product.name} 
+                        image={product.urls[0]}
+                        name={product.name}
                         price={product.price}
                         currency="лв"
                         available={product.available}

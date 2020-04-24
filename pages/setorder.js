@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react'
-import Button from '../components/button'
-import Navbar from '../components/navbar'
-import Textfield from '../components/textfield'
-import Message from '../components/message'
-import Head from '../components/head'
-import Router from 'next/router'
+import { useState, useEffect } from 'react';
+import Button from '../components/button';
+import Navbar from '../components/navbar';
+import Textfield from '../components/textfield';
+import Message from '../components/message';
+import Head from '../components/head';
+import Router from 'next/router';
 
-import { get } from 'lodash/object'
-import PropTypes from 'prop-types'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import initFirebase from '../utils/initFirebase'
-import "firebase/firestore"
-import 'firebase/auth'
+import { get } from 'lodash/object';
+import PropTypes from 'prop-types';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import initFirebase from '../utils/initFirebase';
+import "firebase/firestore";
+import 'firebase/auth';
 
 initFirebase()
 
@@ -29,34 +29,23 @@ const SetOrder = props => {
     const [loadingSetOrder, setLoadingSetOrder] = useState(false)
     const [error, setError] = useState("")
 
-    useEffect(() => {
-
-    }, [])
-
     const handleOrder = async e => {
         e.preventDefault()
         console.log("Order wokrs...")
-        setLoadingSetOrder(!loadingSignUp)
+        setLoadingSetOrder(!loadingSetOrder)
         if (AuthUser) {
-            // TODO:
-            if (false) { // if update address
-
-            } else if (false) { // if add new address
-
-            } else {
-                await firebase.firestore().collection(`users`).doc("TYmjYTjgFsX0yHhYR1KumDNeMOH3").set({
-                    orderInfo: {
-                        billingAddress: [billingAddress],
-                        deliveryAddress: [deliveryAddress],
-                        telephoneNumber: telephoneNumber,
-                        orderType: orderType,
-                        paymentMethod: paymentMethod
-                    }
-                })
-                Router.replace("/finalizeorder")
-            }
+            await firebase.firestore().collection(`users`).doc(AuthUser.id).update({
+                orderInfo: {
+                    billingAddress: [billingAddress],
+                    deliveryAddress: [deliveryAddress],
+                    telephoneNumber: telephoneNumber,
+                    orderType: orderType,
+                    paymentMethod: paymentMethod
+                }
+            })
+            Router.push("/finalizeorder")
         } else {
-            localStorage.setItem(
+            sessionStorage.setItem(
                 "Anonymus-info",
                 JSON.stringify({
                     billingAddress: billingAddress,
@@ -66,7 +55,7 @@ const SetOrder = props => {
                     paymentMethod: paymentMethod
                 })
             )
-            Router.replace("/finalizeorder")
+            Router.push("/finalizeorder")
         }
         setLoadingSetOrder(false)
     }
@@ -182,40 +171,60 @@ const SetOrder = props => {
             `}</style>
             <Navbar {...props} />
             <div className="wrp-setorder">
-                <from onSubmit={() => console.log('loooooool')} className="setorder-from">
+                <form onSubmit={handleOrder} className="setorder-from">
                     <h2 className="form-header">Set an order</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Billing address" id="billingAddress"
-                                value={billingAddress} required
+                            <Textfield
+                                error={error}
+                                label="Billing address"
+                                id="billingAddress"
+                                value={billingAddress}
+                                required
                                 onChange={e => { setBillingAddress(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Delivery address" id="deliveryAddress"
-                                value={deliveryAddress} required
+                            <Textfield
+                                error={error}
+                                label="Delivery address"
+                                id="deliveryAddress"
+                                value={deliveryAddress}
+                                required
                                 onChange={e => { setDeliveryAddress(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="telephone number" id="telephoneNumber"
-                                value={telephoneNumber} required
+                            <Textfield
+                                error={error}
+                                label="telephone number"
+                                id="telephoneNumber"
+                                value={telephoneNumber}
+                                required
                                 onChange={e => { setTelephoneNumber(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Fast order/Normal order" id="orderType"
-                                value={orderType} required
+                            <Textfield
+                                error={error}
+                                label="Fast order/Normal order"
+                                id="orderType"
+                                value={orderType}
+                                required
                                 onChange={e => { setOrderType(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Cash or card " id="paymentMethod"
-                                value={paymentMethod} required
+                            <Textfield
+                                error={error}
+                                label="Cash or card "
+                                id="paymentMethod"
+                                value={paymentMethod}
+                                required
                                 onChange={e => { setPaymentMethod(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
@@ -228,13 +237,14 @@ const SetOrder = props => {
                         content={error}
                     />
                     <div className="form-actions">
-                        <Button loading={loadingSetOrder} onClick={() => console.log('clicked')}
+                        <Button
+                            loading={loadingSetOrder}
                             type="submit"
                             className="form-submit">
                             Procceed to final step
                         </Button>
                     </div>
-                </from>
+                </form>
             </div>
         </>
 

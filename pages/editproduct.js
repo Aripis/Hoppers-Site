@@ -1,23 +1,24 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
-import Button from '../components/button'
-import Navbar from '../components/navbar'
-import { get } from 'lodash'
-import Textfield from '../components/textfield'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import "firebase/firestore"
-import 'firebase/auth'
-import initFirebase from '../utils/initFirebase'
-import Router from 'next/router'
-import ImageGallery from 'react-image-gallery'
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import Button from '../components/button';
+import Navbar from '../components/navbar';
+import { get } from 'lodash';
+import Textfield from '../components/textfield';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import "firebase/firestore";
+import 'firebase/auth';
+import initFirebase from '../utils/initFirebase';
+import Router from 'next/router';
+import ImageGallery from 'react-image-gallery';
 
 initFirebase()
 
 const EditProduct = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     const [name, setName] = useState(props.name)
     const [productId, setProductId] = useState(props.productId)
     const [price, setPrice] = useState(props.price)
@@ -25,7 +26,7 @@ const EditProduct = props => {
     const [loadingEdit, setLoadingEdit] = useState(false)
     const [available, setAvailable] = useState(props.available)
     const [loadingDelete, setLoadingDelete] = useState(false)
-    
+
     const editProduct = () => {
         setLoadingEdit(true)
         firebase.firestore().collection("products").doc(props.id).update({
@@ -122,7 +123,7 @@ const EditProduct = props => {
                 }           
 
             `}</style>
-            <Navbar {...props}/>
+            <Navbar {...props} />
             <div className="wrp-edit">
                 <div className="edit-content">
                     <div className="content-gallery">
@@ -130,32 +131,61 @@ const EditProduct = props => {
                             slideDuration={350}
                             showPlayButton={false}
                             showFullscreenButton={false}
-                            // careful with images
                             items={
-                                urls.length > 0 
-                                ?
-                                urls.split(/[ ,]+/).map(url => ({original: url, thumbnail: url}))
-                                :
-                                [{original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi"}]
+                                urls.length > 0
+                                    ?
+                                    urls.split(/[ ,]+/).map(url => ({ original: url, thumbnail: url }))
+                                    :
+                                    [{ original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi" }]
                             }
                         />
                     </div>
                     <div className="content-fields">
-                        <Textfield placeholder="Id" value={productId} onChange={e => setProductId(e.target.value)} className="edit-product-id" />
-                        <Textfield placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="edit-name" />
+                        <Textfield
+                            placeholder="Id"
+                            value={productId}
+                            onChange={e => setProductId(e.target.value)}
+                            className="edit-product-id" />
+                        <Textfield
+                            placeholder="Name"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            className="edit-name" />
                         <div className="edit-available">
-                            <input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} id="available" name="available" value="Bike" />
-                            <label htmlFor="available">Available</label>
+                            <input
+                                type="checkbox"
+                                checked={available}
+                                onChange={e => setAvailable(e.target.checked)}
+                                id="available"
+                                name="available"
+                                value="Bike" />
+                            <label
+                                htmlFor="available">Available</label>
                         </div>
-                        <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="edit-price" />
-                        {/* Must edit urls for thumnails and multiple images */}
-                        <Textfield placeholder="Image Urls" value={urls} onChange={e => setUrls(e.target.value)} className="edit-urls" />
+                        <Textfield
+                            placeholder="Price"
+                            value={price}
+                            onChange={e => setPrice(e.target.value)}
+                            className="edit-price" />
+                        <Textfield
+                            placeholder="Image Urls"
+                            value={urls}
+                            onChange={e => setUrls(e.target.value)}
+                            className="edit-urls" />
                         {AuthUser && AuthUser.id === props.uid &&
                             <>
-                                <Button loading={loadingEdit} onClick={editProduct} className="edit-submit-edit">
+                                <Button
+                                    loading={loadingEdit}
+                                    onClick={editProduct}
+                                    className="edit-submit-edit"
+                                >
                                     Edit product
                                 </Button>
-                                <Button loading={loadingDelete} onClick={deleteProduct} className="edit-delete">
+                                <Button
+                                    loading={loadingDelete}
+                                    onClick={deleteProduct}
+                                    className="edit-delete"
+                                >
                                     Delete product
                                 </Button>
                             </>
@@ -171,12 +201,12 @@ EditProduct.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
-    if((AuthUser === null || AuthUser.id !== doc.data().uid)  && ctx.res) {
+    if ((AuthUser === null || AuthUser.id !== doc.data().uid) && ctx.res) {
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return
     }
-    return {...doc.data(), id: ctx.query.id}
+    return { ...doc.data(), id: ctx.query.id }
 }
 
 EditProduct.propTypes = {

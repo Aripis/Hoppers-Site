@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import initFirebase from '../utils/initFirebase'
-import CartContext from '../contexts/cartContext'
-import Button from '../components/button'
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import initFirebase from '../utils/initFirebase';
+import CartContext from '../contexts/cartContext';
+import Button from '../components/button';
 
 initFirebase()
 
@@ -20,8 +20,7 @@ const CartProduct = props => {
     const removeItem = () => {
         if (props.authId) {
             firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).delete().then(() => setCartState(true))
-        }
-        else {
+        } else {
             localStorage.removeItem(`Anonymus-${props.productId}`)
             setCartState(true)
         }
@@ -42,7 +41,7 @@ const CartProduct = props => {
                     max-height: 80px;
                 }
             `}</style>
-            <div className="wrp" >
+            <div className="wrp">
                 <img src={product.urls && product.urls[0]} />
                 <p>name: {product.name};&nbsp;</p>
                 <p>quantity: {props.quantity};&nbsp;</p>

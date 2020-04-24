@@ -1,7 +1,7 @@
-import Link from 'next/link'
-import PropTypes from 'prop-types'
-import priceConvert from '../utils/priceConvert'
-import Button from './button'
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import priceConvert from '../utils/priceConvert';
+import Button from './button';
 
 const Product = props => {
     return (
@@ -72,12 +72,11 @@ const Product = props => {
                 
             `}</style>
             <div className={`wrp-card ${props.className || ""}`}>
-                <div className="card-image" style={{backgroundImage: `url('${props.image}')`}}/>
+                <div className="card-image" style={{ backgroundImage: `url('${props.image}')` }} />
                 <div className="card-content">
                     <div className="content-name">
                         {props.name}
                     </div>
-                    
                     <div className="content-available">
                         {props.available ?
                             "in stock"
@@ -89,7 +88,6 @@ const Product = props => {
                         <div className="info-price">
                             {priceConvert(props.price, props.currency)}
                         </div>
-                        
                         <div className="info-actions">
                             <Button className="actions-button">
                                 <Link href={`/viewproduct?id=${props.id}`}>

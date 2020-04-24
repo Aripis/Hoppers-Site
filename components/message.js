@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const Message = props => (
     <>
@@ -63,7 +63,7 @@ const Message = props => (
 )
 
 Message.defaultProps = {
-   visible: true
+    visible: true
 }
 
 Message.propTypes = {

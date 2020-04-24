@@ -1,23 +1,22 @@
-import PropTypes from 'prop-types'
-import priceConvert from '../utils/priceConvert'
-import Button from '../components/button'
-import Navbar from '../components/navbar'
-import { get } from 'lodash'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import initFirebase from '../utils/initFirebase'
-import ImageGallery from 'react-image-gallery'
-import Link from 'next/link'
-import CartContext from '../contexts/cartContext'
-import { useContext } from 'react'
+import PropTypes from 'prop-types';
+import priceConvert from '../utils/priceConvert';
+import Button from '../components/button';
+import Navbar from '../components/navbar';
+import { get } from 'lodash';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import initFirebase from '../utils/initFirebase';
+import ImageGallery from 'react-image-gallery';
+import Link from 'next/link';
+import CartContext from '../contexts/cartContext';
+import { useContext } from 'react';
 
 initFirebase()
 
 const ViewProduct = props => {
-    //to be encrypted?
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartState, setCartState } = useContext(CartContext)
@@ -31,8 +30,7 @@ const ViewProduct = props => {
                     firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).update({
                         quantity: doc.data().quantity + 1,
                     })
-                }
-                else {
+                } else {
                     firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).set({
                         quantity: 1,
                         productId: props.productId
@@ -170,7 +168,6 @@ const ViewProduct = props => {
                             slideDuration={350}
                             showPlayButton={false}
                             showFullscreenButton={false}
-                            // careful with images
                             items={images}
                         />
                     </div>
@@ -188,9 +185,12 @@ const ViewProduct = props => {
                         <div className="preview-price">
                             <span>{priceConvert(props.price, "лв")}</span>
                         </div>
-                        <Button className="content-button" onClick={addToCart}>
+                        <Button
+                            className="content-button"
+                            onClick={addToCart}
+                        >
                             Add to cart.
-                            </Button>
+                        </Button>
                         {AuthUser && AuthUser.id === props.uid &&
                             <Button className="content-button">
                                 <Link href={`/editproduct?id=${props.id}`}>

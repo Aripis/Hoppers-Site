@@ -39,14 +39,16 @@ const Button = props => (
             onClick={props.onClick}
             className={`button ${props.className || ""}`}
             style={props.style}
-        >   
-            {props.loading && <Dotloader dots={props.dots}/>}
-            <span style={{visibility: props.loading ? "hidden" : "visible"}}>{props.children}</span>
+        >
+            {props.loading && <Dotloader dots={props.dots} />}
+            <span style={{ visibility: props.loading ? "hidden" : "visible" }}>
+                {props.children}
+            </span>
         </button>
     </>
 )
 
-Button.defoultProps = {
+Button.defaultProps = {
     type: "button",
     dots: 3
 }

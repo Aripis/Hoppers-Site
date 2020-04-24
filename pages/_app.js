@@ -1,14 +1,14 @@
-import React from 'react'
-import App from 'next/app'
+import React from 'react';
+import App from 'next/app';
 
-import Head from '../components/head'
-import Footer from '../components/footer'
-import "react-image-gallery/styles/css/image-gallery.css"
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPaypal } from '@fortawesome/free-brands-svg-icons'
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import Head from '../components/head';
+import Footer from '../components/footer';
+import "react-image-gallery/styles/css/image-gallery.css";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faPaypal } from '@fortawesome/free-brands-svg-icons';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-import CartContext from '../contexts/cartContext'
+import CartContext from '../contexts/cartContext';
 
 library.add(faPaypal, faShoppingCart)
 
@@ -18,13 +18,14 @@ export default class MyApp extends App {
     }
 
     setCartState = newState => {
-        this.setState({cartState: newState});
+        this.setState({ cartState: newState });
     }
+
     render() {
         const { Component, pageProps } = this.props
         return (
             <>
-                <Head title="Hoppers"/>
+                <Head title="Hoppers" />
                 <style jsx global>{`
                     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');                    
                     
@@ -84,10 +85,10 @@ export default class MyApp extends App {
 
                 `}</style>
                 <div className="layout">
-                <CartContext.Provider value={{cartState: this.state.cartState, setCartState: this.setCartState}}>
-                    <Component {...pageProps} />
-                    <Footer />
-                </CartContext.Provider>
+                    <CartContext.Provider value={{ cartState: this.state.cartState, setCartState: this.setCartState }}>
+                        <Component {...pageProps} />
+                        <Footer />
+                    </CartContext.Provider>
                 </div>
             </>
         )

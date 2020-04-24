@@ -1,23 +1,24 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
-import Button from '../components/button'
-import Navbar from '../components/navbar'
-import { get } from 'lodash'
-import Textfield from '../components/textfield'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import "firebase/firestore"
-import 'firebase/auth'
-import initFirebase from '../utils/initFirebase'
-import Router from 'next/router'
-import ImageGallery from 'react-image-gallery'
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import Button from '../components/button';
+import Navbar from '../components/navbar';
+import { get } from 'lodash';
+import Textfield from '../components/textfield';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import "firebase/firestore";
+import 'firebase/auth';
+import initFirebase from '../utils/initFirebase';
+import Router from 'next/router';
+import ImageGallery from 'react-image-gallery';
 
 initFirebase()
 
 const AddProduct = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     const [name, setName] = useState("")
     const [productId, setProductId] = useState("")
     const [price, setPrice] = useState("")
@@ -122,7 +123,7 @@ const AddProduct = props => {
                 }           
 
             `}</style>
-            <Navbar {...props}/>
+            <Navbar {...props} />
             <div className="wrp-add">
                 <div className="add-content">
                     <div className="content-gallery">
@@ -130,30 +131,58 @@ const AddProduct = props => {
                             slideDuration={350}
                             showPlayButton={false}
                             showFullscreenButton={false}
-                            // careful with images
                             items={
-                                urls.length > 0 
-                                ?
-                                urls.split(/[ ,]+/).map(url => ({original: url, thumbnail: url}))
-                                :
-                                [{original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi"}]
+                                urls.length > 0
+                                    ?
+                                    urls.split(/[ ,]+/).map(url => ({ original: url, thumbnail: url }))
+                                    :
+                                    [{ original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi" }]
                             }
                         />
                     </div>
                     <div className="content-fields">
-                        <Textfield placeholder="Id" value={productId} onChange={e => setProductId(e.target.value)} className="add-product-id" />
-                        <Textfield placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="add-name" />
+                        <Textfield
+                            placeholder="Id"
+                            value={productId}
+                            onChange={e => setProductId(e.target.value)}
+                            className="add-product-id" />
+                        <Textfield
+                            placeholder="Name"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            className="add-name" />
                         <div className="add-available">
-                            <input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} id="available" name="available" value="Bike" />
+                            <input
+                                type="checkbox"
+                                checked={available}
+                                onChange={e => setAvailable(e.target.checked)}
+                                id="available"
+                                name="available"
+                                value="Bike" />
                             <label htmlFor="available">Available</label>
                         </div>
-                        <Textfield placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="add-price" />
-                        {/* Must edit urls for thumnails and multiple images */}
-                        <Textfield placeholder="Image Urls" value={urls} onChange={e => setUrls(e.target.value)} className="add-urls" />
-                        <Button loading={loadingAdd} onClick={addProduct} className="add-submit-add">
+                        <Textfield
+                            placeholder="Price"
+                            value={price}
+                            onChange={e => setPrice(e.target.value)}
+                            className="add-price" />
+                        <Textfield
+                            placeholder="Image Urls"
+                            value={urls}
+                            onChange={e => setUrls(e.target.value)}
+                            className="add-urls" />
+                        <Button
+                            loading={loadingAdd}
+                            onClick={addProduct}
+                            className="add-submit-add"
+                        >
                             Add product
                         </Button>
-                        <Button loading={loadingCancel} onClick={cancelAdd} className="add-cancel-add">
+                        <Button
+                            loading={loadingCancel}
+                            onClick={cancelAdd}
+                            className="add-cancel-add"
+                        >
                             Cancel
                         </Button>
                     </div>
@@ -166,7 +195,7 @@ const AddProduct = props => {
 AddProduct.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    if((AuthUser === null || AuthUser.role !== 'creator') && ctx.res){
+    if ((AuthUser === null || AuthUser.role !== 'creator') && ctx.res) {
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return

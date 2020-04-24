@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const Label = props => (
     <>
@@ -56,15 +56,14 @@ const Label = props => (
                 }
             }
         `}</style>
-        <label 
-            id={props.id} 
-            style={props.style} 
-            className={`label ${props.required ? "required" : ""} ${props.error ? "error" : ""} ${props.className || ""}`} 
+        <label
+            id={props.id}
+            style={props.style}
+            className={`label ${props.required ? "required" : ""} ${props.error ? "error" : ""} ${props.className || ""}`}
             htmlFor={props.htmlFor}
         >
-                {props.content}
+            {props.content}
         </label>
-
     </>
 )
 

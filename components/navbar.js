@@ -1,22 +1,23 @@
 import { useState, useContext, useEffect } from 'react';
-import Link from 'next/link'
-import PropTypes from 'prop-types'
-import { get } from 'lodash/object'
-import logout from '../utils/auth/logout'
-import Router from 'next/router'
-import CartContext from '../contexts/cartContext'
-import Button from '../components/button'
-import CartProduct from '../components/cartproduct'
-import initFirebase from '../utils/initFirebase'
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import { get } from 'lodash/object';
+import logout from '../utils/auth/logout';
+import Router from 'next/router';
+import CartContext from '../contexts/cartContext';
+import Button from '../components/button';
+import CartProduct from '../components/cartproduct';
+import initFirebase from '../utils/initFirebase';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 
 initFirebase()
 
 const Navbar = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     const { cartState, setCartState } = useContext(CartContext)
     const [cart, setCart] = useState([])
 
@@ -28,8 +29,7 @@ const Navbar = props => {
                     id: doc.id
                 })))
             })
-        }
-        else {
+        } else {
             setCart(Object.values({ ...localStorage }).map(product => JSON.parse(product)))
         }
         setCartState(false)
@@ -74,11 +74,9 @@ const Navbar = props => {
                 </div>
                 <div className="navbar-buttons">
                     {AuthUser && AuthUser.role === "creator" &&
-                        <>
-                            <Link href="/addproduct">
-                                <a>Add Product</a>
-                            </Link>
-                        </>
+                        <Link href="/addproduct">
+                            <a>Add Product</a>
+                        </Link>
                     }
                     <Link href="/">
                         <a>Home</a>
@@ -88,7 +86,12 @@ const Navbar = props => {
                     </Link>
                     <div>
                         {cart && cart.map((item, i) => (
-                            <CartProduct key={i} dbId={item.id} quantity={item.quantity} productId={item.productId}>
+                            <CartProduct
+                                key={i}
+                                dbId={item.id}
+                                quantity={item.quantity}
+                                productId={item.productId}
+                                authId={AuthUser ? AuthUser.id : null}>
 
                             </CartProduct>
                         ))}

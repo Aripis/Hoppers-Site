@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { get } from 'lodash'
-import Textfield from '../components/textfield'
-import Button from '../components/button'
-import Navbar from '../components/navbar'
-import Head from '../components/head'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import initFirebase from '../utils/initFirebase'
-import Router from 'next/router'
-import Message from '../components/message'
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { get } from 'lodash';
+import Textfield from '../components/textfield';
+import Button from '../components/button';
+import Navbar from '../components/navbar';
+import Head from '../components/head';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import initFirebase from '../utils/initFirebase';
+import Router from 'next/router';
+import Message from '../components/message';
 
 initFirebase()
 
@@ -182,42 +182,63 @@ const Signup = props => {
                     <h2 className="form-header">Create your new profile</h2>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="First name" id="firstname"
-                                value={firstName} required
+                            <Textfield
+                                error={error}
+                                label="First name"
+                                id="firstname"
+                                value={firstName}
+                                required
                                 onChange={e => { setFirstName(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Surname" id="surname"
-                                value={surName} required
+                            <Textfield
+                                error={error}
+                                label="Surname"
+                                id="surname"
+                                value={surName}
+                                required
                                 onChange={e => { setSurname(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Email" id="email"
-                                value={email} required
+                            <Textfield
+                                error={error}
+                                label="Email"
+                                id="email"
+                                value={email}
+                                required
                                 onChange={e => { setEmail(e.target.value); setError("") }}
                                 type="email" className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Retype email" id="retypeemail"
-                                value={reEmail} required
+                            <Textfield error={error}
+                                label="Retype email"
+                                id="retypeemail"
+                                value={reEmail}
+                                required
                                 onChange={e => { setReEmail(e.target.value); setError("") }}
                                 type="email" className="form-input" />
                         </div>
                     </div>
                     <div className="form-field">
                         <div className="form-div">
-                            <Textfield error={error} label="Password" id="password"
-                                value={password} required
+                            <Textfield error={error}
+                                label="Password"
+                                id="password"
+                                value={password}
+                                required
                                 onChange={e => { setPassword(e.target.value); setError("") }}
                                 type="password" className="form-input" />
                         </div>
                         <div className="form-div">
-                            <Textfield error={error} label="Retype password" id="retypepassword"
-                                value={rePassword} required
+                            <Textfield error={error}
+                                label="Retype password"
+                                id="retypepassword"
+                                value={rePassword}
+                                required
                                 onChange={e => { setRePassword(e.target.value); setError("") }}
                                 type="password" className="form-input" />
                         </div>
@@ -227,12 +248,13 @@ const Signup = props => {
                         error={error}
                         className="form-message"
                         header="An error occurred"
-                        content={error}
-                    />
+                        content={error} />
                     <div className="form-actions">
-                        <Button loading={loadingSignUp}
+                        <Button
+                            loading={loadingSignUp}
                             type="submit"
-                            className="form-submit">
+                            className="form-submit"
+                        >
                             Sign up
                         </Button>
                     </div>
