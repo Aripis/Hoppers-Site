@@ -85,20 +85,21 @@ const SeeCart = props => {
             `}</style>
             <Navbar {...props} />
             <div className="wrp-cartcontent">
-                {cart.length > 0
+                {cart && Object.keys(cart).length > 0
                     ?
                     <>
                         <div className="cartcontent-productslist">
-                            {cart && cart.map((item, i) => (
-                                <OrderProduct
-                                    key={i}
-                                    dbId={item.id}
-                                    productId={item.productId}
-                                    quantity={item.quantity}
-                                    authId={AuthUser ? AuthUser.id : null}>
-
-                                </OrderProduct>
-                            ))}
+                            {
+                                Object.keys(cart).map(key => (
+                                    <OrderProduct
+                                        key={key}
+                                        dbId={key}
+                                        quantity={cart[key].quantity}
+                                        productId={cart[key].productId}
+                                        authId={AuthUser ? AuthUser.id : null}
+                                    />
+                                ))
+                            }
                         </div>
                         <div className="cartcontent-info">
                             <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
