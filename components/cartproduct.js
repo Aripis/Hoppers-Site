@@ -80,8 +80,6 @@ const CartProduct = props => {
                 }
             `}</style>
             <div className="wrp-cartproduct">
-                <p>DBID: {props.dbId}</p>
-                <p>ID: {props.productId}</p>
                 <div className="cartproduct-info">
                     <img className="cartproduct-img" src={product.urls && product.urls[0]} />
                     <p className="cartproduct-name">{product.name}</p>
