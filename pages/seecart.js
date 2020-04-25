@@ -22,7 +22,7 @@ initFirebase()
 const SeeCart = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    const { cartState, setCartState } = useContext(CartContext)
+    const { cartContext, setCartContext } = useContext(CartContext)
     const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     const [cart, setCart] = useState([])
@@ -34,14 +34,14 @@ const SeeCart = props => {
                     ...doc.data(),
                     id: doc.id
                 })))
-                setCartState(false)
+                setCartContext(false)
             })
         }
         else {
-            setCart(Object.values({ ...localStorage }).map(product => JSON.parse(product)))
-            setCartState(false)
+            setCart(JSON.parse(localStorage.getItem("cart")))
+            setCartContext(false)
         }
-    }, [cartState])
+    }, [cartContext])
 
 
     return (
@@ -86,30 +86,30 @@ const SeeCart = props => {
             <Navbar {...props} />
             <div className="wrp-cartcontent">
                 {cart.length > 0
-                ?
-                <>
-                    <div className="cartcontent-productslist">
-                        {cart && cart.map((item, i) => (
-                            <OrderProduct
-                                key={i}
-                                dbId={item.id}
-                                productId={item.productId}
-                                quantity={item.quantity}
-                                authId={AuthUser ? AuthUser.id : null}>
+                    ?
+                    <>
+                        <div className="cartcontent-productslist">
+                            {cart && cart.map((item, i) => (
+                                <OrderProduct
+                                    key={i}
+                                    dbId={item.id}
+                                    productId={item.productId}
+                                    quantity={item.quantity}
+                                    authId={AuthUser ? AuthUser.id : null}>
 
-                            </OrderProduct>
-                        ))}
-                    </div>
-                    <div className="cartcontent-info">
-                        <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
-                        <Button onClick={() => Router.push("/setorder")}>
-                            Set Order
+                                </OrderProduct>
+                            ))}
+                        </div>
+                        <div className="cartcontent-info">
+                            <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
+                            <Button onClick={() => Router.push("/setorder")}>
+                                Set Order
                         </Button>
-                    </div>
-                </>
-                :
-                <div>
-                    Your cart is empty :)
+                        </div>
+                    </>
+                    :
+                    <div>
+                        Your cart is empty :)
                 </div>
                 }
             </div>

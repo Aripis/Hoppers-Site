@@ -18,24 +18,26 @@ const Navbar = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
 
-    const { cartState, setCartState } = useContext(CartContext)
+    const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState({})
 
     useEffect(() => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
-                setCart(cart.docs.map(doc => ({
-                    ...doc.data(),
-                    id: doc.id
-                })))
+                let cart_data = {}
+                cart.docs.forEach(doc => {
+                    cart_data = {
+                        ...cart_data,
+                        [doc.id]: doc.data()
+                    }
+                })
+                setCart(cart_data)
             })
         } else {
-
             setCart(JSON.parse(localStorage.getItem("cart")))
-            // setCart(Object.values(localStorage).map(product => JSON.parse(product)).sort((a,b) => a.productId < b.productId ? -1 : a.productId > b.productId ? 1 : 0))
         }
-        setCartState(false)
-    }, [cartState])
+        setCartContext(false)
+    }, [cartContext])
 
     return (
         <>

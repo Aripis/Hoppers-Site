@@ -12,7 +12,7 @@ initFirebase()
 
 const OrderProduct = props => {
     const [product, setProduct] = useState([])
-    const { cartState, setCartState } = useContext(CartContext)
+    const { cartContext, setCartContext } = useContext(CartContext)
     const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     useEffect(() => {
@@ -23,14 +23,35 @@ const OrderProduct = props => {
 
     const removeItem = () => {
         if (props.authId) {
-            firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).delete().then(() => {
-                setTotalPrice(-(product.price * props.quantity))
-                setCartState(true)
+            firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).get().then(doc => {
+                if (doc.exists) {
+                    if (doc.data().quantity > 1) {
+                        firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).update({
+                            quantity: doc.data().quantity - 1
+                        }).then(() => {
+                            setTotalPrice(-(product.price * props.quantity))
+                            setCartContext(true)
+                        })
+                    } else {
+                        firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).delete().then(() => {
+                            setTotalPrice(-(product.price * props.quantity))
+                            setCartContext(true)
+                        })
+                    }
+                }
             })
         } else {
-            localStorage.removeItem(`Anonymus-${props.productId}`)
+            let cart = JSON.parse(localStorage.getItem("cart"))
+            if (cart[props.dbId]) {
+                if (cart[props.dbId].quantity > 1) {
+                    cart[props.dbId].quantity--
+                } else {
+                    delete cart[props.dbId]
+                }
+            }
+            localStorage.setItem("cart", JSON.stringify(cart))
             setTotalPrice(-(product.price * props.quantity))
-            setCartState(true)
+            setCartContext(true)
         }
     }
 

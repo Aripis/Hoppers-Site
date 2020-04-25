@@ -20,7 +20,7 @@ initFirebase()
 const FinalizeOrder = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    const { cartState, setCartState } = useContext(CartContext)
+    const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState([])
 
     const [billingAddress, setBillingAddress] = useState("")
@@ -51,7 +51,7 @@ const FinalizeOrder = props => {
                     ...doc.data(),
                     id: doc.id
                 })))
-                setCartState(false)
+                setCartContext(false)
             })
             firebase.firestore().collection("users").doc(AuthUser.id).get().then(doc => {
                 setBillingAddress(doc.data().orderInfo.billingAddress)
@@ -68,10 +68,10 @@ const FinalizeOrder = props => {
             setTelephoneNumber(info.telephoneNumber)
             setOrderType(info.orderType)
             setPaymentMethod(info.paymentMethod)
-            setCart(Object.values({ ...localStorage }).map(product => JSON.parse(product)))
-            setCartState(false)
+            setCart(JSON.parse(localStorage.getItem("cart")))
+            setCartContext(false)
         }
-    }, [cartState])
+    }, [cartContext])
 
     return (
         <>

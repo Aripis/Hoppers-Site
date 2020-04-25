@@ -20,7 +20,7 @@ initFirebase()
 const ViewProduct = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    const { cartState, setCartState } = useContext(CartContext)
+    const { cartContext, setCartContext } = useContext(CartContext)
     // const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     let images = props.urls.map(url => ({ original: url, thumbnail: url }))
@@ -41,7 +41,7 @@ const ViewProduct = props => {
             })
         } else {
             let cart = localStorage.getItem("cart")
-            if(cart === null){
+            if (cart === null) {
                 cart = {
                     [props.id]: {
                         quantity: 1,
@@ -50,10 +50,11 @@ const ViewProduct = props => {
                 }
             } else {
                 cart = JSON.parse(cart)
-                if(cart[props.id]){
+                if (cart[props.id]) {
                     cart[props.id].quantity++
                 } else {
-                    cart = {...cart, 
+                    cart = {
+                        ...cart,
                         [props.id]: {
                             quantity: 1,
                             productId: props.productId
@@ -65,7 +66,7 @@ const ViewProduct = props => {
 
         }
         // setTotalPrice(parseFloat(props.price))
-        setCartState(true)
+        setCartContext(true)
     }
 
     return (

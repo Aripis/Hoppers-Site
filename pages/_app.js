@@ -15,16 +15,16 @@ library.add(faPaypal, faShoppingCart)
 
 export default class MyApp extends App {
     state = {
-        cartState: false,
+        cartContext: false,
         totalPrice: 0
     }
 
-    setCartState = newState => {
-        this.setState({ cartState: newState });
+    setCartContext = newState => {
+        this.setState({ cartContext: newState });
     }
 
     setTotalPrice = newPrice => {
-        if(newPrice === null){
+        if (newPrice === null) {
             this.setState({ totalPrice: 0 });
         } else {
             this.setState({ totalPrice: this.state.totalPrice + newPrice });
@@ -96,9 +96,9 @@ export default class MyApp extends App {
                 `}</style>
                 <div className="layout">
                     <TotalPriceContext.Provider value={{ totalPrice: this.state.totalPrice, setTotalPrice: this.setTotalPrice }}>
-                        <CartContext.Provider value={{ cartState: this.state.cartState, setCartState: this.setCartState }}>
-                                <Component {...pageProps} />
-                                <Footer />
+                        <CartContext.Provider value={{ cartContext: this.state.cartContext, setCartContext: this.setCartContext }}>
+                            <Component {...pageProps} />
+                            <Footer />
                         </CartContext.Provider>
                     </TotalPriceContext.Provider>
                 </div>
