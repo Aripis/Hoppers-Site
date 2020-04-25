@@ -30,11 +30,11 @@ const SeeCart = props => {
     useEffect(() => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
-                setCart(cart.docs.map(doc => ({
-                    ...doc.data(),
-                    id: doc.id
-                })))
-                setCartContext(false)
+                let cart_data = {}
+                cart.docs.forEach(doc => {
+                    cart_data[doc.id] = doc.data()
+                })
+                setCart(cart_data)
             })
         }
         else {
