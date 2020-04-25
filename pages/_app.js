@@ -9,16 +9,26 @@ import { faPaypal } from '@fortawesome/free-brands-svg-icons';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import CartContext from '../contexts/cartContext';
+import TotalPriceContext from '../contexts/priceContext';
 
 library.add(faPaypal, faShoppingCart)
 
 export default class MyApp extends App {
     state = {
-        cartState: false
+        cartState: false,
+        totalPrice: 0
     }
 
     setCartState = newState => {
         this.setState({ cartState: newState });
+    }
+
+    setTotalPrice = newPrice => {
+        if(newPrice === null){
+            this.setState({ totalPrice: 0 });
+        } else {
+            this.setState({ totalPrice: this.state.totalPrice + newPrice });
+        }
     }
 
     render() {
@@ -85,10 +95,12 @@ export default class MyApp extends App {
 
                 `}</style>
                 <div className="layout">
-                    <CartContext.Provider value={{ cartState: this.state.cartState, setCartState: this.setCartState }}>
-                        <Component {...pageProps} />
-                        <Footer />
-                    </CartContext.Provider>
+                    <TotalPriceContext.Provider value={{ totalPrice: this.state.totalPrice, setTotalPrice: this.setTotalPrice }}>
+                        <CartContext.Provider value={{ cartState: this.state.cartState, setCartState: this.setCartState }}>
+                                <Component {...pageProps} />
+                                <Footer />
+                        </CartContext.Provider>
+                    </TotalPriceContext.Provider>
                 </div>
             </>
         )

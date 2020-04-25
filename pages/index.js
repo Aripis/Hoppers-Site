@@ -18,9 +18,7 @@ const Home = props => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
-        firebase.firestore().collection("products").onSnapshot(snapshot => {
-            setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
-        })
+        
     }, [])
 
     return (
@@ -30,23 +28,7 @@ const Home = props => {
             `}</style>
             <Navbar {...props} />
             <div className="wrp-index">
-                <div className="index-hero">
-                    <p>Hero Content</p>
-                </div>
-                <div className="index-products">
-                    {products.map((product, i) => (
-                        <Product
-                            key={i}
-                            id={product.id}
-                            className="product"
-                            image={product.urls[0]}
-                            name={product.name}
-                            price={product.price}
-                            currency="лв"
-                            available={product.available}
-                        />
-                    ))}
-                </div>
+                
             </div>
         </>
     )

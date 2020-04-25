@@ -19,7 +19,7 @@ const Navbar = props => {
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
 
     const { cartState, setCartState } = useContext(CartContext)
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState({})
 
     useEffect(() => {
         if (AuthUser) {
@@ -30,7 +30,9 @@ const Navbar = props => {
                 })))
             })
         } else {
-            setCart(Object.values({ ...localStorage }).map(product => JSON.parse(product)))
+
+            setCart(JSON.parse(localStorage.getItem("cart")))
+            // setCart(Object.values(localStorage).map(product => JSON.parse(product)).sort((a,b) => a.productId < b.productId ? -1 : a.productId > b.productId ? 1 : 0))
         }
         setCartState(false)
     }, [cartState])
@@ -53,7 +55,31 @@ const Navbar = props => {
                     display: flex;
                 }
 
-                .wrp-navbar > .navbar-buttons > :global(a) {
+                .wrp-navbar > .navbar-buttons > .wrp-cart > .cart {
+                    display: flex;
+                    flex-direction: column;
+                    visibility: hidden;
+                    opacity: 0;
+                    position: absolute;
+                    right: 0;
+                    background-color: #FAFBFD;
+                    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                    padding: .6em;
+                    margin-top: 2em;
+                    z-index: -2;
+                    transition: opacity .2s, visibility .2s;
+                }
+
+                .wrp-navbar > .navbar-buttons > .wrp-cart > .cart > :global(.cart-button) {
+                    margin-top: 1em;
+                }
+
+                .wrp-navbar > .navbar-buttons > .wrp-cart {
+                    position: relative;
+                }
+
+                .wrp-navbar > .navbar-buttons > :global(a),
+                .wrp-navbar > .navbar-buttons > .wrp-cart  {
                     display: inline-block;
                     padding: 1.55em 2.5em;
                     user-select: none;
@@ -62,10 +88,19 @@ const Navbar = props => {
                     transition: .3s;
                 }
 
-                .wrp-navbar > .navbar-buttons > :global(a):hover {
+                .wrp-navbar > .navbar-buttons > .wrp-cart:hover > .cart{
+                    visibility: visible;
+                    opacity: 1;
+                    z-index: 999;
+                
+                }
+
+                .wrp-navbar > .navbar-buttons > :global(a):hover,
+                .wrp-navbar > .navbar-buttons > .wrp-cart:hover {
                     text-shadow: 0 0 .65px black, 0 0 .65px black;
                     color: black;
                 }
+
 
             `}</style>
             <nav className="wrp-navbar">
@@ -84,20 +119,29 @@ const Navbar = props => {
                     <Link href="/store">
                         <a>Store</a>
                     </Link>
-                    <div>
-                        {cart && cart.map((item, i) => (
-                            <CartProduct
-                                key={i}
-                                dbId={item.id}
-                                quantity={item.quantity}
-                                productId={item.productId}
-                                authId={AuthUser ? AuthUser.id : null}>
+                    <div className="wrp-cart">
+                        Cart
+                        
+                        <div className="cart">
+                            {cart && Object.keys(cart).length > 0
+                            ? 
+                            Object.keys(cart).map(key => (
+                                <CartProduct
+                                    key={key}
+                                    dbId={key}
+                                    quantity={cart[key].quantity}
+                                    productId={cart[key].productId}
+                                    authId={AuthUser ? AuthUser.id : null} 
+                                />
 
-                            </CartProduct>
-                        ))}
-                        <Button onClick={() => Router.replace("/seecart")}>
-                            See cart
-                        </Button>
+                            ))
+                            :
+                            "Your cart is empty :)"
+                            }
+                            <Button className="cart-button" onClick={() => Router.replace("/seecart")}>
+                                See cart
+                            </Button>
+                        </div>
                     </div>
                     {!AuthUser ? (
                         <>

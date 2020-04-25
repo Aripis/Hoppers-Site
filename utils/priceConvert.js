@@ -1,5 +1,5 @@
 export default (price, currency) => {
-    let parsedPrice = price.toString().split(".")
+    let parsedPrice = (Math.round((parseFloat(price) + Number.EPSILON) * 100) / 100).toString().split(".")
     return(
         <>
             <style jsx>{`

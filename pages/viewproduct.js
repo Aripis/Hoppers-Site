@@ -12,6 +12,7 @@ import initFirebase from '../utils/initFirebase';
 import ImageGallery from 'react-image-gallery';
 import Link from 'next/link';
 import CartContext from '../contexts/cartContext';
+import TotalPriceContext from '../contexts/priceContext'
 import { useContext } from 'react';
 
 initFirebase()
@@ -20,6 +21,7 @@ const ViewProduct = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartState, setCartState } = useContext(CartContext)
+    // const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     let images = props.urls.map(url => ({ original: url, thumbnail: url }))
 
@@ -38,16 +40,31 @@ const ViewProduct = props => {
                 }
             })
         } else {
-            const tmp = JSON.parse(localStorage.getItem("Anonymus-" + props.productId))
-            localStorage.setItem(
-                "Anonymus-" + props.productId,
-                JSON.stringify({
-                    id: props.id,
-                    quantity: tmp ? tmp.quantity + 1 : 1,
-                    productId: props.productId
-                })
-            )
+            let cart = localStorage.getItem("cart")
+            if(cart === null){
+                cart = {
+                    [props.id]: {
+                        quantity: 1,
+                        productId: props.productId
+                    }
+                }
+            } else {
+                cart = JSON.parse(cart)
+                if(cart[props.id]){
+                    cart[props.id].quantity++
+                } else {
+                    cart = {...cart, 
+                        [props.id]: {
+                            quantity: 1,
+                            productId: props.productId
+                        }
+                    }
+                }
+            }
+            localStorage.setItem("cart", JSON.stringify(cart))
+
         }
+        // setTotalPrice(parseFloat(props.price))
         setCartState(true)
     }
 
