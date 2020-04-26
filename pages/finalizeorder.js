@@ -31,17 +31,19 @@ const FinalizeOrder = props => {
     const [paymentMethod, setPaymentMethod] = useState("")
 
     const handleSubmit = async () => {
-        await firebase.firestore().collection("orders").add({
-            cart: cart,
-            orderinfo: {
-                billingAddress: billingAddress[0],
-                deliveryAddress: deliveryAddress[0],
-                telephoneNumber: telephoneNumber,
-                orderType: orderType,
-                paymentMethod: paymentMethod
-            },
-            user: firebase.firestore().doc(`users/${AuthUser.id}`)
-        })
+        if (AuthUser) {
+            await firebase.firestore().collection("orders").add({
+                cart: cart,
+                orderinfo: {
+                    billingAddress: billingAddress[0],
+                    deliveryAddress: deliveryAddress[0],
+                    telephoneNumber: telephoneNumber,
+                    orderType: orderType,
+                    paymentMethod: paymentMethod
+                },
+                user: firebase.firestore().doc(`users/${AuthUser.id}`)
+            })
+        }
         Router.push('/myorders')
     }
 
@@ -67,19 +69,30 @@ const FinalizeOrder = props => {
         }
         else {
             const info = JSON.parse(sessionStorage.getItem("Anonymus-info"))
+
             setBillingAddress(info.billingAddress)
             setDeliveryAddress(info.deliveryAddress)
             setTelephoneNumber(info.telephoneNumber)
             setOrderType(info.orderType)
             setPaymentMethod(info.paymentMethod)
-            setCart(JSON.parse(localStorage.getItem("cart")))
+
+            let cart_data = JSON.parse(localStorage.getItem("cart"))
+            let price = 0
+            if (cart_data) {
+                Object.keys(cart_data).forEach(key => {
+                    price += cart_data[key].quantity * cart_data[key].price
+                })
+            }
+            setCart(cart_data)
+            setTotalPrice(price)
             setCartContext(false)
+
         }
     }, [cartContext])
 
     return (
         <>
-             <style jsx>{`
+            <style jsx>{`
                 .wrp-cartcontent {
                     flex:1;
                     display: flex;
