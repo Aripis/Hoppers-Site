@@ -138,7 +138,10 @@ const AddProduct = props => {
                                     ?
                                     urls.split(/[ ,]+/).map(url => ({ original: url, thumbnail: url }))
                                     :
-                                    [{ original: "https://bit.ly/39bL8Gi", thumbnail: "https://bit.ly/39bL8Gi" }]
+                                    [{
+                                        original: "https://www.dicetower.com/sites/default/files/styles/image_300/public/game-art/no-image-available_1.png?itok=4AoejwSQ",
+                                        thumbnail: "https://www.dicetower.com/sites/default/files/styles/image_300/public/game-art/no-image-available_1.png?itok=4AoejwSQ"
+                                    }]
                             }
                         />
                     </div>

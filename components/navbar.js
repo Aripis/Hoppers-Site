@@ -21,6 +21,7 @@ const Navbar = props => {
 
     const [totalPrice, setTotalPrice] = useState()
 
+    const [role, setRole] = useState("user")
     const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState({})
 
@@ -35,6 +36,9 @@ const Navbar = props => {
                 })
                 setCart(cart_data)
                 setTotalPrice(price)
+            })
+            firebase.firestore().doc(`users/${AuthUser.id}`).get().then(doc => {
+                setRole(doc.data().role)
             })
         } else {
             let cart_data = JSON.parse(localStorage.getItem("cart"))
@@ -120,7 +124,7 @@ const Navbar = props => {
                     <h1>Aripis</h1>
                 </div>
                 <div className="navbar-buttons">
-                    {AuthUser && AuthUser.role === "creator" &&
+                    {AuthUser && role === "creator" &&
                         <Link href="/addproduct">
                             <a>Add Product</a>
                         </Link>

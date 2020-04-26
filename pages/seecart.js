@@ -115,7 +115,7 @@ const SeeCart = props => {
                             <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
                             <Button onClick={() => Router.push("/setorder")}>
                                 Set Order
-                        </Button>
+                            </Button>
                         </div>
                     </>
                     :
