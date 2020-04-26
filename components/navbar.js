@@ -6,6 +6,7 @@ import logout from '../utils/auth/logout';
 import Router from 'next/router';
 import CartContext from '../contexts/cartContext';
 import Button from '../components/button';
+import priceConvert from '../utils/priceConvert';
 import CartProduct from '../components/cartproduct';
 import initFirebase from '../utils/initFirebase';
 import firebase from 'firebase/app';
@@ -17,25 +18,38 @@ initFirebase()
 const Navbar = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+    
+    const [totalPrice, setTotalPrice] = useState()
 
     const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState({})
-
+    
     useEffect(() => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
                 let cart_data = {}
+                let price = 0
                 cart.docs.forEach(doc => {
                     cart_data = {
                         ...cart_data,
                         [doc.id]: doc.data()
                     }
+                    price += doc.data().price
                 })
                 setCart(cart_data)
+                setTotalPrice(price)
             })
         } else {
             setCart(JSON.parse(localStorage.getItem("cart")))
+            let price = 0
+            if (cart){
+                Object.keys(cart).forEach(key => {
+                    price += cart[key].quantity * cart[key].price
+                })
+            }
+            setTotalPrice(price)
         }
+        const cart = JSON.parse(localStorage.getItem("cart"))
         setCartContext(false)
     }, [cartContext])
 
@@ -140,6 +154,7 @@ const Navbar = props => {
                             :
                             "Your cart is empty :)"
                             }
+                            <p>TotalPrice: {priceConvert(totalPrice, "лв.")}</p>
                             <Button className="cart-button" onClick={() => Router.replace("/seecart")}>
                                 See cart
                             </Button>

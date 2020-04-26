@@ -6,7 +6,6 @@ import Button from '../components/button';
 import Navbar from '../components/navbar';
 import Router from 'next/router';
 import CartContext from '../contexts/cartContext';
-import TotalPriceContext from '../contexts/priceContext'
 import OrderProduct from '../components/orderproduct';
 import priceConvert from '../utils/priceConvert';
 
@@ -23,7 +22,6 @@ const SeeCart = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartContext, setCartContext } = useContext(CartContext)
-    const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     const [cart, setCart] = useState([])
 
@@ -102,7 +100,7 @@ const SeeCart = props => {
                             }
                         </div>
                         <div className="cartcontent-info">
-                            <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
+                            {/* <span className="info-totalprice">Total price: {priceConvert(totPrice, "лв.")}</span> */}
                             <Button onClick={() => Router.push("/setorder")}>
                                 Set Order
                         </Button>

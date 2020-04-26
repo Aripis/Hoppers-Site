@@ -3,7 +3,6 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import initFirebase from '../utils/initFirebase';
 import CartContext from '../contexts/cartContext';
-import TotalPriceContext from '../contexts/priceContext';
 import Button from '../components/button';
 import priceConvert from '../utils/priceConvert';
 
@@ -13,14 +12,12 @@ initFirebase()
 const CartProduct = props => {
     const [product, setProduct] = useState([])
     const { cartContext, setCartContext } = useContext(CartContext)
-    const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     useEffect(() => {
         firebase.firestore().collection("products").doc(props.dbId).get().then(doc => {
             setProduct(doc.data())
-            setTotalPrice(doc.data().price * props.quantity)
         })
-    }, [])
+    }, [cartContext])
 
     const removeItem = () => {
         if (props.authId) {
@@ -30,12 +27,10 @@ const CartProduct = props => {
                         firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).update({
                             quantity: doc.data().quantity - 1
                         }).then(() => {
-                            setTotalPrice(-(product.price * props.quantity))
                             setCartContext(true)
                         })
                     } else {
                         firebase.firestore().collection(`users/${props.authId}/cart`).doc(props.dbId).delete().then(() => {
-                            setTotalPrice(-(product.price * props.quantity))
                             setCartContext(true)
                         })
                     }
@@ -52,7 +47,6 @@ const CartProduct = props => {
                 }
             }
             localStorage.setItem("cart", JSON.stringify(cart))
-            setTotalPrice(-(product.price * props.quantity))
             setCartContext(true)
         }
     }

@@ -12,20 +12,19 @@ import initFirebase from '../utils/initFirebase';
 import ImageGallery from 'react-image-gallery';
 import Link from 'next/link';
 import CartContext from '../contexts/cartContext';
-import TotalPriceContext from '../contexts/priceContext'
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 initFirebase()
 
 const ViewProduct = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     const { cartContext, setCartContext } = useContext(CartContext)
-    // const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
 
     let images = props.urls.map(url => ({ original: url, thumbnail: url }))
 
-    const addToCart = () => {
+    const addToCart = async () => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).get().then(doc => {
                 if (doc.exists) {
@@ -35,7 +34,8 @@ const ViewProduct = props => {
                 } else {
                     firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).set({
                         quantity: 1,
-                        productId: props.productId
+                        productId: props.productId,
+                        price: parseFloat(props.price)
                     })
                 }
             })
@@ -45,7 +45,8 @@ const ViewProduct = props => {
                 cart = {
                     [props.id]: {
                         quantity: 1,
-                        productId: props.productId
+                        productId: props.productId,
+                        price: props.price
                     }
                 }
             } else {
@@ -57,15 +58,14 @@ const ViewProduct = props => {
                         ...cart,
                         [props.id]: {
                             quantity: 1,
-                            productId: props.productId
+                            productId: props.productId,
+                            price: props.price
                         }
                     }
                 }
             }
             localStorage.setItem("cart", JSON.stringify(cart))
-
         }
-        // setTotalPrice(parseFloat(props.price))
         setCartContext(true)
     }
 
