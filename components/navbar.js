@@ -37,16 +37,16 @@ const Navbar = props => {
                 setTotalPrice(price)
             })
         } else {
-            setCart(JSON.parse(localStorage.getItem("cart")))
+            let cart_data = JSON.parse(localStorage.getItem("cart"))
             let price = 0
-            if (cart) {
-                Object.keys(cart).forEach(key => {
-                    price += cart[key].quantity * cart[key].price
+            if (cart_data) {
+                Object.keys(cart_data).forEach(key => {
+                    price += cart_data[key].quantity * cart_data[key].price
                 })
             }
+            setCart(cart_data)
             setTotalPrice(price)
         }
-        const cart = JSON.parse(localStorage.getItem("cart"))
         setCartContext(false)
     }, [cartContext])
 

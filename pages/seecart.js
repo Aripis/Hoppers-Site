@@ -39,11 +39,18 @@ const SeeCart = props => {
                 setCart(cart_data)
                 setTotalPrice(price)
             })
+        } else {
+            let cart_data = JSON.parse(localStorage.getItem("cart"))
+            let price = 0
+            if (cart_data) {
+                Object.keys(cart_data).forEach(key => {
+                    price += cart_data[key].quantity * cart_data[key].price
+                })
+            }
+            setCart(cart_data)
+            setTotalPrice(price)
         }
-        else {
-            setCart(JSON.parse(localStorage.getItem("cart")))
-            setCartContext(false)
-        }
+        setCartContext(false)
     }, [cartContext])
 
 
