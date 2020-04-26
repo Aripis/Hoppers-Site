@@ -9,6 +9,7 @@ const Product = props => {
             <style jsx>{`
                 .wrp-card {
                     margin: .5em;
+                    max-width: 13em;
                     flex-shrink: 1;
                     height: 18em;
                     box-shadow: 0 .065em .19em rgba(0,0,0,0.12), 0 .065em .125em rgba(0,0,0,0.24);

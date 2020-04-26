@@ -31,7 +31,6 @@ const SetOrder = props => {
 
     const handleOrder = async e => {
         e.preventDefault()
-        console.log("Order wokrs...")
         setLoadingSetOrder(!loadingSetOrder)
         if (AuthUser) {
             await firebase.firestore().collection(`users`).doc(AuthUser.id).update({

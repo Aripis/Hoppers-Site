@@ -22,17 +22,22 @@ const SeeCart = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartContext, setCartContext } = useContext(CartContext)
+    const [totalPrice, setTotalPrice] = useState()
+
 
     const [cart, setCart] = useState([])
 
     useEffect(() => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
-                setCart(cart.docs.map(doc => ({
-                    ...doc.data(),
-                    id: doc.id
-                })))
-                setCartContext(false)
+                let cart_data = {}
+                let price = 0
+                cart.docs.forEach(doc => {
+                    cart_data[doc.id] = doc.data()
+                    price += doc.data().price * doc.data().quantity
+                })
+                setCart(cart_data)
+                setTotalPrice(price)
             })
         }
         else {
@@ -100,7 +105,7 @@ const SeeCart = props => {
                             }
                         </div>
                         <div className="cartcontent-info">
-                            {/* <span className="info-totalprice">Total price: {priceConvert(totPrice, "лв.")}</span> */}
+                            <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
                             <Button onClick={() => Router.push("/setorder")}>
                                 Set Order
                         </Button>

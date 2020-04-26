@@ -83,9 +83,9 @@ const Store = props => {
 
             </div>
             <div className="wrp-products">
-                {products.map((product, i) => (
+                {products.map(product => (
                     <Product
-                        key={i}
+                        key={product.id}
                         id={product.id}
                         className="product"
                         image={product.urls[0]}

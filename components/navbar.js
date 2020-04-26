@@ -18,23 +18,20 @@ initFirebase()
 const Navbar = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    
+
     const [totalPrice, setTotalPrice] = useState()
 
     const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState({})
-    
+
     useEffect(() => {
         if (AuthUser) {
             firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
                 let cart_data = {}
                 let price = 0
                 cart.docs.forEach(doc => {
-                    cart_data = {
-                        ...cart_data,
-                        [doc.id]: doc.data()
-                    }
-                    price += doc.data().price
+                    cart_data[doc.id] = doc.data()
+                    price += doc.data().price * doc.data().quantity
                 })
                 setCart(cart_data)
                 setTotalPrice(price)
@@ -42,7 +39,7 @@ const Navbar = props => {
         } else {
             setCart(JSON.parse(localStorage.getItem("cart")))
             let price = 0
-            if (cart){
+            if (cart) {
                 Object.keys(cart).forEach(key => {
                     price += cart[key].quantity * cart[key].price
                 })
@@ -81,19 +78,19 @@ const Navbar = props => {
                     background-color: #FAFBFD;
                     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                     padding: .6em;
-                    margin-top: 2em;
+                    margin-top: 1.6em;
                     z-index: -2;
                     transition: opacity .2s, visibility .2s;
                 }
-
+                
                 .wrp-navbar > .navbar-buttons > .wrp-cart > .cart > :global(.cart-button) {
                     margin-top: 1em;
                 }
-
+                
                 .wrp-navbar > .navbar-buttons > .wrp-cart {
                     position: relative;
                 }
-
+                
                 .wrp-navbar > .navbar-buttons > :global(a),
                 .wrp-navbar > .navbar-buttons > .wrp-cart  {
                     display: inline-block;
@@ -103,12 +100,11 @@ const Navbar = props => {
                     cursor: pointer;
                     transition: .3s;
                 }
-
+                
                 .wrp-navbar > .navbar-buttons > .wrp-cart:hover > .cart{
                     visibility: visible;
                     opacity: 1;
                     z-index: 999;
-                
                 }
 
                 .wrp-navbar > .navbar-buttons > :global(a):hover,
@@ -137,22 +133,21 @@ const Navbar = props => {
                     </Link>
                     <div className="wrp-cart">
                         Cart
-                        
                         <div className="cart">
                             {cart && Object.keys(cart).length > 0
-                            ? 
-                            Object.keys(cart).map(key => (
-                                <CartProduct
-                                    key={key}
-                                    dbId={key}
-                                    quantity={cart[key].quantity}
-                                    productId={cart[key].productId}
-                                    authId={AuthUser ? AuthUser.id : null} 
-                                />
+                                ?
+                                Object.keys(cart).map(key => (
+                                    <CartProduct
+                                        key={key}
+                                        dbId={key}
+                                        quantity={cart[key].quantity}
+                                        productId={cart[key].productId}
+                                        authId={AuthUser ? AuthUser.id : null}
+                                    />
 
-                            ))
-                            :
-                            "Your cart is empty :)"
+                                ))
+                                :
+                                "Your cart is empty :)"
                             }
                             <p>TotalPrice: {priceConvert(totalPrice, "лв.")}</p>
                             <Button className="cart-button" onClick={() => Router.replace("/seecart")}>

@@ -203,17 +203,19 @@ const ViewProduct = props => {
                         <div className="preview-price">
                             <span>{priceConvert(props.price, "лв")}</span>
                         </div>
-                        <Button
-                            className="content-button"
-                            onClick={addToCart}
-                        >
-                            Add to cart.
-                        </Button>
-                        {AuthUser && AuthUser.id === props.uid &&
+                        {AuthUser && AuthUser.id === props.uid
+                            ?
                             <Button className="content-button">
                                 <Link href={`/editproduct?id=${props.id}`}>
                                     <a>Edit product</a>
                                 </Link>
+                            </Button>
+                            :
+                            <Button
+                                className="content-button"
+                                onClick={addToCart}
+                            >
+                                Add to cart.
                             </Button>
                         }
                     </div>
