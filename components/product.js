@@ -1,16 +1,16 @@
-import Link from 'next/link'
-import PropTypes from 'prop-types'
-import priceConvert from '../utils/priceConvert'
-import Button from './button'
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import priceConvert from '../utils/priceConvert';
+import Button from './button';
 
 const Product = props => {
     return (
         <>
-            <style jsx>{`                
+            <style jsx>{`
                 .wrp-card {
                     margin: .5em;
-                    flex-shrink: 1;
                     max-width: 13em;
+                    flex-shrink: 1;
                     height: 18em;
                     box-shadow: 0 .065em .19em rgba(0,0,0,0.12), 0 .065em .125em rgba(0,0,0,0.24);
                     display: flex;
@@ -56,6 +56,10 @@ const Product = props => {
                     font-size: 1.125em;
                 }
 
+                .wrp-card > .card-content > .content-info > .info-actions {
+                    padding-left: .6em;
+                }
+
                 .wrp-card > .card-content > .content-info > .info-actions > :global(.actions-button) {
                     font-size: .9em;
                     width: 7em;
@@ -72,12 +76,11 @@ const Product = props => {
                 
             `}</style>
             <div className={`wrp-card ${props.className || ""}`}>
-                <div className="card-image" style={{backgroundImage: `url('${props.image}')`}}/>
+                <div className="card-image" style={{ backgroundImage: `url('${props.image}')` }} />
                 <div className="card-content">
                     <div className="content-name">
                         {props.name}
                     </div>
-                    
                     <div className="content-available">
                         {props.available ?
                             "in stock"
@@ -89,15 +92,12 @@ const Product = props => {
                         <div className="info-price">
                             {priceConvert(props.price, props.currency)}
                         </div>
-                        
                         <div className="info-actions">
-                                <Button 
-                                    className="actions-button"
-                                >
-                                    <Link href={`/viewproduct?id=${props.id}`}>
-                                        <a>See offer</a>
-                                    </Link>
-                                </Button>
+                            <Button className="actions-button">
+                                <Link href={`/viewproduct?id=${props.id}`}>
+                                    <a>See offer</a>
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>

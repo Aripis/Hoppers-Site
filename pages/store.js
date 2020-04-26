@@ -1,24 +1,39 @@
-import PropTypes from 'prop-types'
-import Product from '../components/product'
+import PropTypes from 'prop-types';
+import Product from '../components/product';
 import { useState, useEffect } from 'react';
-import Navbar from '../components/navbar'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import initFirebase from '../utils/initFirebase'
+import Navbar from '../components/navbar';
+import { debounce } from 'lodash'
+import Search from '../components/search';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import initFirebase from '../utils/initFirebase';
 
 initFirebase()
 
 const Store = props => {
     const [products, setProducts] = useState([])
+    const [value, setValue] = useState("")
 
     useEffect(() => {
         firebase.firestore().collection("products").onSnapshot(snapshot => {
-            setProducts(snapshot.docs.map(doc => ({...doc.data(), id: doc.id})))
+            setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
         })
     }, [])
+
+    const search = debounce(value => {
+        if (value) {
+            firebase.firestore().collection("products").where("searchQueries", "array-contains", value.toLowerCase()).onSnapshot(snapshot => {
+                setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+            })
+        } else {
+            firebase.firestore().collection("products").onSnapshot(snapshot => {
+                setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+            })
+        }
+    }, 500)
 
     return (
         <>
@@ -29,6 +44,14 @@ const Store = props => {
                     flex-flow: row wrap;
                     justify-content: center;
                     background-color: #E9EBEE;
+                }
+
+                .wrp-search {
+                    background-color: #E9EBEE;
+                    padding: 1.25em;
+                    display:flex;
+                    justify-content: center;
+                    align-items: center;
                 }
 
                 @media only screen and (max-width: 450px){
@@ -48,16 +71,25 @@ const Store = props => {
                     }
                 }
             `}</style>
-            <Navbar {...props}/>
-            <div className="wrp-products"> 
-                {products.map((product, i) => (
+            <Navbar {...props} />
+            <div className="wrp-search">
+                <Search
+                    value={value}
+                    onChange={e => {
+                        setValue(e.target.value);
+                        search(e.target.value)
+                    }}
+                />
+
+            </div>
+            <div className="wrp-products">
+                {products.map(product => (
                     <Product
-                        key={i}
+                        key={product.id}
                         id={product.id}
                         className="product"
-                        // must be careful with urls
-                        image={product.urls[0]} 
-                        name={product.name} 
+                        image={product.urls[0]}
+                        name={product.name}
                         price={product.price}
                         currency="лв"
                         available={product.available}

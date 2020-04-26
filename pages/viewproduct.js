@@ -1,21 +1,73 @@
-import PropTypes from 'prop-types'
-import priceConvert from '../utils/priceConvert'
-import Button from '../components/button'
-import Navbar from '../components/navbar'
-import withAuthUser from '../utils/pageWrappers/withAuthUser'
-import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo'
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import initFirebase from '../utils/initFirebase'
-import ImageGallery from 'react-image-gallery'
+import PropTypes from 'prop-types';
+import priceConvert from '../utils/priceConvert';
+import Button from '../components/button';
+import Navbar from '../components/navbar';
+import { get } from 'lodash';
+import withAuthUser from '../utils/pageWrappers/withAuthUser';
+import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import initFirebase from '../utils/initFirebase';
+import ImageGallery from 'react-image-gallery';
+import Link from 'next/link';
+import CartContext from '../contexts/cartContext';
+import { useContext, useState } from 'react';
 
 initFirebase()
 
 const ViewProduct = props => {
-    //to be encrypted?
+    const { AuthUserInfo } = props
+    const AuthUser = get(AuthUserInfo, 'AuthUser', null)
 
-    let images = props.urls.map(url => ({original: url, thumbnail: url}))
+    const { cartContext, setCartContext } = useContext(CartContext)
+
+    let images = props.urls.map(url => ({ original: url, thumbnail: url }))
+
+    const addToCart = async () => {
+        if (AuthUser) {
+            firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).get().then(doc => {
+                if (doc.exists) {
+                    firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).update({
+                        quantity: doc.data().quantity + 1,
+                    })
+                } else {
+                    firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(props.id).set({
+                        quantity: 1,
+                        productId: props.productId,
+                        price: parseFloat(props.price)
+                    })
+                }
+            })
+        } else {
+            let cart = localStorage.getItem("cart")
+            if (cart === null) {
+                cart = {
+                    [props.id]: {
+                        quantity: 1,
+                        productId: props.productId,
+                        price: props.price
+                    }
+                }
+            } else {
+                cart = JSON.parse(cart)
+                if (cart[props.id]) {
+                    cart[props.id].quantity++
+                } else {
+                    cart = {
+                        ...cart,
+                        [props.id]: {
+                            quantity: 1,
+                            productId: props.productId,
+                            price: props.price
+                        }
+                    }
+                }
+            }
+            localStorage.setItem("cart", JSON.stringify(cart))
+        }
+        setCartContext(true)
+    }
 
     return (
         <>
@@ -125,7 +177,8 @@ const ViewProduct = props => {
                 }
 
             `}</style>
-            <Navbar {...props}/>
+
+            <Navbar {...props} />
             <div className="wrp-view">
                 <div className="view-content">
                     <div className="content-gallery">
@@ -133,7 +186,6 @@ const ViewProduct = props => {
                             slideDuration={350}
                             showPlayButton={false}
                             showFullscreenButton={false}
-                            // careful with images
                             items={images}
                         />
                     </div>
@@ -143,67 +195,80 @@ const ViewProduct = props => {
                         </h2>
                         <div className="preview-available">
                             {props.available ?
-                                <>in stock</>
+                                "in stock"
                                 :
-                                <>sold out</>
+                                "sold out"
                             }
                         </div>
                         <div className="preview-price">
                             <span>{priceConvert(props.price, "лв")}</span>
                         </div>
-                        <Button className="content-button"> 
-                            Add to cart.
-                        </Button>
+                        {AuthUser && AuthUser.id === props.uid
+                            ?
+                            <Button className="content-button">
+                                <Link href={`/editproduct?id=${props.id}`}>
+                                    <a>Edit product</a>
+                                </Link>
+                            </Button>
+                            :
+                            <Button
+                                className="content-button"
+                                onClick={addToCart}
+                            >
+                                Add to cart.
+                            </Button>
+                        }
                     </div>
                 </div>
                 {/* <div className="view-details">
-                    <div className="details-description">
-                        Description<br />
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
+                        <div className="details-description">
+                            Description<br />
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
+                        </div>
+                        <div className="details-faq">
+                            Faq<br />
+                            1.<br />
+                            2.<br />
+                            3.<br />
+                            4.<br />
+                        </div>
+                        <div className="details-reviews">
+                            Reviews <br />
+                            1.<br />
+                            2.<br />
+                            3.<br />
+                            4.<br />
+                        </div>
+                        <div className="details-specs">
+                            Specs <br />
+                            1.<br />
+                            2.<br />
+                            3.<br />
+                            4.<br />
+                        </div>
                     </div>
-                    <div className="details-faq">
-                        Faq<br />
-                        1.<br />
-                        2.<br />
-                        3.<br />
-                        4.<br />
-                    </div>
-                    <div className="details-reviews">
-                        Reviews <br />
-                        1.<br />
-                        2.<br />
-                        3.<br />
-                        4.<br />
-                    </div>
-                    <div className="details-specs">
-                        Specs <br />
-                        1.<br />
-                        2.<br />
-                        3.<br />
-                        4.<br />
-                    </div>
-                </div>
-                <div className="view-suggestions">
-                    {[...Array(6).keys()].map(i => (
-                        <Product
-                            key={i}
-                            className="product"
-                            image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
-                            name="Chair Milon, Grey, Wooden" 
-                            price="19.99"
-                            currency="лв"
-                            available
-                        />
-                    ))}
-                </div> */}
+                    <div className="view-suggestions">
+                        {[...Array(6).keys()].map(i => (
+                            <Product
+                                key={i}
+                                className="product"
+                                image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
+                                name="Chair Milon, Grey, Wooden" 
+                                price="19.99"
+                                currency="лв"
+                                available
+                            />
+                        ))}
+                    </div> */}
             </div>
+
         </>
     )
 }
 
 ViewProduct.getInitialProps = async ctx => {
     let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
-    return {...doc.data()}
+    return { ...doc.data(), id: ctx.query.id }
 }
 
 ViewProduct.propTypes = {

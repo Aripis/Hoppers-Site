@@ -7,7 +7,10 @@
         "firebase_public_api_key": "@firebase_public_api_key",
         "firebase_private_key": "@firebase_private_key",
         "session_secret_current": "@session_secret_current",
-        "session_secret_previous": "@session_secret_previous"
+        "session_secret_previous": "@session_secret_previous",
+        "algolia_id": "@algolia_id",
+        "algolia_admin_key": "@algolia_admin_key",
+        "algolia_search_key": "@algolia_search_key"
     },
     "build": {
         "env": {
@@ -18,7 +21,10 @@
             "firebase_public_api_key": "@firebase_public_api_key",
             "firebase_private_key": "@firebase_private_key",
             "session_secret_current": "@session_secret_current",
-            "session_secret_previous": "@session_secret_previous"
+            "session_secret_previous": "@session_secret_previous",
+            "algolia_id": "@algolia_id",
+            "algolia_admin_key": "@algolia_admin_key",
+            "algolia_search_key": "@algolia_search_key"
         }
     }
 }

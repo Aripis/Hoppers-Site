@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const Message = props => (
     <>
@@ -63,13 +63,22 @@ const Message = props => (
 )
 
 Message.defaultProps = {
-   visible: true
+    visible: true
 }
 
 Message.propTypes = {
-    visible: PropTypes.bool,
-    success: PropTypes.bool,
-    error: PropTypes.bool,
+    visible: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
+    success: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
+    error: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
     header: PropTypes.string,
     content: PropTypes.string
 }

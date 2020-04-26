@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Label from '../components/label'
+import Label from '../components/label';
 
 const Textfield = props => (
     <>
@@ -35,7 +35,7 @@ const Textfield = props => (
                 box-shadow: 0 0 .15em .03em #fa1d00;
             }
         `}</style>
-        <input 
+        <input
             id={props.id}
             style={props.style}
             type={props.type}
@@ -46,7 +46,12 @@ const Textfield = props => (
             required={props.required}
         />
         {props.label &&
-            <Label required={props.required} error={props.error} htmlFor={props.id} content={props.label} on="input" />
+            <Label
+                required={props.required}
+                error={props.error}
+                htmlFor={props.id}
+                content={props.label}
+                on="input" />
         }
     </>
 )
