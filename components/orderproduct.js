@@ -97,8 +97,8 @@ const OrderProduct = props => {
                     <img className="orderproduct-img" src={product.urls && product.urls[0]} />
                     <p className="orderproduct-name">{product.name}</p>
                 </div>
+                <p className="orderproduct-price">{priceConvert(product.price, "лв.")}</p>
                 <p className="orderproduct-quantity">x{props.quantity}</p>
-                <p className="orderproduct-price">{priceConvert(product.price * props.quantity, "лв.")}</p>
                 <div>
                     <Button onClick={removeItem}>
                         Remove

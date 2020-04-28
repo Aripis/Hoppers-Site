@@ -43,8 +43,11 @@ const FinalizeOrder = props => {
                 },
                 user: firebase.firestore().doc(`users/${AuthUser.id}`)
             })
+            Router.push('/myorders')
+        } else {
+            localStorage.removeItem("cart")
+            Router.push('/myorders')
         }
-        Router.push('/myorders')
     }
 
     useEffect(() => {

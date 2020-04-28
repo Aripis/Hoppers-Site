@@ -72,7 +72,6 @@ const CartProduct = props => {
                 .wrp-cartproduct .cartproduct-img {
                     max-width: 80px;
                     max-height: 80px;
-                    
                 }
 
                 .wrp-cartproduct > .cartproduct-price {
@@ -95,10 +94,11 @@ const CartProduct = props => {
             <div className="wrp-cartproduct">
                 <div className="cartproduct-info">
                     <img className="cartproduct-img" src={product.urls && product.urls[0]} />
-                    <p className="cartproduct-name">{product.name}</p>
+                    <span className="cartproduct-name">{product.name}</span>
                 </div>
-                <p className="cartproduct-quantity">x{props.quantity}</p>
-                <p className="cartproduct-price">{priceConvert(product.price * props.quantity, "лв.")}</p>
+                <span className="cartproduct-totalprice">{priceConvert(product.price, "лв.")}</span>
+                <span className="cartproduct-quantity">x{props.quantity}</span>
+                <span className="cartproduct-price">{priceConvert(product.price * props.quantity, "лв.")}</span>
                 <div>
                     <Button onClick={removeItem}>
                         Remove
