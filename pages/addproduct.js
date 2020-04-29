@@ -9,12 +9,22 @@ import withAuthUser from '../utils/pageWrappers/withAuthUser';
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
 import firebase from 'firebase/app';
 import "firebase/firestore";
+import "firebase/storage";
 import 'firebase/auth';
 import initFirebase from '../utils/initFirebase';
 import Router from 'next/router';
 import ImageGallery from 'react-image-gallery';
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import arrayMove from "array-move";
+import Gallery from "react-photo-gallery";
+import Photo from "../components/photo";
 
 initFirebase()
+
+const SortablePhoto = SortableElement(item => <Photo {...item} />);
+const SortableGallery = SortableContainer(({ items }) => (
+  <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
+));
 
 const AddProduct = props => {
     const { AuthUserInfo } = props
@@ -23,28 +33,45 @@ const AddProduct = props => {
     const [name, setName] = useState("")
     const [productId, setProductId] = useState("")
     const [price, setPrice] = useState("")
-    const [urls, setUrls] = useState("")
     const [loadingAdd, setLoadingAdd] = useState(false)
     const [loadingCancel, setLoadingCancel] = useState(false)
     const [available, setAvailable] = useState(false)
+    const [items, setItems] = useState([]);
 
-    const addProduct = () => {
+    const addProduct = async () => {
         setLoadingAdd(true)
-        firebase.firestore().collection("products").add({
+        const docRef = await firebase.firestore().collection("products").add({
             productId: productId,
             name: name,
             price: price,
-            urls: urls.split(/[ ,]+/),
             uid: AuthUser.id,
             available: available,
             searchQueries: searchQueries(name)
-        }).then(() => Router.replace("/store"))
+        })
+        items.forEach(async item => {
+            await firebase.storage().ref(`products/${docRef.id}/${item.file.name}`).put(item.file)
+        })
+        Router.replace("/store")
     }
 
     const cancelAdd = () => {
         setLoadingCancel(true)
         Router.replace("/store")
     }
+
+    const handleFileChange = async e => {
+        const files = await Promise.all(e.target.files)
+        setItems(files.map(file => ({
+            src: URL.createObjectURL(file),
+            file: file,
+            width: 2,
+            height: 2
+        })))
+    }
+
+    const onSortEnd = ({ oldIndex, newIndex }) => {
+        setItems(arrayMove(items, oldIndex, newIndex));
+    };
 
     return (
         <>
@@ -108,6 +135,10 @@ const AddProduct = props => {
                     outline:none;
                 }
 
+                :global(.react-photo-gallery_photo) {
+                    object-fit: contain;
+                }
+
                 @media only screen and (max-width: 520px) {
                     :global(.image-gallery .image-gallery-image){
                         max-width: 40em;
@@ -134,9 +165,9 @@ const AddProduct = props => {
                             showPlayButton={false}
                             showFullscreenButton={false}
                             items={
-                                urls.length > 0
+                                items.length > 0
                                     ?
-                                    urls.split(/[ ,]+/).map(url => ({ original: url, thumbnail: url }))
+                                    items.map(item => ({ original: item.src, thumbnail: item.src }))
                                     :
                                     [{
                                         original: "https://www.dicetower.com/sites/default/files/styles/image_300/public/game-art/no-image-available_1.png?itok=4AoejwSQ",
@@ -171,11 +202,13 @@ const AddProduct = props => {
                             value={price}
                             onChange={e => setPrice(e.target.value)}
                             className="add-price" />
-                        <Textfield
-                            placeholder="Image Urls"
-                            value={urls}
-                            onChange={e => setUrls(e.target.value)}
-                            className="add-urls" />
+                        <input 
+                            type="file"
+                            onChange={handleFileChange} 
+                            accept=".jpg,.jpeg,.svg,.png"
+                            multiple
+                        />
+                        <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
                         <Button
                             loading={loadingAdd}
                             onClick={addProduct}
