@@ -9,6 +9,7 @@ import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/storage';
 import initFirebase from '../utils/initFirebase';
 
 initFirebase()
@@ -18,19 +19,31 @@ const Store = props => {
     const [value, setValue] = useState("")
 
     useEffect(() => {
-        firebase.firestore().collection("products").onSnapshot(snapshot => {
-            setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+        firebase.firestore().collection("products").onSnapshot(async snapshot => {
+            setProducts(await Promise.all(snapshot.docs.map(async  doc => {
+                const images = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
+                return { ...doc.data(), id: doc.id, urls: imagesUrl}
+            })))
         })
     }, [])
 
     const search = debounce(value => {
         if (value) {
-            firebase.firestore().collection("products").where("searchQueries", "array-contains", value.toLowerCase()).onSnapshot(snapshot => {
-                setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+            firebase.firestore().collection("products").where("searchQueries", "array-contains", value.toLowerCase()).onSnapshot(async snapshot => {
+                setProducts(await Promise.all(snapshot.docs.map(async  doc => {
+                    const images = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                    const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
+                    return { ...doc.data(), id: doc.id, urls: imagesUrl}
+                })))
             })
         } else {
-            firebase.firestore().collection("products").onSnapshot(snapshot => {
-                setProducts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+            firebase.firestore().collection("products").onSnapshot(async snapshot => {
+                setProducts(await Promise.all(snapshot.docs.map(async  doc => {
+                    const images = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                    const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
+                    return { ...doc.data(), id: doc.id, urls: imagesUrl}
+                })))
             })
         }
     }, 500)

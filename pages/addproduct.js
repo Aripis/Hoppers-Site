@@ -48,9 +48,9 @@ const AddProduct = props => {
             available: available,
             searchQueries: searchQueries(name)
         })
-        items.forEach(async item => {
-            await firebase.storage().ref(`products/${docRef.id}/${item.file.name}`).put(item.file)
-        })
+        for(let i = 0; i < items.length; i++) {
+            await firebase.storage().ref(`products/${docRef.id}/${i+1}`).put(items[i].file)
+        }
         Router.replace("/store")
     }
 

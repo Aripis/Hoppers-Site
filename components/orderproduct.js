@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/storage';
 import initFirebase from '../utils/initFirebase';
 import CartContext from '../contexts/cartContext';
 import Button from '../components/button';
@@ -14,8 +15,10 @@ const OrderProduct = props => {
     const { cartContext, setCartContext } = useContext(CartContext)
 
     useEffect(() => {
-        firebase.firestore().collection("products").doc(props.dbId).get().then(doc => {
-            setProduct(doc.data())
+        firebase.firestore().collection("products").doc(props.dbId).get().then(async doc => {
+            const images = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+            const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
+            setProduct({...doc.data(), urls: imagesUrl})
         })
     }, [])
 

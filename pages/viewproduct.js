@@ -8,21 +8,30 @@ import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 import initFirebase from '../utils/initFirebase';
 import ImageGallery from 'react-image-gallery';
 import Link from 'next/link';
 import CartContext from '../contexts/cartContext';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 initFirebase()
 
 const ViewProduct = props => {
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-
+    const [images, setImages] = useState([])
     const { cartContext, setCartContext } = useContext(CartContext)
 
-    let images = props.urls.map(url => ({ original: url, thumbnail: url }))
+    useEffect(() => {
+        (async () => {
+            const images = await firebase.storage().ref().child(`products/${props.id}`).listAll()
+            const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
+            let mappedImages = imagesUrl.map(url => ({ original: url, thumbnail: url }))
+            setImages(mappedImages)
+        })()
+    })
+
 
     const addToCart = async () => {
         if (AuthUser) {
@@ -267,8 +276,8 @@ const ViewProduct = props => {
 }
 
 ViewProduct.getInitialProps = async ctx => {
-    let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
-    return { ...doc.data(), id: ctx.query.id }
+    const doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
+    return { ...doc.data(), id: ctx.query.id, urls: [] }
 }
 
 ViewProduct.propTypes = {
