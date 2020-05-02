@@ -30,7 +30,7 @@ const ViewProduct = props => {
             let mappedImages = imagesUrl.map(url => ({ original: url, thumbnail: url }))
             setImages(mappedImages)
         })()
-    })
+    }, [])
 
 
     const addToCart = async () => {

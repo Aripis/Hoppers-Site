@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../components/button';
 import Navbar from '../components/navbar';
@@ -18,12 +18,13 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import arrayMove from "array-move";
 import Gallery from "react-photo-gallery";
 import Photo from "../components/photo";
+import Upload from "../components/upload"
 
 initFirebase()
 
 const SortablePhoto = SortableElement(item => <Photo {...item} />);
-const SortableGallery = SortableContainer(({ items }) => (
-  <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
+const SortableGallery = SortableContainer(({items}) => (
+    <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
 const AddProduct = props => {
@@ -37,6 +38,13 @@ const AddProduct = props => {
     const [loadingCancel, setLoadingCancel] = useState(false)
     const [available, setAvailable] = useState(false)
     const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        let closeButtons = document.querySelectorAll(".photo-close")
+        closeButtons.forEach(span => {
+            span.onclick = removeProduct
+        })
+    }, [items])
 
     const addProduct = async () => {
         setLoadingAdd(true)
@@ -72,6 +80,12 @@ const AddProduct = props => {
     const onSortEnd = ({ oldIndex, newIndex }) => {
         setItems(arrayMove(items, oldIndex, newIndex));
     };
+
+    const removeProduct = e => {
+        let parentImage = e.target.parentElement.style.backgroundImage.match(/url\([^\)]+\)/gi )[0]
+        .split(/[()'"]+/)[1]
+        setItems(items.filter(item => item.src !== parentImage))
+    }
 
     return (
         <>
@@ -139,6 +153,20 @@ const AddProduct = props => {
                     object-fit: contain;
                 }
 
+                :global(.react-photo-gallery--gallery){
+                    margin: 1.25em 1.25em 1.25em 0;
+                }
+
+                :global(.react-photo-gallery--gallery > div){
+                    // max-width: 37.5em;
+                }
+
+                :global(.react-photo-gallery--gallery > div > div){
+                    max-width: 10.5em;
+                    max-height: 6.25em;
+                    width: 100%;
+                }
+
                 @media only screen and (max-width: 520px) {
                     :global(.image-gallery .image-gallery-image){
                         max-width: 40em;
@@ -202,13 +230,13 @@ const AddProduct = props => {
                             value={price}
                             onChange={e => setPrice(e.target.value)}
                             className="add-price" />
-                        <input 
+                        <Upload
                             type="file"
                             onChange={handleFileChange} 
                             accept=".jpg,.jpeg,.svg,.png"
                             multiple
                         />
-                        <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
+                        <SortableGallery distance={1} items={items} onSortEnd={onSortEnd} axis={"xy"} />
                         <Button
                             loading={loadingAdd}
                             onClick={addProduct}
