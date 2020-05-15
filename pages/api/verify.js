@@ -1,8 +1,8 @@
 const stripe = require('stripe')('sk_test_MUKrgdzRDZoHZJ1lOnwOFOgB00Bs91Zc1P');
 const bodyParser = require('body-parser')
 
-const endpointSecret = process.env.stripe_signature_secret || '';
-
+const endpointSecret = 'whsec_Lt3vrIqC3fFAeYFrsLqaNJhsEefSzb7J';
+console.log(endpointSecret)
 export const config = {
     api: {
         bodyParser: false,

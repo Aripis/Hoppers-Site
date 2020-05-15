@@ -15,10 +15,10 @@ const handler = (req, res) => {
             return decodedToken
         })
         .then(decodedToken => {
-            return res.status(200).json({ status: true, decodedToken }).end()
+            return res.status(200).json({ status: true, decodedToken })
         })
         .catch(error => {
-            return res.status(500).json({ error }).end()
+            return res.status(500).json({ error })
         })
 }
 

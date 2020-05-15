@@ -73,7 +73,6 @@ const FinalizeOrder = props => {
                                 deliveryAddress: deliveryAddress[0],
                                 telephoneNumber: telephoneNumber,
                                 orderType: orderType,
-                                paymentMethod: paymentMethod
                             },
                             user: firebase.firestore().doc(`users/${AuthUser.id}`)
                         })
