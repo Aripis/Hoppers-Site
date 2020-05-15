@@ -3,7 +3,7 @@ import { verifyIdToken } from '../../utils/auth/verifyIdToken';
 
 const handler = (req, res) => {
     if (!req.body) {
-        return res.status(400).json({ code: 400, message: "Bad Request" })
+        return res.status(400).json({ code: 400, message: "Bad Request" }).end()
     }
 
     const { token } = req.body
@@ -15,10 +15,10 @@ const handler = (req, res) => {
             return decodedToken
         })
         .then(decodedToken => {
-            return res.status(200).json({ status: true, decodedToken })
+            return res.status(200).json({ status: true, decodedToken }).end()
         })
         .catch(error => {
-            return res.status(500).json({ error })
+            return res.status(500).json({ error }).end()
         })
 }
 

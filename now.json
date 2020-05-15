@@ -8,7 +8,8 @@
         "firebase_private_key": "@firebase_private_key",
         "session_secret_current": "@session_secret_current",
         "session_secret_previous": "@session_secret_previous",
-        "storage_bucket": "@storage_bucket"
+        "storage_bucket": "@storage_bucket",
+        "stripe_signature_secret": "@stripe_signature_secret"
     },
     "build": {
         "env": {
@@ -20,7 +21,8 @@
             "firebase_private_key": "@firebase_private_key",
             "session_secret_current": "@session_secret_current",
             "session_secret_previous": "@session_secret_previous",
-            "storage_bucket": "@storage_bucket"
+            "storage_bucket": "@storage_bucket",
+            "stripe_signature_secret": "@stripe_signature_secret"
         }
     }
 }
