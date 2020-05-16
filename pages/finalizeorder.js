@@ -1,7 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
-
 import { get } from 'lodash/object';
 import Button from '../components/button';
 import Navbar from '../components/navbar';
@@ -27,6 +25,7 @@ const FinalizeOrder = props => {
 
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState([])
     const [totalPrice, setTotalPrice] = useState()
@@ -64,7 +63,7 @@ const FinalizeOrder = props => {
             if (result.paymentIntent.status === 'succeeded') {
                 const res = await fetch(`/api/checkpayment?id=${result.paymentIntent.id}`)
                 const status = res.status
-                if(status === 200){
+                if (status === 200) {
                     if (AuthUser) {
                         await firebase.firestore().collection("orders").add({
                             cart: cart,
@@ -77,9 +76,18 @@ const FinalizeOrder = props => {
                             user: firebase.firestore().doc(`users/${AuthUser.id}`)
                         })
                     } else {
-                        //localstorage
+                        await firebase.firestore().collection("orders").add({
+                            cart: cart,
+                            orderinfo: {
+                                billingAddress: billingAddress[0],
+                                deliveryAddress: deliveryAddress[0],
+                                telephoneNumber: telephoneNumber,
+                                orderType: orderType,
+                            },
+                            user: null
+                        })
                     }
-                    Router.push('/myorders')
+                    Router.replace('/myorders')
                 } else {
                     setLoadingSubmit(false)
                 }
@@ -153,7 +161,7 @@ const FinalizeOrder = props => {
                     border: 0;
                 }
 
-                .wrp-cartcontent > .cartcontent-info {
+                .wrp-cartcontent > .cartcontent-info > .info-details {
                     padding: 1em 2em;
                     display: flex;
                     flex-direction: column;
@@ -163,11 +171,14 @@ const FinalizeOrder = props => {
                     margin-left: 1em;
                 }
 
-                .wrp-cartcontent > .cartcontent-info > .info-totalprice {
+                .wrp-cartcontent > .cartcontent-info > .info-details> .details-totalprice {
                     font-weight: bold;
                     font-size: 1.5em;
                 }
-
+                
+                .wrp-cartcontent > .cartcontent-info > .info-details > .details-info {
+                    font-weight: bold;
+                }
             `}</style>
             <Navbar {...props} />
             <div className="wrp-cartcontent">
@@ -188,14 +199,15 @@ const FinalizeOrder = props => {
                             }
                         </div>
                         <form className="cartcontent-info" onSubmit={handleSubmit}>
-                            <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
-                            <span>{billingAddress}</span>
-                            <span>{deliveryAddress}</span>
-                            <span>{telephoneNumber}</span>
-                            <span>{orderType}</span>
-                            <span>{paymentMethod}</span>
-                            <StripeCardSection />
-                            <Button loading={loadingSubmit} type="submit" disabled={!stripe}>Confirm order</Button>
+                            <div className="info-details">
+                                <StripeCardSection className="details-card" />
+                                <span ><b>Billing address:</b> {billingAddress}</span>
+                                <span ><b>Delivery address:</b> {deliveryAddress}</span>
+                                <span ><b>Telephone number:</b> {telephoneNumber}</span>
+                                <span ><b>Type of order:</b> {orderType}</span>
+                                <span className="details-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
+                                <Button loading={loadingSubmit} type="submit" disabled={!stripe}>Confirm order</Button>
+                            </div>
                         </form>
                     </>
                     :

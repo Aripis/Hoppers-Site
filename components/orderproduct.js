@@ -18,7 +18,7 @@ const OrderProduct = props => {
         firebase.firestore().collection("products").doc(props.dbId).get().then(async doc => {
             const images = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
             const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
-            setProduct({...doc.data(), urls: imagesUrl})
+            setProduct({ ...doc.data(), urls: imagesUrl })
         })
     }, [])
 
@@ -100,8 +100,8 @@ const OrderProduct = props => {
                     <img className="orderproduct-img" src={product.urls && product.urls[0]} />
                     <p className="orderproduct-name">{product.name}</p>
                 </div>
+                <p className="orderproduct-price">{priceConvert(product.price, "лв.")}</p>
                 <p className="orderproduct-quantity">x{props.quantity}</p>
-                <p className="orderproduct-price">{priceConvert(product.price * props.quantity, "лв.")}</p>
                 <div>
                     <Button onClick={removeItem}>
                         Remove

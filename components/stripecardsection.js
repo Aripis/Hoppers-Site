@@ -45,9 +45,15 @@ const StripeCardSection = () => (
             .StripeElement--webkit-autofill {
                 background-color: #fefde5 !important;
             }
+
+            .wrp-label > label-name {
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+
         `}</style>
-        <label>
-            Card details
+        <label className="wrp-label">
+            <span className="label-name">Card details</span>
             <CardElement options={CARD_ELEMENT_OPTIONS} />
         </label>
     </>
