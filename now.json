@@ -8,9 +8,8 @@
         "firebase_private_key": "@firebase_private_key",
         "session_secret_current": "@session_secret_current",
         "session_secret_previous": "@session_secret_previous",
-        "algolia_id": "@algolia_id",
-        "algolia_admin_key": "@algolia_admin_key",
-        "algolia_search_key": "@algolia_search_key"
+        "storage_bucket": "@storage_bucket",
+        "stripe_signature_secret": "@stripe_signature_secret"
     },
     "build": {
         "env": {
@@ -22,9 +21,8 @@
             "firebase_private_key": "@firebase_private_key",
             "session_secret_current": "@session_secret_current",
             "session_secret_previous": "@session_secret_previous",
-            "algolia_id": "@algolia_id",
-            "algolia_admin_key": "@algolia_admin_key",
-            "algolia_search_key": "@algolia_search_key"
+            "storage_bucket": "@storage_bucket",
+            "stripe_signature_secret": "@stripe_signature_secret"
         }
     }
 }

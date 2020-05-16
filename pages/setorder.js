@@ -25,7 +25,6 @@ const SetOrder = props => {
     const [deliveryAddress, setDeliveryAddress] = useState("")
     const [telephoneNumber, setTelephoneNumber] = useState("")
     const [orderType, setOrderType] = useState("")
-    const [paymentMethod, setPaymentMethod] = useState("")
     const [loadingSetOrder, setLoadingSetOrder] = useState(false)
     const [error, setError] = useState("")
 
@@ -39,7 +38,6 @@ const SetOrder = props => {
                     deliveryAddress: [deliveryAddress],
                     telephoneNumber: telephoneNumber,
                     orderType: orderType,
-                    paymentMethod: paymentMethod
                 }
             })
             Router.push("/finalizeorder")
@@ -51,7 +49,6 @@ const SetOrder = props => {
                     deliveryAddress: deliveryAddress,
                     telephoneNumber: telephoneNumber,
                     orderType: orderType,
-                    paymentMethod: paymentMethod
                 })
             )
             Router.push("/finalizeorder")
@@ -213,18 +210,6 @@ const SetOrder = props => {
                                 value={orderType}
                                 required
                                 onChange={e => { setOrderType(e.target.value); setError("") }}
-                                className="form-input" />
-                        </div>
-                    </div>
-                    <div className="form-field">
-                        <div className="form-div">
-                            <Textfield
-                                error={error}
-                                label="Cash or card "
-                                id="paymentMethod"
-                                value={paymentMethod}
-                                required
-                                onChange={e => { setPaymentMethod(e.target.value); setError("") }}
                                 className="form-input" />
                         </div>
                     </div>

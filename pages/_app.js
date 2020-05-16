@@ -7,6 +7,10 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaypal } from '@fortawesome/free-brands-svg-icons';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+
+const stripePromise = loadStripe("pk_test_EVzuSTjfReSbL0UZa2BmkVtG00JcWHNEoC");
 
 import CartContext from '../contexts/cartContext';
 
@@ -84,12 +88,14 @@ export default class MyApp extends App {
                     }
 
                 `}</style>
-                <div className="layout">
-                    <CartContext.Provider value={{ cartContext: this.state.cartContext, setCartContext: this.setCartContext }}>
-                        <Component {...pageProps} />
-                        <Footer />
-                    </CartContext.Provider>
-                </div>
+                <Elements stripe={stripePromise}>
+                    <div className="layout">
+                        <CartContext.Provider value={{ cartContext: this.state.cartContext, setCartContext: this.setCartContext }}>
+                            <Component {...pageProps} />
+                            <Footer />
+                        </CartContext.Provider>
+                    </div>
+                </Elements>
             </>
         )
     }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../components/button';
 import Navbar from '../components/navbar';
@@ -9,12 +9,23 @@ import withAuthUser from '../utils/pageWrappers/withAuthUser';
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
 import firebase from 'firebase/app';
 import "firebase/firestore";
+import "firebase/storage";
 import 'firebase/auth';
 import initFirebase from '../utils/initFirebase';
 import Router from 'next/router';
 import ImageGallery from 'react-image-gallery';
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import arrayMove from "array-move";
+import Gallery from "react-photo-gallery";
+import Photo from "../components/photo";
+import Upload from "../components/upload"
 
 initFirebase()
+
+const SortablePhoto = SortableElement(item => <Photo {...item} />);
+const SortableGallery = SortableContainer(({ items }) => (
+    <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
+));
 
 const AddProduct = props => {
     const { AuthUserInfo } = props
@@ -23,27 +34,57 @@ const AddProduct = props => {
     const [name, setName] = useState("")
     const [productId, setProductId] = useState("")
     const [price, setPrice] = useState("")
-    const [urls, setUrls] = useState("")
     const [loadingAdd, setLoadingAdd] = useState(false)
     const [loadingCancel, setLoadingCancel] = useState(false)
     const [available, setAvailable] = useState(false)
+    const [items, setItems] = useState([]);
 
-    const addProduct = () => {
+    useEffect(() => {
+        let closeButtons = document.querySelectorAll(".photo-close")
+        closeButtons.forEach(span => {
+            span.onclick = removeProduct
+        })
+    }, [items])
+
+    const addProduct = async () => {
         setLoadingAdd(true)
-        firebase.firestore().collection("products").add({
+        const docRef = await firebase.firestore().collection("products").add({
             productId: productId,
             name: name,
             price: price,
-            urls: urls.split(/[ ,]+/),
             uid: AuthUser.id,
             available: available,
             searchQueries: searchQueries(name)
-        }).then(() => Router.replace("/store"))
+        })
+        for (let i = 0; i < items.length; i++) {
+            await firebase.storage().ref(`products/${docRef.id}/${i + 1}`).put(items[i].file)
+        }
+        Router.replace("/store")
     }
 
     const cancelAdd = () => {
         setLoadingCancel(true)
         Router.replace("/store")
+    }
+
+    const handleFileChange = async e => {
+        const files = await Promise.all(e.target.files)
+        setItems(files.map(file => ({
+            src: URL.createObjectURL(file),
+            file: file,
+            width: 2,
+            height: 2
+        })))
+    }
+
+    const onSortEnd = ({ oldIndex, newIndex }) => {
+        setItems(arrayMove(items, oldIndex, newIndex));
+    };
+
+    const removeProduct = e => {
+        let parentImage = e.target.parentElement.style.backgroundImage.match(/url\([^\)]+\)/gi)[0]
+            .split(/[()'"]+/)[1]
+        setItems(items.filter(item => item.src !== parentImage))
     }
 
     return (
@@ -108,6 +149,24 @@ const AddProduct = props => {
                     outline:none;
                 }
 
+                :global(.react-photo-gallery_photo) {
+                    object-fit: contain;
+                }
+
+                :global(.react-photo-gallery--gallery){
+                    margin: 1.25em 1.25em 1.25em 0;
+                }
+
+                :global(.react-photo-gallery--gallery > div){
+                    // max-width: 37.5em;
+                }
+
+                :global(.react-photo-gallery--gallery > div > div){
+                    max-width: 10.5em;
+                    max-height: 6.25em;
+                    width: 100%;
+                }
+
                 @media only screen and (max-width: 520px) {
                     :global(.image-gallery .image-gallery-image){
                         max-width: 40em;
@@ -134,9 +193,9 @@ const AddProduct = props => {
                             showPlayButton={false}
                             showFullscreenButton={false}
                             items={
-                                urls.length > 0
+                                items.length > 0
                                     ?
-                                    urls.split(/[ ,]+/).map(url => ({ original: url, thumbnail: url }))
+                                    items.map(item => ({ original: item.src, thumbnail: item.src }))
                                     :
                                     [{
                                         original: "https://www.dicetower.com/sites/default/files/styles/image_300/public/game-art/no-image-available_1.png?itok=4AoejwSQ",
@@ -171,11 +230,13 @@ const AddProduct = props => {
                             value={price}
                             onChange={e => setPrice(e.target.value)}
                             className="add-price" />
-                        <Textfield
-                            placeholder="Image Urls"
-                            value={urls}
-                            onChange={e => setUrls(e.target.value)}
-                            className="add-urls" />
+                        <Upload
+                            type="file"
+                            onChange={handleFileChange}
+                            accept=".jpg,.jpeg,.svg,.png"
+                            multiple
+                        />
+                        <SortableGallery distance={1} items={items} onSortEnd={onSortEnd} axis={"xy"} />
                         <Button
                             loading={loadingAdd}
                             onClick={addProduct}
