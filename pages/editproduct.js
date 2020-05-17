@@ -10,6 +10,7 @@ import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
 import firebase from 'firebase/app';
 import "firebase/firestore";
 import 'firebase/auth';
+import 'firebase/storage'
 import initFirebase from '../utils/initFirebase';
 import Router from 'next/router';
 import ImageGallery from 'react-image-gallery';
@@ -202,13 +203,13 @@ const EditProduct = props => {
 EditProduct.getInitialProps = async ctx => {
     const AuthUserInfo = get(ctx, 'myCustomData.AuthUserInfo', null)
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-    let doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
+    const doc = await firebase.firestore().collection("products").doc(ctx.query.id).get()
     if ((AuthUser === null || AuthUser.id !== doc.data().uid) && ctx.res) {
         ctx.res.writeHead(302, { Location: '/' })
         ctx.res.end()
         return
     }
-    return { ...doc.data(), id: ctx.query.id }
+    return { ...doc.data(), id: ctx.query.id, urls: []}
 }
 
 EditProduct.propTypes = {

@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import { get } from 'lodash/object';
 import Button from '../components/button';
 import Navbar from '../components/navbar';
@@ -15,38 +14,70 @@ import initFirebase from '../utils/initFirebase';
 import "firebase/firestore";
 import 'firebase/auth';
 
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import StripeCardSection from '../components/stripecardsection';
+
 initFirebase()
 
 const FinalizeOrder = props => {
+    const stripe = useStripe();
+    const elements = useElements();
+
     const { AuthUserInfo } = props
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+
     const { cartContext, setCartContext } = useContext(CartContext)
     const [cart, setCart] = useState([])
     const [totalPrice, setTotalPrice] = useState()
 
+    const [loadingSubmit, setLoadingSubmit] = useState(false)
     const [billingAddress, setBillingAddress] = useState("")
     const [deliveryAddress, setDeliveryAddress] = useState("")
     const [telephoneNumber, setTelephoneNumber] = useState("")
     const [orderType, setOrderType] = useState("")
-    const [paymentMethod, setPaymentMethod] = useState("")
 
-    const handleSubmit = async () => {
-        if (AuthUser) {
-            await firebase.firestore().collection("orders").add({
-                cart: cart,
-                orderinfo: {
-                    billingAddress: billingAddress[0],
-                    deliveryAddress: deliveryAddress[0],
-                    telephoneNumber: telephoneNumber,
-                    orderType: orderType,
-                    paymentMethod: paymentMethod
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setLoadingSubmit(true)
+        const response = await fetch(`/api/secret?price=${totalPrice}`);
+        const data = await response.json()
+
+        if (!stripe || !elements) {
+            return;
+        }
+
+        const result = await stripe.confirmCardPayment(data.client_secret, {
+            payment_method: {
+                card: elements.getElement(CardElement),
+                billing_details: {
+                    name: 'Jenny Rosen',
                 },
-                user: firebase.firestore().doc(`users/${AuthUser.id}`)
-            })
-            Router.push('/myorders')
+            }
+        });
+
+        if (result.error) {
+            console.log(result.error.message);
+            setLoadingSubmit(false)
         } else {
-            localStorage.removeItem("cart")
-            Router.push('/myorders')
+            if (result.paymentIntent.status === 'succeeded') {
+                const res = await fetch(`/api/checkpayment?id=${result.paymentIntent.id}`)
+                const status = res.status
+                if (status === 200) {
+                    await firebase.firestore().collection("orders").add({
+                        cart: cart,
+                        orderinfo: {
+                            billingAddress: billingAddress[0],
+                            deliveryAddress: deliveryAddress[0],
+                            telephoneNumber: telephoneNumber,
+                            orderType: orderType,
+                        },
+                        user: AuthUser ? firebase.firestore().doc(`users/${AuthUser.id}`) : null
+                    })
+                    Router.replace('/myorders')
+                } else {
+                    setLoadingSubmit(false)
+                }
+            }
         }
     }
 
@@ -67,7 +98,6 @@ const FinalizeOrder = props => {
                 setDeliveryAddress(doc.data().orderInfo.deliveryAddress)
                 setTelephoneNumber(doc.data().orderInfo.telephoneNumber)
                 setOrderType(doc.data().orderInfo.orderType)
-                setPaymentMethod(doc.data().orderInfo.paymentMethod)
             })
         }
         else {
@@ -77,7 +107,6 @@ const FinalizeOrder = props => {
             setDeliveryAddress(info.deliveryAddress)
             setTelephoneNumber(info.telephoneNumber)
             setOrderType(info.orderType)
-            setPaymentMethod(info.paymentMethod)
 
             let cart_data = JSON.parse(localStorage.getItem("cart"))
             let price = 0
@@ -116,7 +145,7 @@ const FinalizeOrder = props => {
                     border: 0;
                 }
 
-                .wrp-cartcontent > .cartcontent-info {
+                .wrp-cartcontent > .cartcontent-info > .info-details {
                     padding: 1em 2em;
                     display: flex;
                     flex-direction: column;
@@ -126,11 +155,14 @@ const FinalizeOrder = props => {
                     margin-left: 1em;
                 }
 
-                .wrp-cartcontent > .cartcontent-info > .info-totalprice {
+                .wrp-cartcontent > .cartcontent-info > .info-details> .details-totalprice {
                     font-weight: bold;
                     font-size: 1.5em;
                 }
-
+                
+                .wrp-cartcontent > .cartcontent-info > .info-details > .details-info {
+                    font-weight: bold;
+                }
             `}</style>
             <Navbar {...props} />
             <div className="wrp-cartcontent">
@@ -150,17 +182,17 @@ const FinalizeOrder = props => {
                                 ))
                             }
                         </div>
-                        <div className="cartcontent-info">
-                            <span className="info-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
-                            <span>{billingAddress}</span>
-                            <span>{deliveryAddress}</span>
-                            <span>{telephoneNumber}</span>
-                            <span>{orderType}</span>
-                            <span>{paymentMethod}</span>
-                            <Button onClick={handleSubmit}>
-                                Submit order
-                            </Button>
-                        </div>
+                        <form className="cartcontent-info" onSubmit={handleSubmit}>
+                            <div className="info-details">
+                                <StripeCardSection className="details-card" />
+                                <span ><b>Billing address:</b> {billingAddress}</span>
+                                <span ><b>Delivery address:</b> {deliveryAddress}</span>
+                                <span ><b>Telephone number:</b> {telephoneNumber}</span>
+                                <span ><b>Type of order:</b> {orderType}</span>
+                                <span className="details-totalprice">Total price: {priceConvert(totalPrice, "лв.")}</span>
+                                <Button loading={loadingSubmit} type="submit" disabled={!stripe}>Confirm order</Button>
+                            </div>
+                        </form>
                     </>
                     :
                     <div>

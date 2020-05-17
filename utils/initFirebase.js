@@ -5,6 +5,7 @@ const config = {
   authDomain: process.env.firebase_auth_domain,
   databaseURL: process.env.firebase_database_url,
   projectId: process.env.firebase_project_id,
+  storageBucket: process.env.storage_bucket
 }
 
 export default () => {

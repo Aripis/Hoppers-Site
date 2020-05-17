@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/storage';
 import initFirebase from '../utils/initFirebase';
 import CartContext from '../contexts/cartContext';
 import Button from '../components/button';
@@ -14,8 +15,10 @@ const CartProduct = props => {
     const { cartContext, setCartContext } = useContext(CartContext)
 
     useEffect(() => {
-        firebase.firestore().collection("products").doc(props.dbId).get().then(doc => {
-            setProduct(doc.data())
+        firebase.firestore().collection("products").doc(props.dbId).get().then(async doc => {
+            const images = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+            const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
+            setProduct({...doc.data(), urls: imagesUrl})
         })
     }, [cartContext])
 
@@ -96,9 +99,8 @@ const CartProduct = props => {
                     <img className="cartproduct-img" src={product.urls && product.urls[0]} />
                     <span className="cartproduct-name">{product.name}</span>
                 </div>
-                <span className="cartproduct-totalprice">{priceConvert(product.price, "лв.")}</span>
-                <span className="cartproduct-quantity">x{props.quantity}</span>
-                <span className="cartproduct-price">{priceConvert(product.price * props.quantity, "лв.")}</span>
+                <p className="cartproduct-price">{priceConvert(product.price, "лв.")}</p>
+                <p className="cartproduct-quantity">x{props.quantity}</p>
                 <div>
                     <Button onClick={removeItem}>
                         Remove
