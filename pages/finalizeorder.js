@@ -35,7 +35,6 @@ const FinalizeOrder = props => {
     const [deliveryAddress, setDeliveryAddress] = useState("")
     const [telephoneNumber, setTelephoneNumber] = useState("")
     const [orderType, setOrderType] = useState("")
-    const [paymentMethod, setPaymentMethod] = useState("")
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -64,29 +63,16 @@ const FinalizeOrder = props => {
                 const res = await fetch(`/api/checkpayment?id=${result.paymentIntent.id}`)
                 const status = res.status
                 if (status === 200) {
-                    if (AuthUser) {
-                        await firebase.firestore().collection("orders").add({
-                            cart: cart,
-                            orderinfo: {
-                                billingAddress: billingAddress[0],
-                                deliveryAddress: deliveryAddress[0],
-                                telephoneNumber: telephoneNumber,
-                                orderType: orderType,
-                            },
-                            user: firebase.firestore().doc(`users/${AuthUser.id}`)
-                        })
-                    } else {
-                        await firebase.firestore().collection("orders").add({
-                            cart: cart,
-                            orderinfo: {
-                                billingAddress: billingAddress[0],
-                                deliveryAddress: deliveryAddress[0],
-                                telephoneNumber: telephoneNumber,
-                                orderType: orderType,
-                            },
-                            user: null
-                        })
-                    }
+                    await firebase.firestore().collection("orders").add({
+                        cart: cart,
+                        orderinfo: {
+                            billingAddress: billingAddress[0],
+                            deliveryAddress: deliveryAddress[0],
+                            telephoneNumber: telephoneNumber,
+                            orderType: orderType,
+                        },
+                        user: AuthUser ? firebase.firestore().doc(`users/${AuthUser.id}`) : null
+                    })
                     Router.replace('/myorders')
                 } else {
                     setLoadingSubmit(false)
@@ -112,7 +98,6 @@ const FinalizeOrder = props => {
                 setDeliveryAddress(doc.data().orderInfo.deliveryAddress)
                 setTelephoneNumber(doc.data().orderInfo.telephoneNumber)
                 setOrderType(doc.data().orderInfo.orderType)
-                setPaymentMethod(doc.data().orderInfo.paymentMethod)
             })
         }
         else {
@@ -122,7 +107,6 @@ const FinalizeOrder = props => {
             setDeliveryAddress(info.deliveryAddress)
             setTelephoneNumber(info.telephoneNumber)
             setOrderType(info.orderType)
-            setPaymentMethod(info.paymentMethod)
 
             let cart_data = JSON.parse(localStorage.getItem("cart"))
             let price = 0

@@ -100,8 +100,8 @@ const CartProduct = props => {
                     <img className="cartproduct-img" src={product.urls && product.urls[0]} />
                     <p className="cartproduct-name">{product.name}</p>
                 </div>
+                <p className="cartproduct-price">{priceConvert(product.price, "лв.")}</p>
                 <p className="cartproduct-quantity">x{props.quantity}</p>
-                <p className="cartproduct-price">{priceConvert(product.price * props.quantity, "лв.")}</p>
                 <div>
                     <Button onClick={removeItem}>
                         Remove
