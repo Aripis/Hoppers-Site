@@ -73,6 +73,14 @@ const FinalizeOrder = props => {
                         },
                         user: AuthUser ? firebase.firestore().doc(`users/${AuthUser.id}`) : null
                     })
+                    if(AuthUser){
+                        let snapshot = await firebase.firestore().collection(`users/${AuthUser.id}/cart`).get()
+                        snapshot.docs.forEach(async doc => {
+                            await firebase.firestore().collection(`users/${AuthUser.id}/cart`).doc(doc.id).delete()
+                        })
+                    } else {
+                        delete localStorage["cart"]
+                    }
                     Router.replace('/myorders')
                 } else {
                     setLoadingSubmit(false)
