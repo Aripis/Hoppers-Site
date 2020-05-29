@@ -8,11 +8,12 @@ import Router from 'next/router';
 import CartContext from '../contexts/cartContext';
 import OrderProduct from '../components/orderproduct';
 import priceConvert from '../utils/priceConvert';
-
+import Product from '../components/product';
 import withAuthUser from '../utils/pageWrappers/withAuthUser';
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
-import firebase from 'firebase/app';
 import initFirebase from '../utils/initFirebase';
+
+import firebase from 'firebase/app';
 import "firebase/firestore";
 import 'firebase/auth';
 
@@ -23,34 +24,52 @@ const SeeCart = props => {
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const { cartContext, setCartContext } = useContext(CartContext)
     const [totalPrice, setTotalPrice] = useState()
+    const [products, setProducts] = useState([])
 
 
     const [cart, setCart] = useState([])
 
     useEffect(() => {
-        if (AuthUser) {
-            firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
-                let cart_data = {}
-                let price = 0
-                cart.docs.forEach(doc => {
-                    cart_data[doc.id] = doc.data()
-                    price += doc.data().price * doc.data().quantity
+        (async () => {
+            let category = "other"
+            if (AuthUser) {
+                firebase.firestore().collection(`users/${AuthUser.id}/cart`).onSnapshot(cart => {
+                    let cart_data = {}
+                    let price = 0
+                    cart.docs.forEach(doc => {
+                        cart_data[doc.id] = doc.data()
+                        price += doc.data().price * doc.data().quantity
+                    })
+                    setCart(cart_data)
+                    setTotalPrice(price)
                 })
+
+                let user = await firebase.firestore().collection("users").doc(AuthUser.id).get()
+                let categories = user.data().categories
+                category = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b);
+            } else {
+                // TODO: get catehory from localstorage
+                let cart_data = JSON.parse(localStorage.getItem("cart"))
+                let price = 0
+                if (cart_data) {
+                    Object.keys(cart_data).forEach(key => {
+                        price += cart_data[key].quantity * cart_data[key].price
+                    })
+                }
                 setCart(cart_data)
                 setTotalPrice(price)
-            })
-        } else {
-            let cart_data = JSON.parse(localStorage.getItem("cart"))
-            let price = 0
-            if (cart_data) {
-                Object.keys(cart_data).forEach(key => {
-                    price += cart_data[key].quantity * cart_data[key].price
-                })
             }
-            setCart(cart_data)
-            setTotalPrice(price)
-        }
-        setCartContext(false)
+            setCartContext(false)
+
+            firebase.firestore().collection("products").where("category", "==", category).limit(5).onSnapshot(async snapshot => {
+                setProducts(await Promise.all(snapshot.docs
+                    .map(async  doc => {
+                        const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                        const imagesUrl = await Promise.all(products.items.map(itemRef => itemRef.getDownloadURL()))
+                        return { ...doc.data(), id: doc.id, urls: imagesUrl }
+                    })))
+            })
+        })()
     }, [cartContext])
 
 
@@ -64,6 +83,7 @@ const SeeCart = props => {
                     justify-content: center;
                     align-items: center;
                     background-color: #E9EBEE;
+                    flex-wrap: wrap;
                 }
                 
                 .wrp-cartcontent > .cartcontent-productslist {
@@ -92,6 +112,13 @@ const SeeCart = props => {
                     font-size: 1.5em;
                 }
 
+                .wrp-cartcontent > .view-suggestions {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    align-items: center;
+                }
             `}</style>
             <Navbar {...props} />
             <div className="wrp-cartcontent">
@@ -123,6 +150,20 @@ const SeeCart = props => {
                         Your cart is empty :)
                 </div>
                 }
+                <div className="view-suggestions">
+                    {products.map(product => (
+                        <Product
+                            key={product.id}
+                            id={product.id}
+                            className="product"
+                            image={product.urls[0]}
+                            name={product.name}
+                            price={product.price}
+                            currency="лв"
+                            available={product.available}
+                        />
+                    ))}
+                </div>
             </div>
         </>
     )
