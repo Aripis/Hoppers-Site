@@ -20,33 +20,47 @@ const Home = props => {
 
     useEffect(() => {
         (async () => {
-            let user = await firebase.firestore().collection("users").doc(AuthUser.id).get()
-            let categories = user.data().categories
-            categories = Object.keys(categories).sort((a, b) => categories[b] - categories[a])
-            let another = []
-            categories.forEach(async (category) => {
-                let prod = await firebase.firestore().collection("products").where("category", "==", category).limit(5).get()
-                let all = await Promise.all(prod.docs
-                    .map(async  doc => {
-                        const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
-                        const imagesUrl = await Promise.all(products.items.map(itemRef => itemRef.getDownloadURL()))
-                        return { ...doc.data(), id: doc.id, urls: imagesUrl }
-                    }))
-                another = [...another, ...all]
-                setProducts(another)
-            })
+            if(AuthUser){
+                let user = await firebase.firestore().collection("users").doc(AuthUser.id).get()
+                let tmp = categories
+                if(user.data().categories){
+                    tmp = Object.keys(user.data().categories).sort((a, b) => user.data().categories[b] - user.data().categories[a])
+                    setCategories(tmp)
+                }
+                let tmpProducts = []
+                for(const category of tmp){
+                    let prod = await firebase.firestore().collection("products").where("category", "==", category).limit(5).get()
+                    let all = await Promise.all(prod.docs
+                        .map(async  doc => {
+                            const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                            const imagesUrl = await Promise.all(products.items.map(itemRef => itemRef.getDownloadURL()))
+                            return { ...doc.data(), id: doc.id, urls: imagesUrl }
+                        }))
+                    tmpProducts = [...tmpProducts, ...all]
+                }
+                setProducts(tmpProducts)
+            }
         })()
     }, [])
 
     return (
         <>
             <style jsx>{`
-                
+                .wrp-index {
+                    flex: 1;
+                    display: flex;
+                }
+
+                .wrp-index .view-suggestions {
+                    flex: 1;
+                    margin-top: 2em;
+                    display:flex;
+                    justify-content: center;
+                }
             `}</style>
             <Navbar {...props} />
             <div className="wrp-index">
                 <div className="view-suggestions">
-                    {console.log(products)}
                     {products && products.length > 0 && products.map(product => (
                         <Product
                             key={product.id}
