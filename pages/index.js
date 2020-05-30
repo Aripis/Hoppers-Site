@@ -53,20 +53,19 @@ const Home = props => {
         <>
             <style jsx>{`
                 .wrp-index {
-                    flex-grow: 1;
+                    flex: 1;
                     display: flex;
+                }
+
+                .wrp-index .view-suggestions {
+                    display:flex;
+                    flex: 1;
                     flex-flow: row wrap;
                     justify-content: center;
                     background-color: #E9EBEE;
                     padding-left: 10em;
                     padding-right: 10em;
-                }
-
-                .wrp-index .view-suggestions {
-                    flex: 1;
                     margin-top: 2em;
-                    display:flex;
-                    justify-content: center;
                 }
             `}</style>
             <Navbar {...props} />
