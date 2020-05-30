@@ -14,6 +14,7 @@ import ImageGallery from 'react-image-gallery';
 import Link from 'next/link';
 import CartContext from '../contexts/cartContext';
 import { useContext, useState, useEffect } from 'react';
+import Product from '../components/product';
 
 initFirebase()
 
@@ -22,14 +23,51 @@ const ViewProduct = props => {
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const [images, setImages] = useState([])
     const { cartContext, setCartContext } = useContext(CartContext)
+    const [products, setProducts] = useState([])
 
     useEffect(() => {
         (async () => {
+            if (AuthUser) {
+                await firebase.firestore().collection("users").doc(AuthUser.id).update(
+                    `categories.${props.category}`,
+                    firebase.firestore.FieldValue.increment(1)
+                )
+            } else {
+                let uspref = localStorage.getItem("user_preferences")
+                if (uspref === null) {
+                    uspref = {
+                        [props.category]: 1
+                    }
+                } else {
+                    uspref = JSON.parse(uspref)
+                    if (uspref[props.category]) {
+                        uspref[props.category]++
+                    } else {
+                        uspref = {
+                            ...uspref,
+                            [props.category]: 1
+                        }
+                    }
+                }
+                localStorage.setItem("user_preferences", JSON.stringify(uspref))
+            }
+
             const images = await firebase.storage().ref().child(`products/${props.id}`).listAll()
             const imagesUrl = await Promise.all(images.items.map(itemRef => itemRef.getDownloadURL()))
             let mappedImages = imagesUrl.map(url => ({ original: url, thumbnail: url }))
             setImages(mappedImages)
         })()
+
+        firebase.firestore().collection("products").where("category", "==", props.category).limit(5).onSnapshot(async snapshot => {
+            setProducts(await Promise.all(snapshot.docs
+                .filter(doc => doc.id != props.id)
+                .map(async  doc => {
+                    const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                    const imagesUrl = await Promise.all(products.items.map(itemRef => itemRef.getDownloadURL()))
+                    return { ...doc.data(), id: doc.id, urls: imagesUrl }
+                })))
+        })
+
     }, [])
 
 
@@ -255,20 +293,21 @@ const ViewProduct = props => {
                             3.<br />
                             4.<br />
                         </div>
-                    </div>
-                    <div className="view-suggestions">
-                        {[...Array(6).keys()].map(i => (
-                            <Product
-                                key={i}
-                                className="product"
-                                image="https://stolche.info/wp-content/uploads/2017/03/PC-018-grey.jpg" 
-                                name="Chair Milon, Grey, Wooden" 
-                                price="19.99"
-                                currency="лв"
-                                available
-                            />
-                        ))}
                     </div> */}
+                <div className="view-suggestions">
+                    {products.map(product => (
+                        <Product
+                            key={product.id}
+                            id={product.id}
+                            className="product"
+                            image={product.urls[0]}
+                            name={product.name}
+                            price={product.price}
+                            currency="лв"
+                            available={product.available}
+                        />
+                    ))}
+                </div>
             </div>
 
         </>
@@ -296,9 +335,6 @@ ViewProduct.propTypes = {
     }),
     name: PropTypes.string,
     available: PropTypes.bool
-    // to be written
-    // price:
-    // urls: 
 }
 
 ViewProduct.defaultProps = {

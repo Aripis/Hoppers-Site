@@ -54,7 +54,8 @@ const Signup = props => {
                     firstName: firstName,
                     surName: surName,
                     email: email,
-                    role: "user"
+                    role: "user",
+                    categories: {}
                 })
                 Router.replace('/')
             } catch (error) {

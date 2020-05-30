@@ -37,7 +37,8 @@ const AddProduct = props => {
     const [loadingAdd, setLoadingAdd] = useState(false)
     const [loadingCancel, setLoadingCancel] = useState(false)
     const [available, setAvailable] = useState(false)
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState([])
+    const [category, setCategory] = useState("other")
 
     useEffect(() => {
         let closeButtons = document.querySelectorAll(".photo-close")
@@ -54,7 +55,8 @@ const AddProduct = props => {
             price: price,
             uid: AuthUser.id,
             available: available,
-            searchQueries: searchQueries(name)
+            searchQueries: searchQueries(name),
+            category: category
         })
         for (let i = 0; i < items.length; i++) {
             await firebase.storage().ref(`products/${docRef.id}/${i + 1}`).put(items[i].file)
@@ -230,6 +232,16 @@ const AddProduct = props => {
                             value={price}
                             onChange={e => setPrice(e.target.value)}
                             className="add-price" />
+                        <select name="categories" className="categories" onChange={e => {
+                            setCategory(e.target.value)
+                            console.log(e.target.value)
+                        }}>
+                            <option value="other">Other</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="food">Food</option>
+                            <option value="phone">Phone</option>
+                            <option value="tv">TV</option>
+                        </select>
                         <Upload
                             type="file"
                             onChange={handleFileChange}
