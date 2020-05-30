@@ -46,7 +46,9 @@ const SeeCart = props => {
 
                 let user = await firebase.firestore().collection("users").doc(AuthUser.id).get()
                 let categories = user.data().categories
-                category = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b);
+                if(categories){
+                    category = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b);
+                }
             } else {
                 let uspref = localStorage.getItem("user_preferences")
                 if (uspref != null) {
