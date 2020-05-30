@@ -94,7 +94,7 @@ const SeeCart = props => {
                     background-color: white;
                     border-radius: .3em;
                     box-shadow: 0 .065em .19em rgba(0,0,0,0.12), 0 .065em .125em rgba(0,0,0,0.24);
-                    margin-right: 1em;
+                    margin: 2em 1em;
                 }
 
                 .wrp-cartcontent > .cartcontent-productslist > :global(:last-child) {
@@ -120,8 +120,9 @@ const SeeCart = props => {
                     width: 100%;
                     display: flex;
                     flex-direction: row;
-                    justify-content: space-evenly;
+                    justify-content: center;
                     align-items: center;
+                    margin-bottom: 1em;
                 }
             `}</style>
             <Navbar {...props} />
