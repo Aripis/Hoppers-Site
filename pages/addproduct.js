@@ -5,6 +5,7 @@ import Navbar from '../components/navbar';
 import { get } from 'lodash';
 import searchQueries from '../utils/searchQueries';
 import Textfield from '../components/textfield';
+import Select from '../components/select'
 import withAuthUser from '../utils/pageWrappers/withAuthUser';
 import withAuthUserInfo from '../utils/pageWrappers/withAuthUserInfo';
 import firebase from 'firebase/app';
@@ -232,7 +233,7 @@ const AddProduct = props => {
                             value={price}
                             onChange={e => setPrice(e.target.value)}
                             className="add-price" />
-                        <select name="categories" className="categories" onChange={e => {
+                        <Select name="categories" className="categories" onChange={e => {
                             setCategory(e.target.value)
                             console.log(e.target.value)
                         }}>
@@ -241,7 +242,7 @@ const AddProduct = props => {
                             <option value="food">Food</option>
                             <option value="phone">Phone</option>
                             <option value="tv">TV</option>
-                        </select>
+                        </Select>
                         <Upload
                             type="file"
                             onChange={handleFileChange}

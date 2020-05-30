@@ -36,7 +36,7 @@ const Home = props => {
             }
             let tmpProducts = []
             for (const category of tmp) {
-                let prod = await firebase.firestore().collection("products").where("category", "==", category).limit(5).get()
+                let prod = await firebase.firestore().collection("products").where("category", "==", category).where("available", "==", true).limit(5).get()
                 let all = await Promise.all(prod.docs
                     .map(async  doc => {
                         const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()

@@ -58,7 +58,7 @@ const ViewProduct = props => {
             setImages(mappedImages)
         })()
 
-        firebase.firestore().collection("products").where("category", "==", props.category).limit(5).onSnapshot(async snapshot => {
+        firebase.firestore().collection("products").where("category", "==", props.category).where("available", "==", true).limit(5).onSnapshot(async snapshot => {
             setProducts(await Promise.all(snapshot.docs
                 .filter(doc => doc.id != props.id)
                 .map(async  doc => {
