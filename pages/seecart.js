@@ -67,7 +67,7 @@ const SeeCart = props => {
             }
             setCartContext(false)
 
-            firebase.firestore().collection("products").where("category", "==", category).limit(5).onSnapshot(async snapshot => {
+            firebase.firestore().collection("products").where("category", "==", category).where("available", "==", true).limit(5).onSnapshot(async snapshot => {
                 setProducts(await Promise.all(snapshot.docs
                     .map(async  doc => {
                         const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
@@ -97,6 +97,8 @@ const SeeCart = props => {
                     border-radius: .3em;
                     box-shadow: 0 .065em .19em rgba(0,0,0,0.12), 0 .065em .125em rgba(0,0,0,0.24);
                     margin: 2em 1em;
+                    max-height: 30rem;
+                    overflow: auto;
                 }
 
                 .wrp-cartcontent > .cartcontent-productslist > :global(:last-child) {

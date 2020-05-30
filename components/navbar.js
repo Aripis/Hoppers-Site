@@ -110,6 +110,11 @@ const Navbar = props => {
                     opacity: 1;
                     z-index: 999;
                 }
+                
+                .wrp-navbar > .navbar-buttons > .wrp-cart:hover > .cart > .cart-products {
+                    max-height: 15rem;
+                    overflow: auto;
+                }
 
                 .wrp-navbar > .navbar-buttons > :global(a):hover,
                 .wrp-navbar > .navbar-buttons > .wrp-cart:hover {
@@ -138,21 +143,23 @@ const Navbar = props => {
                     <div className="wrp-cart">
                         Cart
                         <div className="cart">
-                            {cart && Object.keys(cart).length > 0
-                                ?
-                                Object.keys(cart).map(key => (
-                                    <CartProduct
-                                        key={key}
-                                        dbId={key}
-                                        quantity={cart[key].quantity}
-                                        productId={cart[key].productId}
-                                        authId={AuthUser ? AuthUser.id : null}
-                                    />
+                            <div className="cart-products">
+                                {cart && Object.keys(cart).length > 0
+                                    ?
+                                    Object.keys(cart).map(key => (
+                                        <CartProduct
+                                            key={key}
+                                            dbId={key}
+                                            quantity={cart[key].quantity}
+                                            productId={cart[key].productId}
+                                            authId={AuthUser ? AuthUser.id : null}
+                                        />
 
-                                ))
-                                :
-                                "Your cart is empty :)"
-                            }
+                                    ))
+                                    :
+                                    "Your cart is empty :)"
+                                }
+                            </div>
                             <p>TotalPrice: {priceConvert(totalPrice, "лв.")}</p>
                             <Button className="cart-button" onClick={() => Router.replace("/seecart")}>
                                 See cart
