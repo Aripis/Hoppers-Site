@@ -53,8 +53,13 @@ const Home = props => {
         <>
             <style jsx>{`
                 .wrp-index {
-                    flex: 1;
+                    flex-grow: 1;
                     display: flex;
+                    flex-flow: row wrap;
+                    justify-content: center;
+                    background-color: #E9EBEE;
+                    padding-left: 10em;
+                    padding-right: 10em;
                 }
 
                 .wrp-index .view-suggestions {

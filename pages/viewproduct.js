@@ -68,7 +68,7 @@ const ViewProduct = props => {
                 })))
         })
 
-    }, [])
+    }, [images])
 
 
     const addToCart = async () => {
