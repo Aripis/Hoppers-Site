@@ -48,7 +48,11 @@ const SeeCart = props => {
                 let categories = user.data().categories
                 category = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b);
             } else {
-                // TODO: get catehory from localstorage
+                let uspref = localStorage.getItem("user_preferences")
+                if (uspref != null) {
+                    uspref = JSON.parse(uspref)
+                    category = Object.keys(uspref).reduce((a, b) => uspref[a] > uspref[b] ? a : b)
+                }
                 let cart_data = JSON.parse(localStorage.getItem("cart"))
                 let price = 0
                 if (cart_data) {

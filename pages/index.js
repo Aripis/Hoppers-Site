@@ -20,26 +20,32 @@ const Home = props => {
 
     useEffect(() => {
         (async () => {
-            if(AuthUser){
+            let tmp = categories
+            if (AuthUser) {
                 let user = await firebase.firestore().collection("users").doc(AuthUser.id).get()
-                let tmp = categories
-                if(user.data().categories){
+                if (user.data().categories) {
                     tmp = Object.keys(user.data().categories).sort((a, b) => user.data().categories[b] - user.data().categories[a])
                     setCategories(tmp)
                 }
-                let tmpProducts = []
-                for(const category of tmp){
-                    let prod = await firebase.firestore().collection("products").where("category", "==", category).limit(5).get()
-                    let all = await Promise.all(prod.docs
-                        .map(async  doc => {
-                            const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
-                            const imagesUrl = await Promise.all(products.items.map(itemRef => itemRef.getDownloadURL()))
-                            return { ...doc.data(), id: doc.id, urls: imagesUrl }
-                        }))
-                    tmpProducts = [...tmpProducts, ...all]
+            } else {
+                let uspref = localStorage.getItem("user_preferences")
+                if (uspref != null) {
+                    uspref = JSON.parse(uspref)
+                    tmp = [...Object.keys(uspref)]
                 }
-                setProducts(tmpProducts)
             }
+            let tmpProducts = []
+            for (const category of tmp) {
+                let prod = await firebase.firestore().collection("products").where("category", "==", category).limit(5).get()
+                let all = await Promise.all(prod.docs
+                    .map(async  doc => {
+                        const products = await firebase.storage().ref().child(`products/${doc.id}`).listAll()
+                        const imagesUrl = await Promise.all(products.items.map(itemRef => itemRef.getDownloadURL()))
+                        return { ...doc.data(), id: doc.id, urls: imagesUrl }
+                    }))
+                tmpProducts = [...tmpProducts, ...all]
+            }
+            setProducts(tmpProducts)
         })()
     }, [])
 

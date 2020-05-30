@@ -32,6 +32,24 @@ const ViewProduct = props => {
                     `categories.${props.category}`,
                     firebase.firestore.FieldValue.increment(1)
                 )
+            } else {
+                let uspref = localStorage.getItem("user_preferences")
+                if (uspref === null) {
+                    uspref = {
+                        [props.category]: 1
+                    }
+                } else {
+                    uspref = JSON.parse(uspref)
+                    if (uspref[props.category]) {
+                        uspref[props.category]++
+                    } else {
+                        uspref = {
+                            ...uspref,
+                            [props.category]: 1
+                        }
+                    }
+                }
+                localStorage.setItem("user_preferences", JSON.stringify(uspref))
             }
 
             const images = await firebase.storage().ref().child(`products/${props.id}`).listAll()
@@ -41,7 +59,6 @@ const ViewProduct = props => {
         })()
 
         firebase.firestore().collection("products").where("category", "==", props.category).limit(5).onSnapshot(async snapshot => {
-
             setProducts(await Promise.all(snapshot.docs
                 .filter(doc => doc.id != props.id)
                 .map(async  doc => {
