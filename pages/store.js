@@ -57,6 +57,8 @@ const Store = props => {
                     flex-flow: row wrap;
                     justify-content: center;
                     background-color: #E9EBEE;
+                    padding-left: 10em;
+                    padding-right: 10em;
                 }
 
                 .wrp-search {
